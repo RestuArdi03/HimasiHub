@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('backend.dashboard');
 });
+
+Route::get('/backend/dashboard', [DashboardController::class, 'index'])->name('backend.dashboard');
