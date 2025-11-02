@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('no_hp');
             $table->string('jabatan');
             $table->string('alamat');
-            $table->foreignId('users_id')->constrained('users')->onDelete('restrict');
+            $table->string('users_id');
             $table->foreignId('role_id')->constrained('role')->onDelete('restrict');
             $table->timestamps();
         });

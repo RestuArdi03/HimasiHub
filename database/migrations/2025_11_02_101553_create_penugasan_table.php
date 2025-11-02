@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('penugasan', function (Blueprint $table) {
             $table->id();
             $table->string('tugas');
-            $table->foreignId('kepanitiaan_id')->constrained('kepanitiaan')->onDelete('set null');
-            $table->foreignId('users_id')->constrained('users')->onDelete('set null');
+            $table->foreignId('kepanitiaan_id')->nullable()->constrained('kepanitiaan')->onDelete('set null');
+            $table->foreignId('users_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('tindak_lanjut');
             $table->string('deadline');
             $table->string('status');
