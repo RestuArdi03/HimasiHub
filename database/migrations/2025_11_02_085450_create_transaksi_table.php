@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anggota', function (Blueprint $table) {
+        Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
-            $table->string('nim');
-            $table->string('kelas');
-            $table->string('jurusan');
-            $table->string('no_hp');
-            $table->string('jabatan');
-            $table->string('alamat');
+            $table->decimal('debit', 15, 2)->nullable();
+            $table->decimal('kredit', 15, 2)->nullable();
+            $table->decimal('saldo', 15, 2)->nullable();
+            $table->string('keterangan');
+            $table->string('gambar')->nullable();
             $table->foreignId('users_id')->constrained('users')->onDelete('restrict');
-            $table->foreignId('role_id')->constrained('role')->onDelete('restrict');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anggota');
+        Schema::dropIfExists('transaksi');
     }
 };
