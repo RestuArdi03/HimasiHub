@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('notulen', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
+            $table->text('catatan');
             $table->foreignId('kegiatan_id')->constrained('kegiatan')->onDelete('cascade');
             $table->foreignId('users_id')->constrained('users')->onDelete('restrict');
             $table->timestamps();
