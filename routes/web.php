@@ -18,4 +18,3 @@ Route::get('/', function () {
     return view('backend.dashboard');
 });
 
-Route::get('/backend/dashboard', [DashboardController::class, 'index'])->name('backend.dashboard');
