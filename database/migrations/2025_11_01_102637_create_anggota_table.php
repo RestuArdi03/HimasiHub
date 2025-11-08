@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('anggota', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
             $table->string('nim');
             $table->string('kelas');
             $table->string('jurusan');
             $table->string('no_hp');
             $table->string('jabatan');
             $table->string('alamat');
+            $table->string('users_id');
+            $table->foreignId('role_id')->constrained('role')->onDelete('restrict');
             $table->timestamps();
         });
     }

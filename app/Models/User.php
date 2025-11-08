@@ -52,4 +52,19 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    // RELASI DENGAN TABEL ANGGOTA
+    public function anggota()
+    {
+        return $this->hasOne(Anggota::class);
+    }
+
+    // KEPANITIAAN
+    public function kepanitiaan()
+    {
+        // User memiliki banyak Kegiatan melalui tabel kepanitiaan
+        return $this->belongsToMany(Kegiatan::class, 'kepanitiaan', 'users_id', 'kegiatan_id')
+                    ->withPivot('jabatan') // Menambahkan kolom 'jabatan' ke hasil query
+                    ->withTimestamps();
+    }
 }

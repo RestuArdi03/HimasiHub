@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->nullable()->constrained('role')->nullOnDelete();
+        Schema::create('konten', function (Blueprint $table) {
+            $table->id();
+            $table->string('judul');
+            $table->string('gambar');
+            $table->text('deskripsi');
+            $table->foreignId('users_id')->constrained('users')->onDelete('restrict');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('role_id');
-        });
+        Schema::dropIfExists('konten');
     }
 };

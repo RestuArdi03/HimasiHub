@@ -36,27 +36,32 @@ npm install
 npm run build
 ```
 
-5. Salin env, pastikan juga informasi didalamnya sesuai
+5. Menginstall Library Prasyarat (package doctrine/dbal)
+```bash
+composer require doctrine/dbal
+```
+
+6. Salin env, pastikan juga informasi didalamnya sesuai
 ```bash
 cp .env.example .env
 ```
 
-6. Membuat key laravel
+7. Membuat key laravel
 ```bash
 php artisan key:generate
 ```
 
-7. Membuat dan mengisi database
+8. Membuat dan mengisi database
 ```bash
 php artisan migrate --seed
 ```
 
-8. Menghubungkan public ke storage
+9. Menghubungkan public ke storage
 ```bash
 php artisan storage:link
 ```
 
-9. Menjalankan project
+10. Menjalankan project
 ```bash
 php artisan serve
 ```

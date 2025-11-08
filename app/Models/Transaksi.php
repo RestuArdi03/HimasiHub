@@ -5,31 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Anggota extends Model
+class Transaksi extends Model
 {
     use HasFactory;
-    protected $table = 'anggota';
+    protected $table = 'transaksi';
 
     protected $fillable = [
-        'nim',
-        'kelas',
-        'jurusan',
-        'no_hp',
-        'jabatan',
-        'alamat',
+        'debit',
+        'kredit',
+        'saldo',
+        'keterangan',
+        'gambar',
         'users_id',
-        'role_id',
     ];
 
     // RELASI DENGAN TABEL USER
     public function users()
     {
         return $this->belongsTo(User::class);
-    }
-
-    // RELASI DENGAN TABEL ROLE
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
     }
 }
