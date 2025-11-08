@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\SaldoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,8 @@ Route::get('/', function () {
 });
 
 Route::get('/backend/dashboard', [DashboardController::class, 'index'])->name('backend.dashboard');
+
+// Route resource saldo
+Route::prefix('backend')->name('backend.')->group(function () {
+    Route::resource('saldo', SaldoController::class);
+});

@@ -19,5 +19,14 @@ class DatabaseSeeder extends Seeder
 
         // Seed users after roles exist
         $this->call(UsersTableSeeder::class);
+
+        // Seed saldos after users exist
+        $this->call(SaldoSeeder::class);
+
+        // Seed transactions after users exist
+        $this->call(TransactionSeeder::class);
+
+        // Seed iurans after users exist
+        $this->call(IuranSeeder::class);
     }
 }
