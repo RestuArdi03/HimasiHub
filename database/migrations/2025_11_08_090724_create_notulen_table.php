@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('notulen', function (Blueprint $table) {
             $table->id();
+            $table->string('judul');
+            $table->date('tanggal');
+            $table->text('isi');
             $table->timestamps();
         });
     }
