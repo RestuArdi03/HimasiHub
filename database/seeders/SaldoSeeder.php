@@ -20,7 +20,7 @@ class SaldoSeeder extends Seeder
             'nama' => 'Kas',
             'balance' => 0,
             // cari user admin
-            'user_id' => User::where('role_id', Role::where('name', 'admin')->first()->id)->first()->id
+            'user_id' => User::where('role_id', Role::where('nama_role', 'admin')->first()->id)->first()->id
         ]);
 
         // Buat saldo untuk lain-lain
@@ -28,7 +28,7 @@ class SaldoSeeder extends Seeder
             'nama' => 'Lain-lain',
             'balance' => 0,
             // cari user admin
-            'user_id' => User::where('role_id', Role::where('name', 'admin')->first()->id)->first()->id
+            'user_id' => User::where('role_id', Role::where('nama_role', 'admin')->first()->id)->first()->id
         ]);
     }
 }

@@ -24,6 +24,6 @@ class Saldo extends Model
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaksi::class);
     }
 }

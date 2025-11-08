@@ -15,22 +15,22 @@ class RolesTableSeeder extends Seeder
     public function run(): void
     {
         // Ensure roles table exists before seeding when running in some environments
-        if (!Schema::hasTable('roles')) {
-            $this->command->warn('roles table does not exist, skipping RolesTableSeeder. Run migrations first.');
+        if (!Schema::hasTable('role')) {
+            $this->command->warn('role table does not exist, skipping RolesTableSeeder. Run migrations first.');
             return;
         }
 
         $now = Carbon::now()->toDateTimeString();
 
         $roles = [
-            ['name' => 'tamu', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'admin', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'bendahara', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'sekretaris', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'humas', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'pengurus lain', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_role' => 'tamu', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_role' => 'admin', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_role' => 'bendahara', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_role' => 'sekretaris', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_role' => 'humas', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_role' => 'pengurus lain', 'created_at' => $now, 'updated_at' => $now],
         ];
 
-        DB::table('roles')->upsert($roles, ['name']);
+        DB::table('role')->upsert($roles, ['nama_role']);
     }
 }

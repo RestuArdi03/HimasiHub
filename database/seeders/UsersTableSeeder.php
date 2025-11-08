@@ -16,42 +16,42 @@ class UsersTableSeeder extends Seeder
     {
         // Create admin user
         User::create([
-            'name' => 'Admin HimasiHub',
+            'nama' => 'Admin HimasiHub',
             'email' => 'admin@himasihub.test',
             'email_verified_at' => now(),
             'password' => Hash::make('admin123'),
-            'role_id' => Role::where('name', 'admin')->first()->id
+            'role_id' => Role::where('nama_role', 'admin')->first()->id
         ]);
 
         // Create bendahara user
         User::create([
-            'name' => 'Bendahara HimasiHub',
+            'nama' => 'Bendahara HimasiHub',
             'email' => 'bendahara@himasihub.test',
             'email_verified_at' => now(),
             'password' => Hash::make('bendahara123'),
-            'role_id' => Role::where('name', 'bendahara')->first()->id
+            'role_id' => Role::where('nama_role', 'bendahara')->first()->id
         ]);
 
         // Create sekretaris user
         User::create([
-            'name' => 'Sekretaris HimasiHub',
+            'nama' => 'Sekretaris HimasiHub',
             'email' => 'sekretaris@himasihub.test',
             'email_verified_at' => now(),
             'password' => Hash::make('sekretaris123'),
-            'role_id' => Role::where('name', 'sekretaris')->first()->id
+            'role_id' => Role::where('nama_role', 'sekretaris')->first()->id
         ]);
 
         // Create humas user
         User::create([
-            'name' => 'Humas HimasiHub',
+            'nama' => 'Humas HimasiHub',
             'email' => 'humas@himasihub.test',
             'email_verified_at' => now(),
             'password' => Hash::make('humas123'),
-            'role_id' => Role::where('name', 'humas')->first()->id
+            'role_id' => Role::where('nama_role', 'humas')->first()->id
         ]);
 
         // Create some random users with 'pengurus lain' role
-        $pengurusRole = Role::where('name', 'pengurus lain')->first();
+        $pengurusRole = Role::where('nama_role', 'pengurus lain')->first();
         User::factory()
             ->count(3)
             ->state(function (array $attributes) use ($pengurusRole) {
@@ -60,7 +60,7 @@ class UsersTableSeeder extends Seeder
             ->create();
 
         // Create some random users with 'tamu' role
-        $tamuRole = Role::where('name', 'tamu')->first();
+        $tamuRole = Role::where('nama_role', 'tamu')->first();
         User::factory()
             ->count(5)
             ->state(function (array $attributes) use ($tamuRole) {
