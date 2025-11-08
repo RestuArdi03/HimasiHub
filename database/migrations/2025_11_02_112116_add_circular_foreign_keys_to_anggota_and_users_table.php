@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
        // Di tabel users
-        Schema::table('users', function (Blueprint $table) {
-            // 1. Mengubah tipe data 'anggota_id' dari string menjadi unsignedBigInteger
-            $table->unsignedBigInteger('anggota_id')->nullable()->change(); 
-            
-            // 2. Menambahkan Foreign Key
+        Schema::table('users', function (Blueprint $table) {            
             $table->foreign('anggota_id')
                 ->references('id')
                 ->on('anggota')
@@ -24,11 +20,7 @@ return new class extends Migration
         });
 
         // Di tabel anggota
-        Schema::table('anggota', function (Blueprint $table) {
-            // 1. Mengubah tipe data 'users_id' dari string menjadi unsignedBigInteger
-            $table->unsignedBigInteger('users_id')->nullable()->change(); 
-            
-            // 2. Menambahkan Foreign Key
+        Schema::table('anggota', function (Blueprint $table) {            
             $table->foreign('users_id')
                 ->references('id')
                 ->on('users')

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('foto')->nullable();
-            $table->string('anggota_id')->nullable();
             $table->rememberToken();
+            $table->unsignedBigInteger('anggota_id')->nullable();
             $table->timestamps();
         });
     }
