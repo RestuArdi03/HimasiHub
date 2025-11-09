@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Anggota;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AnggotaController extends Controller
 {
@@ -12,7 +13,8 @@ class AnggotaController extends Controller
      */
     public function index()
     {
-        //
+        $anggota = Anggota::all();
+        return view('backend.anggota.index', compact('anggota'));
     }
 
     /**
@@ -20,7 +22,7 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.anggota.create');
     }
 
     /**
@@ -28,7 +30,26 @@ class AnggotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama'     => 'required|string|max:255',
+            'nim'      => 'required|string|max:50',
+            'kelas'    => 'required|string|max:50',
+            'jurusan'  => 'required|string|max:100',
+            'no_hp'    => 'required|string|max:20',
+            'jabatan'  => 'required|string|max:100',
+            'alamat'   => 'required|string|max:255',
+            'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            $validated['foto'] = $request->file('foto')->store('anggota', 'public');
+        } else {
+            $validated['foto'] = 'anggota/default.jpg'; // default image
+        }
+
+        Anggota::create($validated);
+
+        return redirect()->route('backend.anggota.index')->with('success', 'Data anggota berhasil ditambahkan.');
     }
 
     /**

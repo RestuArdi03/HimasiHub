@@ -9,13 +9,15 @@ class Role extends Model
 {
     use HasFactory;
 
+    protected $table = 'role';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'nama_role',
     ];
 
     /**

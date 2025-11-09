@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('kepanitiaan', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('jabatan');
+            $table->foreignId('kegiatan_id')->constrained('kegiatan')->onDelete('restrict');
+            $table->foreignId('users_id')->constrained('users')->onDelete('restrict');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('kepanitiaan');
     }
 };
