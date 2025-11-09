@@ -16,12 +16,12 @@ return new class extends Migration
             $table->dropColumn('keputusan');
 
             //rename dan ubah tipe kolom lama
+            $table->text('pembahasan')->nullable()->change();
             $table->renameColumn('pembahasan', 'hasil_pembahasan');
-            $table->text('hasil_pembahasan')->nullable()->change();
 
             //tambah kolom baru
             $table->string('topik')->after('id');
-            $table->string('status')->nullable()->after('hasil_pembahasan');
+            $table->string('status')->nullable()->after('pembahasan');
         });
     }
 

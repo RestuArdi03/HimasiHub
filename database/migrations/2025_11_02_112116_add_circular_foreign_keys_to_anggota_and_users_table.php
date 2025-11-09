@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
        // Di tabel users
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('anggota_id')->nullable()->after('id');            
+        Schema::table('users', function (Blueprint $table) {            
             $table->foreign('anggota_id')
                 ->references('id')
                 ->on('anggota')
@@ -37,7 +36,6 @@ return new class extends Migration
         // 1. Hapus FK dari tabel 'users'
         Schema::table('users', function (Blueprint $table) {
         $table->dropForeign(['anggota_id']);
-        $table->dropColumn('anggota_id');
         });
 
         // 2. Hapus FK dari tabel 'anggota'

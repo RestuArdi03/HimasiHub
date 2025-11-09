@@ -18,11 +18,11 @@ return new class extends Migration
 
             //rename kolom lama
             $table->renameColumn('judul', 'judul_rapat');
+            $table->text('catatan')->nullable()->change();
             $table->renameColumn('catatan', 'catatan_tambahan');
 
             //tambah kolom baru
-            $table->text('catatan_tambahan')->nullable()->change();
-            $table->date('tanggal_rapat')->after('judul_rapat');
+            $table->date('tanggal_rapat')->after('judul');
             $table->time('waktu_mulai')->after('tanggal_rapat');
             $table->time('waktu_selesai')->nullable()->after('waktu_mulai');
             $table->string('lokasi')->after('waktu_selesai');
