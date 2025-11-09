@@ -21,8 +21,7 @@ return new class extends Migration
         });
 
         // Di tabel anggota
-        Schema::table('anggota', function (Blueprint $table) {
-            $table->unsignedBigInteger('users_id')->nullable()->after('id');         
+        Schema::table('anggota', function (Blueprint $table) {         
             $table->foreign('users_id')
                 ->references('id')
                 ->on('users')
@@ -44,7 +43,6 @@ return new class extends Migration
         // 2. Hapus FK dari tabel 'anggota'
         Schema::table('anggota', function (Blueprint $table) {
             $table->dropForeign(['users_id']);
-            $table->dropColumn('users_id');
         });
     }
 };
