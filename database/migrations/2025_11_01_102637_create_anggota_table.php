@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('no_hp');
             $table->string('jabatan');
             $table->string('alamat');
+            $table->string('foto')->nullable();
             $table->unsignedBigInteger('users_id')->nullable();
             $table->timestamps();
         });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\SaldoController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,11 @@ Route::get('/', function () {
 
 Route::get('/backend/dashboard', [DashboardController::class, 'index'])->name('backend.dashboard');
 
-// Route resource saldo
+// ROUTE BACKEND
 Route::prefix('backend')->name('backend.')->group(function () {
+    // ROUTE SALDO
     Route::resource('saldo', SaldoController::class);
+
+    // ROUTE ANGGOTA
+    Route::resource('anggota', AnggotaController::class);
 });
