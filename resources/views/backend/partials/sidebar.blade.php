@@ -57,12 +57,24 @@
 
                 {{-- KEUANGAN --}}
                 <li class="sidebar-title">Keuangan</li>
-                <li class="sidebar-item  ">
+                <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-cash"></i>
                         <span>Keuangan</span>
                     </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a href="{{ route('backend.saldo.index') }}">Saldo</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="#">Transaksi</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="#">Iuran</a>
+                        </li>
+                    </ul>
                 </li>
+
                 
                 {{-- PENCATATAN --}}
                 <li class="sidebar-title">Pencatatan</li>

@@ -26,6 +26,10 @@ Route::get('/backend/dashboard', [DashboardController::class, 'index'])->name('b
 Route::prefix('backend')->name('backend.')->group(function () {
     // ROUTE SALDO
     Route::resource('saldo', SaldoController::class);
+    Route::put('saldo/{saldo}/restore', [SaldoController::class, 'restore'])->name('saldo.restore');
+    Route::delete('saldo/{saldo}/force-delete', [SaldoController::class, 'forceDelete'])->name('saldo.forceDelete');
+    Route::get('saldo/trash', [SaldoController::class, 'trash'])->name('saldo.trash');
+
 
     // ROUTE ANGGOTA
     Route::resource('anggota', AnggotaController::class);
