@@ -21,7 +21,7 @@ class SaldoPolicy
      */
     public function view(User $user, Saldo $saldo): bool
     {
-        return $user->hasRole('admin') || $user->hasRole('bendahara');
+        return true;
     }
 
     /**

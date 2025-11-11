@@ -40,11 +40,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('backend')->name('backend.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // ROUTE SALDO
-        Route::resource('saldo', SaldoController::class);
-        Route::put('saldo/{saldo}/restore', [SaldoController::class, 'restore'])->name('saldo.restore');
-        Route::delete('saldo/{saldo}/force-delete', [SaldoController::class, 'forceDelete'])->name('saldo.forceDelete');
+        // ROUTE SALDO - Rute spesifik harus di atas resource
         Route::get('saldo/trash', [SaldoController::class, 'trash'])->name('saldo.trash');
+        Route::put('saldo/{saldo}/restore', [SaldoController::class, 'restore'])->name('saldo.restore')->withTrashed();
+        Route::delete('saldo/{saldo}/force-delete', [SaldoController::class, 'forceDelete'])->name('saldo.forceDelete')->withTrashed();
+        Route::resource('saldo', SaldoController::class);
 
         // ROUTE ANGGOTA
         Route::resource('anggota', AnggotaController::class);
