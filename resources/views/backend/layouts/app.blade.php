@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="/backend-assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="/backend-assets/css/app.css">
     <link rel="shortcut icon" href="/backend-assets/images/favicon.svg" type="image/x-icon">
+
+    {{-- STYLE CSS HANDMADE --}}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     
     @stack('styles')
 </head>

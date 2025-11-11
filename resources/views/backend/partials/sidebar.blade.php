@@ -27,7 +27,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Route::currentRouteName() == 'backend.anggota.index' ? 'active' : '' }} ">
+                <li class="sidebar-item {{ request()->routeIs('backend.anggota.*') ? 'active' : '' }} ">
                     <a href="{{ route('backend.anggota.index') }}" class='sidebar-link'>
                         <i class="bi bi-people-fill"></i>
                         <span>Anggota</span>

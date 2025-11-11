@@ -1,0 +1,63 @@
+/* STYLE FOTO ANGGOTA */
+.image-sq-container {
+    position: relative; /* Diperlukan untuk menempatkan gambar secara absolut */
+    width: 100%;
+    /* Nilai 100% padding-bottom adalah kunci untuk rasio 1:1 (tinggi sama dengan lebar) */
+    padding-bottom: 100%; 
+    overflow: hidden;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Garis pemisah dari card-body */
+}
+
+/* Memastikan gambar mengisi penuh container tanpa distorsi */
+.image-sq-container img {
+    position: absolute; /* Memungkinkan gambar mengisi ruang 100% */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Ini adalah properti yang melakukan CROPPING (pemotongan) */
+    object-fit: cover; 
+    object-position: center; /* Memastikan pemotongan berpusat */
+}
+
+/* STYLE TOMBOL */
+.btn-sq {
+    /* KUNCI 1: Menentukan lebar dan tinggi yang sama (misalnya 30px) */
+    width: 30px; 
+    height: 30px;
+    
+    /* KUNCI 2: Menggunakan Flexbox untuk menengahkan ikon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Menghapus padding default agar bentuk persegi murni */
+    padding: 0; 
+    
+    /* Mengatur ukuran ikon di dalamnya */
+    font-size: 0.8rem; 
+    border-radius: 5px; /* Opsional: sesuaikan sudut */
+}
+
+/* STYLE FOOTER */
+.footer-fixed-bottom-right {
+    /* 1. Kunci posisi agar tetap di viewport */
+    position: fixed; 
+    
+    /* 2. Posisikan di sudut kanan bawah */
+    bottom: 0; 
+    right: 0; 
+    
+    /* 3. Atur lebar agar tidak melebar ke seluruh layar */
+    width: auto; 
+    
+    /* Optional: Memberi padding agar tidak terlalu mepet ke sudut */
+    padding-right: 1.5rem; 
+    padding-bottom: 0.5rem;
+    
+    /* Optional: Pastikan footer muncul di atas elemen lain */
+    z-index: 1000; 
+    
+    /* Optional: Atur background agar teks terlihat jelas */
+    background-color: transparent; 
+}

@@ -6,6 +6,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\RolesTableSeeder;
 use Database\Seeders\UsersTableSeeder;
+use Database\Seeders\SaldoSeeder;
+use Database\Seeders\AnggotaSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,5 +24,8 @@ class DatabaseSeeder extends Seeder
 
         // Seed saldos after users exist
         $this->call(SaldoSeeder::class);
+        
+        // Seed saldos after users exist
+        $this->call(AnggotaSeeder::class);
     }
 }

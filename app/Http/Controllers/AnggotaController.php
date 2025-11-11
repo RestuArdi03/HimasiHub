@@ -14,7 +14,7 @@ class AnggotaController extends Controller
     public function index()
     {
         $anggota = Anggota::all();
-        return view('backend.anggota.index', compact('anggota'));
+        return view('backend.anggota.halaman_anggota', compact('anggota'));
     }
 
     /**
@@ -22,7 +22,7 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        return view('backend.anggota.create');
+        return view('backend.anggota.tambah_anggota');
     }
 
     /**
@@ -40,12 +40,6 @@ class AnggotaController extends Controller
             'alamat'   => 'required|string|max:255',
             'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
-        if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('anggota', 'public');
-        } else {
-            $validated['foto'] = 'anggota/default.jpg'; // default image
-        }
 
         Anggota::create($validated);
 
