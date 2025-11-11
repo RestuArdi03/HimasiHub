@@ -14,8 +14,13 @@ class SaldoController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Saldo::class);
-        $saldo = Saldo::with(['user'])->orderBy('nama')->paginate(15);
-        return view('backend.saldo.index', compact('saldo'));
+        $saldos = Saldo::with(['user'])->orderBy('nama')->paginate(15);
+        $totalSaldo = Saldo::sum('balance');
+
+        return view('backend.saldo.index', [
+            'saldos' => $saldos,
+            'totalSaldo' => $totalSaldo,
+        ]);
     }
 
     /**
@@ -36,7 +41,15 @@ class SaldoController extends Controller
         $validated = $request->validated();
         $validated['user_id'] = auth()->user()->id;
 
-        Saldo::create($validated);
+        $saldo = Saldo::create($validated);
+
+        // Membuat transaksi pertama sebagai "Saldo Awal"
+        $saldo->transactions()->create([
+            'debit' => $saldo->balance,
+            'saldo_akhir' => $saldo->balance,
+            'keterangan' => 'Saldo Awal',
+            'users_id' => $validated['user_id'],
+        ]);
 
         return redirect()->route('backend.saldo.index')->with('success', 'Saldo berhasil ditambahkan.');
 
