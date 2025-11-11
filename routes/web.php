@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\SaldoController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,21 +17,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// =================================================================
+// RUTE PUBLIK (FRONTEND)
+// =================================================================
 Route::get('/', function () {
-    return view('backend.dashboard');
-});
+    return view('frontend.dashboard'); // Asumsi file ini ada
+})->name('frontend.index');
 
-Route::get('/backend/dashboard', [DashboardController::class, 'index'])->name('backend.dashboard');
+// ROUTE AUTH
+Auth::routes();
 
-// ROUTE BACKEND
-Route::prefix('backend')->name('backend.')->group(function () {
-    // ROUTE SALDO
-    Route::resource('saldo', SaldoController::class);
-    Route::put('saldo/{saldo}/restore', [SaldoController::class, 'restore'])->name('saldo.restore');
-    Route::delete('saldo/{saldo}/force-delete', [SaldoController::class, 'forceDelete'])->name('saldo.forceDelete');
-    Route::get('saldo/trash', [SaldoController::class, 'trash'])->name('saldo.trash');
+// Google Login
+Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
+// =================================================================
+// RUTE YANG MEMERLUKAN OTENTIKASI (HARUS LOGIN)
+// =================================================================
+Route::middleware(['auth'])->group(function () {
 
-    // ROUTE ANGGOTA
-    Route::resource('anggota', AnggotaController::class);
+    // ROUTE BACKEND
+    Route::prefix('backend')->name('backend.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // ROUTE SALDO
+        Route::resource('saldo', SaldoController::class);
+        Route::put('saldo/{saldo}/restore', [SaldoController::class, 'restore'])->name('saldo.restore');
+        Route::delete('saldo/{saldo}/force-delete', [SaldoController::class, 'forceDelete'])->name('saldo.forceDelete');
+        Route::get('saldo/trash', [SaldoController::class, 'trash'])->name('saldo.trash');
+
+        // ROUTE ANGGOTA
+        Route::resource('anggota', AnggotaController::class);
+    });
 });
