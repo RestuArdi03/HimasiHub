@@ -13,15 +13,22 @@ class Transaksi extends Model
     protected $fillable = [
         'debit',
         'kredit',
-        'saldo',
+        'saldo_akhir',
         'keterangan',
         'gambar',
         'users_id',
+        'saldo_id',
     ];
 
     // RELASI DENGAN TABEL USER
-    public function users()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
+    // RELASI DENGAN TABEL SALDO
+    public function saldo()
+    {
+        return $this->belongsTo(Saldo::class);
     }
 }

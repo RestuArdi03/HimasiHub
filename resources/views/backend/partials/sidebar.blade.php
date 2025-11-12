@@ -27,7 +27,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Route::currentRouteName() == 'backend.anggota.index' ? 'active' : '' }} ">
+                <li class="sidebar-item {{ request()->routeIs('backend.anggota.*') ? 'active' : '' }} ">
                     <a href="{{ route('backend.anggota.index') }}" class='sidebar-link'>
                         <i class="bi bi-people-fill"></i>
                         <span>Anggota</span>
@@ -57,12 +57,13 @@
 
                 {{-- KEUANGAN --}}
                 <li class="sidebar-title">Keuangan</li>
-                <li class="sidebar-item  ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('backend.saldo.*') ? 'active' : '' }} ">
+                    <a href="{{ route('backend.saldo.index') }}" class='sidebar-link'>
                         <i class="bi bi-cash"></i>
                         <span>Keuangan</span>
                     </a>
                 </li>
+
                 
                 {{-- PENCATATAN --}}
                 <li class="sidebar-title">Pencatatan</li>
@@ -84,8 +85,5 @@
 
             </ul>
         </div>
-        <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
     </div>
 </div>
-
-

@@ -13,7 +13,7 @@ class SaldoPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class SaldoPolicy
      */
     public function view(User $user, Saldo $saldo): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class SaldoPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 
     /**
@@ -37,7 +37,7 @@ class SaldoPolicy
      */
     public function update(User $user, Saldo $saldo): bool
     {
-        //
+        return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 
     /**
@@ -45,7 +45,7 @@ class SaldoPolicy
      */
     public function delete(User $user, Saldo $saldo): bool
     {
-        //
+        return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 
     /**
@@ -53,7 +53,7 @@ class SaldoPolicy
      */
     public function restore(User $user, Saldo $saldo): bool
     {
-        //
+        return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 
     /**
@@ -61,6 +61,6 @@ class SaldoPolicy
      */
     public function forceDelete(User $user, Saldo $saldo): bool
     {
-        //
+        return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 }

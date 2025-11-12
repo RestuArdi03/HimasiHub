@@ -13,9 +13,14 @@ class SaldoController extends Controller
      */
     public function index()
     {
-        $this->authorize('view', Saldo::class);
-        $saldo = Saldo::with(['user'])->orderBy('nama')->paginate(15);
-        return view('backend.saldo.index', compact('saldo'));
+        $this->authorize('viewAny', Saldo::class);
+        $saldos = Saldo::with(['user'])->orderBy('nama')->paginate(15);
+        $totalSaldo = Saldo::sum('balance');
+
+        return view('backend.saldo.index', [
+            'saldos' => $saldos,
+            'totalSaldo' => $totalSaldo,
+        ]);
     }
 
     /**
@@ -23,7 +28,7 @@ class SaldoController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', Saldo::class);
+        $this->authorize('create', Saldo::class); // This is correct for creating a new resource
         return view('backend.saldo.create');
     }
 
@@ -32,11 +37,19 @@ class SaldoController extends Controller
      */
     public function store(StoreSaldoRequest $request)
     {
-        $this->authorize('create', Saldo::class);
+        $this->authorize('create', Saldo::class); // This is correct for storing a new resource
         $validated = $request->validated();
         $validated['user_id'] = auth()->user()->id;
 
-        Saldo::create($validated);
+        $saldo = Saldo::create($validated);
+
+        // Membuat transaksi pertama sebagai "Saldo Awal"
+        $saldo->transactions()->create([
+            'debit' => $saldo->balance,
+            'saldo_akhir' => $saldo->balance,
+            'keterangan' => 'Saldo Awal',
+            'users_id' => $validated['user_id'],
+        ]);
 
         return redirect()->route('backend.saldo.index')->with('success', 'Saldo berhasil ditambahkan.');
 
@@ -47,7 +60,7 @@ class SaldoController extends Controller
      */
     public function show(Saldo $saldo)
     {
-        $this->authorize('view', $saldo);
+        $this->authorize('view', $saldo); // This is correct for viewing a specific resource
         $saldo->load([
             'user',
             'transactions',
@@ -60,7 +73,7 @@ class SaldoController extends Controller
      */
     public function edit(Saldo $saldo)
     {
-        $this->authorize('update', $saldo);
+        $this->authorize('update', $saldo); // This is correct for editing a specific resource
         return view('backend.saldo.edit', [
             'saldo' => $saldo
         ]);
@@ -71,7 +84,7 @@ class SaldoController extends Controller
      */
     public function update(UpdateSaldoRequest $request, Saldo $saldo)
     {
-        $this->authorize('update', $saldo);
+        $this->authorize('update', $saldo); // This is correct for updating a specific resource
         $validated = $request->validated();
         $validated['user_id'] = auth()->user()->id;
         $saldo->update($validated);
@@ -85,15 +98,16 @@ class SaldoController extends Controller
      */
     public function destroy(Saldo $saldo)
     {
-        $this->authorize('delete', $saldo);
+        $this->authorize('delete', $saldo); // This is correct for soft deleting a specific resource
         $saldo->delete();
 
         return redirect()->route('backend.saldo.index')->with('success', 'Saldo berhasil dihapus.');
     }
 
     // Restore
-    public function restore(Saldo $saldo)
-    {        $this->authorize('restore', $saldo);
+    public function restore(Saldo $saldo) // The $saldo parameter here is implicitly a trashed model
+    {
+        $this->authorize('restore', $saldo); // This is correct for restoring a specific resource
         $saldo->restore();
 
         return redirect()->route('backend.saldo.index')->with('success', 'Saldo berhasil dipulihkan.');
@@ -101,7 +115,7 @@ class SaldoController extends Controller
 
     // Force Delete
     public function forceDelete(Saldo $saldo)
-    {
+    { // The $saldo parameter here is implicitly a trashed model
         $this->authorize('forceDelete', $saldo);
         $saldo->forceDelete();
 
@@ -110,7 +124,8 @@ class SaldoController extends Controller
 
     // Tempat sampah
     public function trash()
-    {        $this->authorize('viewAny', Saldo::class);
+    {
+        $this->authorize('viewAny', Saldo::class); // This is correct for viewing trashed resources
         $saldo = Saldo::onlyTrashed()->with(['user'])->orderBy('nama')->paginate(15);
         return view('backend.saldo.trash', compact('saldo'));
     }

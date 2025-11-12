@@ -24,6 +24,8 @@ class User extends Authenticatable
         'foto',
         'password',
         'role_id',
+        'google_id',
+        'avatar'
     ];
 
     /**
@@ -52,4 +54,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role->nama_role === $role;
+    }
+
 }
