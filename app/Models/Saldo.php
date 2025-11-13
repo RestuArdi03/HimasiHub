@@ -14,6 +14,8 @@ class Saldo extends Model
         'user_id',
         'nama',
         'balance',
+        'iuran_nominal',
+        'jumlah_iuran',
         'keterangan'
     ];
 

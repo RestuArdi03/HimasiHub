@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Saldo;
+use App\Models\Transaksi;
+use App\Policies\SaldoPolicy;
+use App\Policies\TransaksiPolicy;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Saldo::class => SaldoPolicy::class,
+        Transaksi::class => TransaksiPolicy::class,
     ];
 
     /**
