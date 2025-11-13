@@ -61,5 +61,7 @@ Route::middleware(['auth'])->group(function () {
 
         // ROUTE ANGGOTA
         Route::resource('anggota', AnggotaController::class);
+        Route::delete('/anggota/{anggota}', [AnggotaController::class, 'destroy'])->name('backend.anggota.destroy');
+
     });
 });

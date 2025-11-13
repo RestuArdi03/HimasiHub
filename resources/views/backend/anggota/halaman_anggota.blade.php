@@ -57,31 +57,54 @@
                                 
                                 <div class="card-body d-flex flex-column justify-content-between"> 
     
-                                {{-- Keterangan --}}
-                                <div>
-                                    <h5 class="card-title text-truncate">{{ $agt->nama }}</h5>
-                                    <p class="card-text text-truncate text-muted">{{ $agt->jabatan }}</p>
-                                </div>
+                                    {{-- Keterangan --}}
+                                    <div>
+                                        <h5 class="card-title text-truncate">{{ $agt->nama }}</h5>
+                                        <p class="card-text text-truncate text-muted">{{ $agt->jabatan }}</p>
+                                    </div>
 
-                                {{-- Tombol Aksi --}}
-                                <div class="d-flex gap-2 mt-2 justify-content-center"> 
-                                    
-                                    {{-- Tombol Detail: Gunakan btn-sq dan warna yang sesuai --}}
-                                    <a href="#" class="btn btn-info btn-sq" title="Detail">
-                                        <i class="bi bi-eye-fill"></i>
-                                    </a>
-                                    
-                                    {{-- Tombol Edit --}}
-                                    <a href="#" class="btn btn-warning btn-sq" title="Edit">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
-                                    
-                                    {{-- Tombol Hapus --}}
-                                    <button type="button" class="btn btn-danger btn-sq" title="Hapus">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
+                                    {{-- Tombol Aksi --}}
+                                    <div class="d-flex gap-2 mt-2 justify-content-center"> 
+                                        
+                                        {{-- Tombol Detail: Gunakan btn-sq dan warna yang sesuai --}}
+                                        <a href="#" class="btn btn-info btn-sq" title="Detail">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        
+                                        {{-- Tombol Edit --}}
+                                        <a href="{{ route('backend.anggota.edit', $agt) }}" class="btn btn-warning btn-sq" title="Edit">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        
+                                        {{-- Tombol Hapus --}}
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $agt->id }}" title="Hapus">
+                                                <i class="bi bi-trash-fill"></i>
+                                        </button>
+
+                                        {{-- Modal Konfirmasi Hapus --}}
+                                        <div class="modal fade" id="deleteModal{{ $agt->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $agt->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel{{ $agt->id }}">Konfirmasi Hapus</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Apakah Anda yakin ingin menghapus anggota '{{ $agt->nama }}'?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <form action="{{ route('backend.anggota.destroy', $agt->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Hapus</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                     @endforeach
