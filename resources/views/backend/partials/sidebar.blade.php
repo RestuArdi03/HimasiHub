@@ -18,7 +18,7 @@
             <ul class="menu">
 
                 {{-- UMUM --}}
-                <li class="sidebar-title">Menu Utama</li>
+                <li class="sidebar-title">Menu</li>
 
                 <li class="sidebar-item {{ Route::currentRouteName() == 'backend.dashboard' ? 'active' : '' }} ">
                     <a href="{{ route('backend.dashboard') }}" class='sidebar-link'>
@@ -56,7 +56,6 @@
                 </li>
 
                 {{-- KEUANGAN --}}
-                <li class="sidebar-title">Keuangan</li>
                 <li class="sidebar-item {{ request()->routeIs('backend.saldo.*') ? 'active' : '' }} ">
                     <a href="{{ route('backend.saldo.index') }}" class='sidebar-link'>
                         <i class="bi bi-cash"></i>
@@ -66,7 +65,6 @@
 
                 
                 {{-- PENCATATAN --}}
-                <li class="sidebar-title">Pencatatan</li>
                 <li class="sidebar-item  ">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-journal-text"></i>
@@ -75,7 +73,6 @@
                 </li>
                 
                 {{-- PUBLIKASI --}}
-                <li class="sidebar-title">Publikasi</li>
                 <li class="sidebar-item  ">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-share"></i>

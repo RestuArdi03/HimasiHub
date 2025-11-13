@@ -1,6 +1,6 @@
 @csrf
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 mb-2">
         <div class="form-group">
             <label for="nama">Nama Saldo</label>
             <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama"
@@ -12,7 +12,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 mb-2">
         <div class="form-group">
             <label for="balance">Balance (Saldo Awal)</label>
             <div class="input-group">
