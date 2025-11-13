@@ -42,7 +42,7 @@
                             <button type="submit" class="btn btn-primary me-1 mb-1">
                                 <i class="bi bi-save"></i> Update
                             </button>
-                            <a href="{{ route('backend.saldo.index') }}" class="btn btn-light-secondary me-1 mb-1">
+                            <a href="{{ route('backend.anggota.index') }}" class="btn btn-light-secondary me-1 mb-1">
                                 <i class="bi bi-x-circle"></i> Batal
                             </a>
                         </div>
