@@ -89,12 +89,18 @@
                                         <a href="{{ route('backend.saldo.show', $saldo) }}" class="btn btn-sm btn-info" title="Detail">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
-                                        <a href="{{ route('backend.saldo.edit', $saldo) }}" class="btn btn-sm btn-warning" title="Edit">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $saldo->id }}" title="Hapus">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
+                                        @if(!in_array($saldo->nama, ['Kas', 'Lain-lain']))
+                                            @can('update', $saldo)
+                                                <a href="{{ route('backend.saldo.edit', $saldo) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                            @endcan
+                                            @can('delete', $saldo)
+                                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $saldo->id }}" title="Hapus">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            @endcan
+                                        @endif
 
                                         {{-- Modal Konfirmasi Hapus --}}
                                         <div class="modal fade" id="deleteModal{{ $saldo->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $saldo->id }}" aria-hidden="true">

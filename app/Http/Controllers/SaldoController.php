@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSaldoRequest;
 use App\Http\Requests\UpdateSaldoRequest;
 use App\Models\Saldo;
+use App\Models\User;
 
 class SaldoController extends Controller
 {
@@ -17,9 +18,15 @@ class SaldoController extends Controller
         $saldos = Saldo::with(['user'])->orderBy('nama')->paginate(15);
         $totalSaldo = Saldo::sum('balance');
 
+        // Mengambil data bendahara. Asumsi hanya ada satu bendahara.
+        $bendahara = User::whereHas('role', function ($query) {
+            $query->where('nama_role', 'Bendahara');
+        })->first();
+
         return view('backend.saldo.index', [
             'saldos' => $saldos,
             'totalSaldo' => $totalSaldo,
+            'bendahara' => $bendahara,
         ]);
     }
 
@@ -61,6 +68,12 @@ class SaldoController extends Controller
     public function show(Saldo $saldo)
     {
         $this->authorize('view', $saldo); // This is correct for viewing a specific resource
+
+        // Jika saldo adalah 'Kas', alihkan ke halaman laporan kas khusus
+        if ($saldo->nama === 'Kas') {
+            return redirect()->route('backend.kas.index', ['saldo' => $saldo->id]);
+        }
+
         $saldo->load([
             'user',
             'transactions',
@@ -85,8 +98,8 @@ class SaldoController extends Controller
     public function update(UpdateSaldoRequest $request, Saldo $saldo)
     {
         $this->authorize('update', $saldo); // This is correct for updating a specific resource
+        // Validated request hanya akan berisi 'nama'
         $validated = $request->validated();
-        $validated['user_id'] = auth()->user()->id;
         $saldo->update($validated);
 
         return redirect()->route('backend.saldo.index')->with('success', 'Saldo berhasil diperbarui.');

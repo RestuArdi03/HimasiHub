@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSaldoRequest extends FormRequest
+class UpdateTransaksiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,11 +21,11 @@ class UpdateSaldoRequest extends FormRequest
      */
     public function rules(): array
     {
-        // Hanya izinkan pembaruan nama. ID saldo diabaikan untuk aturan unique.
-        $saldoId = $this->route('saldo')->id;
-
         return [
-            'nama' => 'required|string|max:255|unique:saldo,nama,' . $saldoId,
+            'keterangan' => 'required|string|max:255',
+            'jenis_transaksi' => 'required|in:debit,kredit',
+            'jumlah' => 'required|numeric|min:0.01',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

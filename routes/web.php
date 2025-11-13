@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\SaldoController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleLoginController;
 
@@ -45,6 +46,18 @@ Route::middleware(['auth'])->group(function () {
         Route::put('saldo/{saldo}/restore', [SaldoController::class, 'restore'])->name('saldo.restore')->withTrashed();
         Route::delete('saldo/{saldo}/force-delete', [SaldoController::class, 'forceDelete'])->name('saldo.forceDelete')->withTrashed();
         Route::resource('saldo', SaldoController::class);
+
+        // ROUTE KAS
+        Route::get('kas/{saldo}', [\App\Http\Controllers\KasController::class, 'index'])->name('kas.index');
+        Route::post('kas/{saldo}/pay/{member}', [\App\Http\Controllers\KasController::class, 'pay'])->name('kas.pay');
+        Route::post('kas/{saldo}/settings', [\App\Http\Controllers\KasController::class, 'updateSettings'])->name('kas.settings');
+        Route::delete('kas/unpay/{transaksi}', [\App\Http\Controllers\KasController::class, 'unpay'])->name('kas.unpay');
+
+        // ROUTE TRANSAKSI
+        Route::get('saldo/{saldo}/transaksi/trash', [TransaksiController::class, 'trash'])->name('transaksi.trash');
+        Route::put('transaksi/{id}/restore', [TransaksiController::class, 'restore'])->name('transaksi.restore')->withTrashed();
+        Route::delete('transaksi/{id}/force-delete', [TransaksiController::class, 'forceDelete'])->name('transaksi.forceDelete')->withTrashed();
+        Route::resource('transaksi', TransaksiController::class)->except(['index', 'show']);
 
         // ROUTE ANGGOTA
         Route::resource('anggota', AnggotaController::class);
