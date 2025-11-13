@@ -28,12 +28,12 @@
         <label for="kelas">Kelas</label>
         <fieldset class="form-group">
             <select class="form-select" id="kelas" name="kelas" required>
-                <option value="" disabled selected>Pilih Kelas</option>
-                <option value="19.1A.09">19.1A.09</option>
-                <option value="19.2A.09">19.2A.09</option>
-                <option value="19.3A.09">19.3A.09</option>
-                <option value="19.4A.09">19.4A.09</option>
-                <option value="19.5A.09">19.5A.09</option>
+                 <option value="" disabled {{ old('kelas', $anggota->kelas ?? '') == '' ? 'selected' : '' }}>Pilih Kelas</option>
+                <option value="19.1A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.1A.09' ? 'selected' : '' }}>19.1A.09</option>
+                <option value="19.2A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.2A.09' ? 'selected' : '' }}>19.2A.09</option>
+                <option value="19.3A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.3A.09' ? 'selected' : '' }}>19.3A.09</option>
+                <option value="19.4A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.4A.09' ? 'selected' : '' }}>19.4A.09</option>
+                <option value="19.5A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.5A.09' ? 'selected' : '' }}>19.5A.09</option>
             </select>
         </fieldset>
         @error('kelas')
@@ -46,8 +46,8 @@
         <label for="jurusan">Jurusan</label>
         <fieldset class="form-group">
             <select class="form-select" id="jurusan" name="jurusan" required>
-                <option value="" disabled selected>Pilih Jurusan</option>
-                <option value="Sistem Informasi">Sistem Informasi</option>
+                <option value="" disabled {{ old('jurusan', $anggota->jurusan ?? '') == '' ? 'selected' : '' }}>Pilih Jurusan</option>
+                <option value="Sistem Informasi" {{ old('jurusan', $anggota->jurusan ?? '') == 'Sistem Informasi' ? 'selected' : '' }}>Sistem Informasi</option>
             </select>
         </fieldset>
         @error('jurusan')
@@ -72,15 +72,15 @@
         <label for="jabatan">Jabatan</label>
         <fieldset class="form-group">
             <select class="form-select" id="jabatan" name="jabatan" required>
-                <option value="" disabled selected>Pilih Jabatan</option>
-                <option value="Ketua">Ketua</option>
-                <option value="Wakil Ketua">Wakil Ketua</option>
-                <option value="Sekretaris">Sekretaris</option>
-                <option value="Bendahara">Bendahara</option>
-                <option value="Divisi Humas">Divisi Humas</option>
-                <option value="Divisi Manajer Proyek">Divisi Manajer Proyek</option>
-                <option value="Divisi PDD">Divisi PDD</option>
-                <option value="Divisi Perkab">Divisi Perkab</option>
+                <option value="" disabled {{ old('jabatan', $anggota->jabatan ?? '') == '' ? '' : 'selected' }}>Pilih Jabatan</option>
+                <option value="Ketua" {{ old('jabatan', $anggota->jabatan ?? '') == 'Ketua' ? 'selected' : '' }}>Ketua</option>
+                <option value="Wakil Ketua" {{ old('jabatan', $anggota->jabatan ?? '') == 'Wakil Ketua' ? 'selected' : '' }}>Wakil Ketua</option>
+                <option value="Sekretaris" {{ old('jabatan', $anggota->jabatan ?? '') == 'Sekretaris' ? 'selected' : '' }}>Sekretaris</option>
+                <option value="Bendahara" {{ old('jabatan', $anggota->jabatan ?? '') == 'Bendahara' ? 'selected' : '' }}>Bendahara</option>
+                <option value="Divisi Humas" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi Humas' ? 'selected' : '' }}>Divisi Humas</option>
+                <option value="Divisi Manajer Proyek" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi Manajer Proyek' ? 'selected' : '' }}>Divisi Manajer Proyek</option>
+                <option value="Divisi PDD" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi PDD' ? 'selected' : '' }}>Divisi PDD</option>
+                <option value="Divisi Perkab" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi Perkab' ? 'selected' : '' }}>Divisi Perkab</option>
             </select>
         </fieldset>
         @error('jabatan')

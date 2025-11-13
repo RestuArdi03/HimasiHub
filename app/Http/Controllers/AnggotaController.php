@@ -13,7 +13,7 @@ class AnggotaController extends Controller
      */
     public function index()
     {
-        $anggota = Anggota::all();
+        $anggota = Anggota::withoutTrashed()->get(); 
         return view('backend.anggota.halaman_anggota', compact('anggota'));
     }
 
@@ -51,7 +51,7 @@ class AnggotaController extends Controller
      */
     public function show(Anggota $anggota)
     {
-        //
+        return view('backend.anggota.detail_anggota', compact('anggota'));
     }
 
     /**
@@ -74,9 +74,9 @@ class AnggotaController extends Controller
             'nim'       => 'required|string|max:50',
             'kelas'     => 'required|string|max:50',
             'jurusan'   => 'required|string|max:100',
-            'no_hp'     => 'required|string|max:20',
+            'no_hp'     => 'nullable|string|max:20',
             'jabatan'   => 'required|string|max:100',
-            'alamat'    => 'required|string|max:255',
+            'alamat'    => 'nullable|string|max:255',
             'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -104,8 +104,43 @@ class AnggotaController extends Controller
      */
     public function destroy(Anggota $anggota)
     {
-        \Log::info('Menghapus anggota: ' . $anggota->id);
         $anggota->delete();
-        return redirect()->route('backend.anggota.index')->with('success', 'Data anggota berhasil dihapus.');
+        return redirect()->route('backend.anggota.index')->with('success', 'Anggota berhasil diberhentikan.');
+    }
+
+    public function trash()
+    {
+        $anggota = Anggota::onlyTrashed()->get(); 
+        return view('backend.anggota.mantan_anggota', compact('anggota'));
+    }
+
+    /**
+     * Memulihkan (restore) anggota yang sudah di-soft-delete.
+     */
+    public function restore($id)
+    {
+        // 1. Cari data yang sudah terhapus
+        $anggota = Anggota::onlyTrashed()->findOrFail($id); 
+        
+        // 2. Lakukan pemulihan (mengubah deleted_at menjadi NULL)
+        $anggota->restore(); 
+
+        return redirect()->route('backend.anggota.index')
+            ->with('success', 'Anggota ' . $anggota->nama . ' berhasil dipulihkan.');
+    }
+    
+    /**
+     * Menghapus anggota secara permanen (force delete).
+     */
+    public function forceDelete($id)
+    {
+        // 1. Cari data yang sudah terhapus
+        $anggota = Anggota::onlyTrashed()->findOrFail($id); 
+        
+        // 2. Lakukan penghapusan permanen
+        $anggota->forceDelete(); 
+
+        return redirect()->route('backend.anggota.trash')
+            ->with('success', 'Anggota ' . $anggota->nama . ' berhasil dihapus permanen.');
     }
 }

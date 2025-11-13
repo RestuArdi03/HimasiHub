@@ -37,14 +37,14 @@
                     <a href="{{ route('backend.anggota.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-lg"></i> Tambah Anggota
                     </a>
-                    <a href="#" class="btn btn-danger">
-                        <i class="bi bi-trash3-fill"></i> Tempat Sampah
+                    <a href="{{ route('backend.anggota.trash') }}" class="btn btn-danger">
+                        <i class="bi bi-trash3-fill"></i> Mantan Anggota
                     </a>
                 </div>
 
                 {{-- Data Anggota --}}
                 <div class="row justify-content-center g-4"> 
-                    @foreach ($anggota as $agt)
+                    @forelse ($anggota as $agt)
                         <div class="col-4 col-sm-4 col-md-3 col-xl-2"> 
                             <div class="card h-100 shadow-sm text-center"> 
                                 
@@ -67,7 +67,7 @@
                                     <div class="d-flex gap-2 mt-2 justify-content-center"> 
                                         
                                         {{-- Tombol Detail: Gunakan btn-sq dan warna yang sesuai --}}
-                                        <a href="#" class="btn btn-info btn-sq" title="Detail">
+                                        <a href="{{ route('backend.anggota.show', $agt->id) }}" class="btn btn-info btn-sq" title="Detail">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
                                         
@@ -77,8 +77,8 @@
                                         </a>
                                         
                                         {{-- Tombol Hapus --}}
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $agt->id }}" title="Hapus">
-                                                <i class="bi bi-trash-fill"></i>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $agt->id }}" title="Berhentikan">
+                                                <i class="bi bi-x-square-fill"></i>
                                         </button>
 
                                         {{-- Modal Konfirmasi Hapus --}}
@@ -90,14 +90,14 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Apakah Anda yakin ingin menghapus anggota '{{ $agt->nama }}'?
+                                                        Apakah Anda yakin ingin memberhentikan anggota '{{ $agt->nama }}'?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                         <form action="{{ route('backend.anggota.destroy', $agt->id) }}" method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger">Hapus</button>
+                                                            <button type="submit" class="btn btn-danger">Berhentikan</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -107,7 +107,12 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="text-center mt-5">
+                            <img src="{{ asset('backend-assets/images/empty-box.png') }}" alt="Kosong" width="200" class="mb-3">
+                            <h5 class="text-muted">Belum ada data anggota.</h5>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>

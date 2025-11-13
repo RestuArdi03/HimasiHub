@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('alamat') ->nullable();
             $table->string('foto')->nullable();
             $table->unsignedBigInteger('users_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -47,8 +47,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('saldo', SaldoController::class);
 
         // ROUTE ANGGOTA
-        Route::resource('anggota', AnggotaController::class);
-        Route::delete('/anggota/{anggota}', [AnggotaController::class, 'destroy'])->name('backend.anggota.destroy');
+        Route::get('anggota/mantan-anggota', [AnggotaController::class, 'trash'])->name('anggota.trash');
+        Route::put('anggota/{id}/restore', [AnggotaController::class, 'restore'])->name('anggota.restore')->withTrashed();
+        Route::delete('anggota/{id}/force-delete', [AnggotaController::class, 'forceDelete'])->name('anggota.forceDelete')->withTrashed();
+        Route::resource('anggota', AnggotaController::class, ['parameters' => ['anggota' => 'anggota']]);
 
     });
 });
