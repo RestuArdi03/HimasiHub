@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaksi extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'transaksi';
 
     protected $fillable = [
@@ -21,13 +23,13 @@ class Transaksi extends Model
     ];
 
     // RELASI DENGAN TABEL USER
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'users_id');
     }
 
     // RELASI DENGAN TABEL SALDO
-    public function saldo()
+    public function saldo(): BelongsTo
     {
         return $this->belongsTo(Saldo::class);
     }

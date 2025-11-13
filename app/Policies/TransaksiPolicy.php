@@ -2,26 +2,23 @@
 
 namespace App\Policies;
 
-use App\Models\Saldo;
+use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class SaldoPolicy
+class TransaksiPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Perform pre-authorization checks.
      */
-    public function viewAny(User $user): bool
+    public function before(User $user, string $ability): bool|null
     {
-        return true;
-    }
+        // Berikan akses penuh kepada admin
+        if ($user->hasRole('admin')) {
+            return true;
+        }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Saldo $saldo): bool
-    {
-        return true;
+        return null;
     }
 
     /**
@@ -29,38 +26,32 @@ class SaldoPolicy
      */
     public function create(User $user): bool
     {
+        // Izinkan jika user memiliki role Bendahara
         return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Saldo $saldo): bool
+    public function update(User $user, Transaksi $transaksi): bool
     {
-        // Izinkan update untuk 'Kas' (untuk settings), tapi blok 'Lain-lain'
-        // Form edit saldo utama tetap akan memblokir perubahan nama untuk 'Kas'
-        if ($saldo->nama === 'Lain-lain') {
-             return false;
-        }
+        // Izinkan jika user memiliki role Bendahara
         return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Saldo $saldo): bool
+    public function delete(User $user, Transaksi $transaksi): bool
     {
-        // Saldo sistem tidak boleh dihapus
-        if (in_array($saldo->nama, ['Kas', 'Lain-lain'])) {
-            return false;
-        }
+        // Izinkan jika user memiliki role Bendahara
         return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Saldo $saldo): bool
+    public function restore(User $user, Transaksi $transaksi): bool
     {
         return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
@@ -68,7 +59,7 @@ class SaldoPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Saldo $saldo): bool
+    public function forceDelete(User $user, Transaksi $transaksi): bool
     {
         return $user->hasRole('admin') || $user->hasRole('bendahara');
     }
