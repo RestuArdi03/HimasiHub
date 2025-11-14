@@ -65,8 +65,8 @@
 
                 
                 {{-- PENCATATAN --}}
-                <li class="sidebar-item  ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('backend.notulen.*') ? 'active' : '' }} ">
+                    <a href="{{ route('backend.notulen.index') }}" class='sidebar-link'>
                         <i class="bi bi-journal-text"></i>
                         <span>Pencatatan</span>
                     </a>

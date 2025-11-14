@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\NotulenController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleLoginController;
 
@@ -64,6 +65,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('anggota/{id}/restore', [AnggotaController::class, 'restore'])->name('anggota.restore')->withTrashed();
         Route::delete('anggota/{id}/force-delete', [AnggotaController::class, 'forceDelete'])->name('anggota.forceDelete')->withTrashed();
         Route::resource('anggota', AnggotaController::class, ['parameters' => ['anggota' => 'anggota']]);
+
+        // ROUTE NOTULEN
+        Route::resource('notulen', NotulenController::class);
 
     });
 });

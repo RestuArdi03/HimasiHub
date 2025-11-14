@@ -8,6 +8,8 @@ use Database\Seeders\RolesTableSeeder;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\SaldoSeeder;
 use Database\Seeders\AnggotaSeeder;
+use Database\Seeders\KegiatanSeeder;
+use Database\Seeders\NotulenSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,7 +27,13 @@ class DatabaseSeeder extends Seeder
         // Seed saldos after users exist
         $this->call(SaldoSeeder::class);
         
-        // Seed saldos after users exist
+        // Seed anggota after users exist
         $this->call(AnggotaSeeder::class);
+
+        // Seed kegiatan after users exist
+        $this->call(KegiatanSeeder::class);
+
+        // Seed notulen after all dependencies exist
+        $this->call(NotulenSeeder::class);
     }
 }
