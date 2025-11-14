@@ -56,7 +56,7 @@
                 </li>
 
                 {{-- KEUANGAN --}}
-                <li class="sidebar-item {{ request()->routeIs('backend.saldo.*') ? 'active' : '' }} ">
+                <li class="sidebar-item {{ request()->routeIs('backend.saldo.*') || request()->routeIs('backend.transaksi.*') || request()->routeIs('backend.kas.*') ? 'active' : '' }} ">
                     <a href="{{ route('backend.saldo.index') }}" class='sidebar-link'>
                         <i class="bi bi-cash"></i>
                         <span>Keuangan</span>
