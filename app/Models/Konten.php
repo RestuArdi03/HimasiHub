@@ -12,14 +12,25 @@ class Konten extends Model
 
     protected $fillable = [
         'judul',
+        'slug',
         'gambar',
         'deskripsi',
         'users_id',
     ];
 
     // RELASI DENGAN TABEL USER
-    public function users()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\KontenController;
 use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\NotulenController;
@@ -69,5 +70,7 @@ Route::middleware(['auth'])->group(function () {
         // ROUTE NOTULEN
         Route::resource('notulen', NotulenController::class);
 
+        // ROUTE KONTEN
+        Route::resource('konten', KontenController::class);
     });
 });
