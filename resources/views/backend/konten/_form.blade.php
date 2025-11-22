@@ -27,7 +27,7 @@
             @enderror
             @if (isset($konten) && $konten->gambar)
                 <div class="mt-2">
-                    <img src="{{ Storage::url($konten->gambar) }}" alt="Gambar saat ini" class="img-thumbnail"
+                    <img src="{{ Str::startsWith($konten->gambar, 'http') ? $konten->gambar : Storage::url($konten->gambar) }}" alt="Gambar saat ini" class="img-thumbnail"
                         width="200">
                 </div>
             @endif

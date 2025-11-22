@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\FrontendDashboardController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\FrontendKontenController;
 use App\Http\Controllers\KontenController;
 use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\TransaksiController;
@@ -23,9 +25,10 @@ use App\Http\Controllers\Auth\GoogleLoginController;
 // =================================================================
 // RUTE PUBLIK (FRONTEND)
 // =================================================================
-Route::get('/', function () {
-    return view('frontend.dashboard'); // Asumsi file ini ada
-})->name('frontend.index');
+Route::get('/', [FrontendDashboardController::class, 'index'])->name('frontend.index');
+Route::prefix('frontend')->name('frontend.')->group(function () {
+    Route::resource('konten', FrontendKontenController::class);
+});
 
 // ROUTE AUTH
 Auth::routes();

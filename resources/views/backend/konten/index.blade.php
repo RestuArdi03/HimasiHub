@@ -33,9 +33,11 @@
             <div class="row">
                 {{-- Tombol Aksi --}}
                 <div class="col-12 mb-3">
-                    <a href="{{ route('backend.konten.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-lg"></i> Tambah Publikasi
-                    </a>
+                    @can('konten.create')
+                        <a href="{{ route('backend.konten.create') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg"></i> Tambah Publikasi
+                        </a>
+                    @endcan
                     {{-- Jika Anda mengimplementasikan SoftDeletes, tombol ini bisa diaktifkan --}}
                     {{-- <a href="#" class="btn btn-danger">
                         <i class="bi bi-trash3-fill"></i> Tempat Sampah
@@ -64,7 +66,7 @@
                             @forelse ($konten as $item)
                                 <tr>
                                     <td>
-                                        <img src="{{ Storage::url($item->gambar) }}" alt="{{ $item->judul }}" width="100" class="img-thumbnail">
+                                        <img src="{{ Str::startsWith($item->gambar, 'http') ? $item->gambar : Storage::url($item->gambar) }}" alt="{{ $item->judul }}" width="100" class="img-thumbnail">
                                     </td>
                                     <td>
                                         <a href="{{ route('backend.konten.show', $item) }}">{{ $item->judul }}</a>
@@ -72,15 +74,21 @@
                                     <td>{{ optional($item->user)->nama ?? 'N/A' }}</td>
                                     <td>{{ $item->created_at->format('d M Y') }}</td>
                                     <td>
-                                        <a href="{{ route('backend.konten.show', $item) }}" class="btn btn-sm btn-info" title="Detail">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </a>
-                                        <a href="{{ route('backend.konten.edit', $item) }}" class="btn btn-sm btn-warning" title="Edit">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
+                                        @can('konten.view')
+                                            <a href="{{ route('backend.konten.show', $item) }}" class="btn btn-sm btn-info" title="Detail">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </a>
+                                        @endcan
+                                        @can('update', $item)
+                                            <a href="{{ route('backend.konten.edit', $item) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                        @endcan
+                                        @can('delete', $item)
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        @endcan
 
                                         {{-- Modal Konfirmasi Hapus --}}
                                         <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
