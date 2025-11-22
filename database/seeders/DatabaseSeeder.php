@@ -10,6 +10,7 @@ use Database\Seeders\SaldoSeeder;
 use Database\Seeders\AnggotaSeeder;
 use Database\Seeders\KegiatanSeeder;
 use Database\Seeders\NotulenSeeder;
+use Database\Seeders\KontenSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -35,5 +36,8 @@ class DatabaseSeeder extends Seeder
 
         // Seed notulen after all dependencies exist
         $this->call(NotulenSeeder::class);
+
+        // Seed konten
+        $this->call(KontenSeeder::class);
     }
 }

@@ -8,8 +8,8 @@ use App\Models\Transaksi;
 use App\Policies\KontenPolicy;
 use App\Policies\SaldoPolicy;
 use App\Policies\TransaksiPolicy;
-// use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,6 +31,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // Daftarkan Gate untuk setiap aksi
+        // Ini memetakan string 'permission' ke metode di dalam Policy
+        Gate::define('konten.view', [KontenPolicy::class, 'view']);
+        Gate::define('konten.create', [KontenPolicy::class, 'create']);
+        Gate::define('konten.update', [KontenPolicy::class, 'update']);
+        Gate::define('konten.delete', [KontenPolicy::class, 'delete']);
+        Gate::define('konten.restore', [KontenPolicy::class, 'restore']);
+        Gate::define('konten.forceDelete', [KontenPolicy::class, 'forceDelete']);
     }
 }

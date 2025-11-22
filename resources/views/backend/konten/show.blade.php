@@ -27,7 +27,7 @@
                 <div class="card-body">
                     @if($konten->gambar)
                         <div class="mb-4 text-center">
-                            <img src="{{ Storage::url($konten->gambar) }}" class="img-fluid rounded" alt="{{ $konten->judul }}" style="max-height: 400px;">
+                            <img src="{{ Str::startsWith($konten->gambar, 'http') ? $konten->gambar : Storage::url($konten->gambar) }}" class="img-fluid rounded" alt="{{ $konten->judul }}" style="max-height: 400px;">
                         </div>
                     @endif
 
@@ -53,12 +53,16 @@
                         <i class="bi bi-arrow-left"></i> Kembali
                     </a>
                     <div>
-                        <a href="{{ route('backend.konten.edit', $konten) }}" class="btn btn-warning">
-                            <i class="bi bi-pencil-fill"></i> Edit
-                        </a>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $konten->id }}">
-                            <i class="bi bi-trash-fill"></i> Hapus
-                        </button>
+                        @can('update', $konten)
+                            <a href="{{ route('backend.konten.edit', $konten) }}" class="btn btn-warning">
+                                <i class="bi bi-pencil-fill"></i> Edit
+                            </a>
+                        @endcan
+                        @can('delete', $konten)
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $konten->id }}">
+                                <i class="bi bi-trash-fill"></i> Hapus
+                            </button>
+                        @endcan
                     </div>
                 </div>
             </div>
