@@ -87,7 +87,7 @@
                                     </tr>
                                     <tr>
                                         <td>Jabatan</td>
-                                        <td>{{ $anggota->jabatan ?? '-'}}</td>
+                                        <td>{{ $anggota->jabatan->nama_jabatan ?? '-'}}</td>
                                     </tr>
                                     <tr>
                                         <td>Alamat</td>

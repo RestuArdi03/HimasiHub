@@ -69,21 +69,27 @@
         </div>
     </div>
     <div class="col-md-6 mb-2">
-        <label for="jabatan">Jabatan</label>
+        <label for="_id">Jabatan</label>
         <fieldset class="form-group">
-            <select class="form-select" id="jabatan" name="jabatan" required>
-                <option value="" disabled {{ old('jabatan', $anggota->jabatan ?? '') == '' ? '' : 'selected' }}>Pilih Jabatan</option>
-                <option value="Ketua" {{ old('jabatan', $anggota->jabatan ?? '') == 'Ketua' ? 'selected' : '' }}>Ketua</option>
-                <option value="Wakil Ketua" {{ old('jabatan', $anggota->jabatan ?? '') == 'Wakil Ketua' ? 'selected' : '' }}>Wakil Ketua</option>
-                <option value="Sekretaris" {{ old('jabatan', $anggota->jabatan ?? '') == 'Sekretaris' ? 'selected' : '' }}>Sekretaris</option>
-                <option value="Bendahara" {{ old('jabatan', $anggota->jabatan ?? '') == 'Bendahara' ? 'selected' : '' }}>Bendahara</option>
-                <option value="Divisi Humas" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi Humas' ? 'selected' : '' }}>Divisi Humas</option>
-                <option value="Divisi Manajer Proyek" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi Manajer Proyek' ? 'selected' : '' }}>Divisi Manajer Proyek</option>
-                <option value="Divisi PDD" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi PDD' ? 'selected' : '' }}>Divisi PDD</option>
-                <option value="Divisi Perkab" {{ old('jabatan', $anggota->jabatan ?? '') == 'Divisi Perkab' ? 'selected' : '' }}>Divisi Perkab</option>
+            <select class="form-select" id="jabatan_id" name="jabatan_id" required>
+                <option value="" disabled selected>Pilih Jabatan</option>
+            
+                    {{-- Loop untuk mengisi opsi dari data tabel jabatan --}}
+                    @foreach ($jabatan as $jab)
+                        
+                        {{-- Dapatkan nilai yang tersimpan/lama untuk perbandingan --}}
+                        @php
+                            $selectedValue = old('jabatan_id', $anggota->jabatan_id ?? '');
+                        @endphp
+
+                        <option value="{{ $jab->id }}"
+                            {{ $selectedValue == $jab->id ? 'selected' : '' }}>
+                            {{ $jab->nama_jabatan }}
+                        </option>
+                    @endforeach
             </select>
         </fieldset>
-        @error('jabatan')
+        @error('jabatan_id')
             <div class="invalid-feedback">
                 {{ $message }}
             </div>

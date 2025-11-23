@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('kelas');
             $table->string('jurusan');
             $table->string('no_hp') ->nullable();
-            $table->string('jabatan');
+            $table->unsignedBigInteger('jabatan_id')->nullable();
             $table->string('alamat') ->nullable();
             $table->string('foto')->nullable();
             $table->unsignedBigInteger('users_id')->nullable();

@@ -60,7 +60,7 @@
                                     {{-- Keterangan --}}
                                     <div>
                                         <h5 class="card-title text-truncate">{{ $agt->nama }}</h5>
-                                        <p class="card-text text-truncate text-muted">{{ $agt->jabatan }}</p>
+                                        <p class="card-text text-truncate text-muted">{{ $agt->jabatan->nama_jabatan }}</p>
                                     </div>
 
                                     {{-- Tombol Aksi --}}

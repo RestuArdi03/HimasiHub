@@ -16,16 +16,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed roles first
+        // Seed role first
         $this->call(RolesTableSeeder::class);
 
         // Seed users after roles exist
         $this->call(UsersTableSeeder::class);
 
-        // Seed saldos after users exist
+        // Seed saldo after users exist
         $this->call(SaldoSeeder::class);
         
-        // Seed saldos after users exist
+        // Seed jabatan
+        $this->call(JabatanSeeder::class);
+
+        // Seed anggota after jabatan exist
         $this->call(AnggotaSeeder::class);
     }
 }

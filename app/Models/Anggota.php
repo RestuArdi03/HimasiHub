@@ -18,11 +18,10 @@ class Anggota extends Model
         'kelas',
         'jurusan',
         'no_hp',
-        'jabatan',
+        'jabatan_id',
         'alamat',
         'foto',
         'users_id',
-        'role_id',
     ];
 
     // RELASI DENGAN TABEL USER
@@ -30,10 +29,10 @@ class Anggota extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    // RELASI DENGAN TABEL ROLE
-    public function role()
+    
+    // RELASI DENGAN TABEL JABATAN
+    public function jabatan()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Jabatan::class);
     }
 }

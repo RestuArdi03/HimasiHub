@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anggota;
+use App\Models\Jabatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,7 +14,12 @@ class AnggotaController extends Controller
      */
     public function index()
     {
-        $anggota = Anggota::withoutTrashed()->get(); 
+        $anggota = Anggota::select('anggota.*')
+        // Lakukan join ke tabel jabatan
+        ->join('jabatan', 'anggota.jabatan_id', '=', 'jabatan.id') 
+        // Urutkan berdasarkan kolom 'kode_jabatan' di tabel jabatan
+        ->orderBy('jabatan.kode_jabatan', 'asc') 
+        ->get();
         return view('backend.anggota.halaman_anggota', compact('anggota'));
     }
 
@@ -22,7 +28,8 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        return view('backend.anggota.tambah_anggota');
+        $jabatan = Jabatan::all();
+        return view('backend.anggota.tambah_anggota', compact('jabatan'));
     }
 
     /**
@@ -36,7 +43,7 @@ class AnggotaController extends Controller
             'kelas'    => 'required|string|max:50',
             'jurusan'  => 'required|string|max:100',
             'no_hp'    => 'nullable|string|max:20',
-            'jabatan'  => 'required|string|max:100',
+            'jabatan_id'  => 'required|integer|exists:jabatan,id',
             'alamat'   => 'nullable|string|max:255',
             'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -58,10 +65,11 @@ class AnggotaController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Anggota $anggota)
-    {
+    {   
+        $jabatan = Jabatan::all();
         return view('backend.anggota.edit_anggota', [
             'anggota' => $anggota
-        ]);
+        ], compact('jabatan'));
     }
 
     /**
@@ -75,7 +83,7 @@ class AnggotaController extends Controller
             'kelas'     => 'required|string|max:50',
             'jurusan'   => 'required|string|max:100',
             'no_hp'     => 'nullable|string|max:20',
-            'jabatan'   => 'required|string|max:100',
+            'jabatan_id'  => 'required|integer|exists:jabatan,id',
             'alamat'    => 'nullable|string|max:255',
             'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -110,7 +118,22 @@ class AnggotaController extends Controller
 
     public function trash()
     {
-        $anggota = Anggota::onlyTrashed()->get(); 
+        $anggota = Anggota::query() // Mulai query dengan Anggota::query()
+            // dan tambahkan whereNotNull('anggota.deleted_at') untuk memfilter yang terhapus
+            ->withTrashed() 
+            ->whereNotNull('anggota.deleted_at')
+            
+            // Pilih kolom yang diperlukan untuk menghindari konflik penamaan
+            ->select('anggota.*', 'jabatan.kode_jabatan') 
+            
+            ->join('jabatan', 'anggota.jabatan_id', '=', 'jabatan.id') 
+            
+            // Urutkan berdasarkan kolom 'kode_jabatan' di tabel jabatan
+            ->orderBy('jabatan.kode_jabatan', 'asc') 
+            
+            // Panggil get() hanya sekali
+            ->get(); 
+            
         return view('backend.anggota.mantan_anggota', compact('anggota'));
     }
 

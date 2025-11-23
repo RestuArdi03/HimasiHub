@@ -61,7 +61,7 @@
                             <div class="card-body d-flex flex-column justify-content-between"> 
                                 <div>
                                     <h5 class="card-title text-truncate">{{ $agt->nama }}</h5>
-                                    <p class="card-text text-truncate text-muted">{{ $agt->jabatan }}</p>
+                                    <p class="card-text text-truncate text-muted">{{ $agt->jabatan->nama_jabatan }}</p>
                                     {{-- Tampilkan waktu dihapus sebagai info tambahan --}}
                                     <small class="text-danger">Dihentikan/Purnatugas pada: {{ $agt->deleted_at->format('d/m/Y') }}</small> 
                                 </div>
