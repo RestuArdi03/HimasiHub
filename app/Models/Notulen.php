@@ -11,9 +11,17 @@ class Notulen extends Model
     protected $table = 'notulen';
 
     protected $fillable = [
-        'judul',
-        'kegiatan_id',
-        'users_id',
+        'judul_rapat',
+        'catatan_tambahan',
+        'tanggal_rapat',
+        'waktu_mulai',
+        'waktu_selesai',
+        'lokasi',
+        'tipe_rapat',
+        'pimpinan_rapat_nama',
+        'pimpinan_rapat_id',
+        'notulis_nama',
+        'notulis_id',
     ];
 
     // RELASI DENGAN TABEL KEGIATAN
@@ -26,5 +34,17 @@ class Notulen extends Model
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // RELASI DENGAN TABEL AGENDA
+    public function agenda()
+    {
+        return $this->hasMany(Agenda::class);
+    }
+
+    // RELASI DENGAN TABEL DOKUMENTASI
+    public function dokumentasi()
+    {
+        return $this->hasMany(Dokumentasi::class);
     }
 }

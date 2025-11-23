@@ -11,8 +11,11 @@ class PresensiKehadiran extends Model
     protected $table = 'presensi_kehadiran';
 
     protected $fillable = [
-        'anggota_id',
-        'kegiatan_id',
+        'peserta_nama',
+        'user_id',
+        'presensiable_id',
+        'presensiable_type',
+        'keterangan_kehadiran',
     ];
 
     // RELASI DENGAN TABEL ANGGOTA
@@ -25,5 +28,10 @@ class PresensiKehadiran extends Model
     public function kegiatan()
     {
         return $this->belongsTo(Kegiatan::class);
+    }
+
+    public function presensiable()
+    {
+        return $this->morphTo();
     }
 }

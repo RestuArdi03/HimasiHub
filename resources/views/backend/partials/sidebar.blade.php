@@ -65,16 +65,16 @@
 
                 
                 {{-- PENCATATAN --}}
-                <li class="sidebar-item  ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('backend.notulen.*') ? 'active' : '' }} ">
+                    <a href="{{ route('backend.notulen.index') }}" class='sidebar-link'>
                         <i class="bi bi-journal-text"></i>
                         <span>Pencatatan</span>
                     </a>
                 </li>
                 
                 {{-- PUBLIKASI --}}
-                <li class="sidebar-item  ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('backend.konten.*') ? 'active' : '' }} ">
+                    <a href="{{ route('backend.konten.index') }}" class='sidebar-link'>
                         <i class="bi bi-share"></i>
                         <span>Publikasi</span>
                     </a>
