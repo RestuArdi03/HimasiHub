@@ -21,6 +21,10 @@ class Anggota extends Model
         'jabatan_id',
         'alamat',
         'foto',
+        'moto_hidup',
+        'email',
+        'tiktok',
+        'instagram',
         'users_id',
     ];
 

@@ -109,10 +109,58 @@
     </div>
     <div class="col-md-6 mb-2">
         <div class="form-group">
-            <label for="alamat">Foto</label>
-            <input type="file" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat"
-                   value="{{ old('alamat', $anggota->alamat ?? '') }}" placeholder="Tambahkan foto anggota">
-            @error('alamat')
+            <label for="moto_hidup">Moto Hidup</label>
+            <input type="text" class="form-control @error('moto_hidup') is-invalid @enderror" id="moto_hidup" name="moto_hidup"
+                   value="{{ old('moto_hidup', $anggota->moto_hidup ?? '') }}" placeholder="Masukkan moto hidup anggota">
+            @error('moto_hidup')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div>
+    <div class="col-md-6 mb-2">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
+                   value="{{ old('email', $anggota->email ?? '') }}" placeholder="Masukkan Email anggota">
+            @error('email')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div>
+    <div class="col-md-6 mb-2">
+        <div class="form-group">
+            <label for="tiktok">Tiktok</label>
+            <input type="text" class="form-control @error('tiktok') is-invalid @enderror" id="tiktok" name="tiktok"
+                   value="{{ old('tiktok', $anggota->tiktok ?? '') }}" placeholder="Masukkan link TikTok anggota">
+            @error('tiktok')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div>
+    <div class="col-md-6 mb-2">
+        <div class="form-group">
+            <label for="instagram">Instagram</label>
+            <input type="text" class="form-control @error('instagram') is-invalid @enderror" id="instagram" name="instagram"
+                   value="{{ old('instagram', $anggota->instagram ?? '') }}" placeholder="Masukkan link Instagram anggota">
+            @error('instagram')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div>
+    <div class="col-md-6 mb-2">
+        <div class="form-group">
+            <label for="foto">Foto</label>
+            <input type="file" class="form-control @error('foto') is-invalid @enderror" id="foto" name="foto"
+                   value="{{ old('foto', $anggota->foto ?? '') }}" placeholder="Tambahkan foto anggota">
+            @error('foto')
             <div class="invalid-feedback">
                 {{ $message }}
             </div>

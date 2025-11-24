@@ -8,7 +8,7 @@
             {{-- Header Halaman --}}
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Publikasi</h6>
-                <h1 class="mb-5">Berita & Informasi</h1>
+                <h1 class="mb-5">Berita & Artikel</h1>
             </div>
 
             <div class="row g-5">

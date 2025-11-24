@@ -45,8 +45,24 @@ class AnggotaController extends Controller
             'no_hp'    => 'nullable|string|max:20',
             'jabatan_id'  => 'required|integer|exists:jabatan,id',
             'alamat'   => 'nullable|string|max:255',
+            'moto_hidup'   => 'nullable|string|max:255',
+            'email'   => 'nullable|string|max:255',
+            'tiktok'   => 'nullable|string|max:255',
+            'instagram'   => 'nullable|string|max:255',
             'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'foto.image' => 'File harus berupa gambar.',
+            'foto.mimes' => 'Format gambar hanya boleh jpg, jpeg, atau png.',
+            'foto.max'   => 'Ukuran gambar maksimal 2MB.',
         ]);
+
+        // cek apakah ada file foto
+        if ($request->hasFile('foto')) {
+            // simpan file ke folder public/storage/foto
+            $path = $request->file('foto')->store('foto', 'public');
+            // simpan path ke field foto
+            $validated['foto'] = $path;
+        }
 
         Anggota::create($validated);
 
@@ -85,7 +101,15 @@ class AnggotaController extends Controller
             'no_hp'     => 'nullable|string|max:20',
             'jabatan_id'  => 'required|integer|exists:jabatan,id',
             'alamat'    => 'nullable|string|max:255',
+            'moto_hidup'   => 'nullable|string|max:255',
+            'email'   => 'nullable|string|max:255',
+            'tiktok'   => 'nullable|string|max:255',
+            'instagram'   => 'nullable|string|max:255',
             'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'foto.image' => 'File harus berupa gambar.',
+            'foto.mimes' => 'Format gambar hanya boleh jpg, jpeg, atau png.',
+            'foto.max'   => 'Ukuran gambar maksimal 2MB.',
         ]);
 
         // --- LOGIKA PENANGANAN FOTO BARU ---

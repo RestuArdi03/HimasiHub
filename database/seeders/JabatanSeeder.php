@@ -21,7 +21,7 @@ class JabatanSeeder extends Seeder
             ['nama_jabatan' => 'Divisi Humas', 'kode_jabatan' => '5', 'created_at' => now(), 'updated_at' => now()],
             ['nama_jabatan' => 'Divisi Manajer Proyek', 'kode_jabatan' => '6', 'created_at' => now(), 'updated_at' => now()],
             ['nama_jabatan' => 'Divisi PDD', 'kode_jabatan' => '7', 'created_at' => now(), 'updated_at' => now()],
-            ['nama_jabatan' => 'Divisi Perkap', 'kode_jabatan' => '8', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_jabatan' => 'Divisi Perlengkapan', 'kode_jabatan' => '8', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

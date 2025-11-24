@@ -22,6 +22,7 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <!-- Libraries Stylesheet -->
     <link href="{{ asset('lib/animate/animate.min.css') }}" rel="stylesheet">
@@ -32,6 +33,11 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('frontend-assets/css/style.css') }}" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    
 </head>
 
 <body>
@@ -47,24 +53,26 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <a href="{{ route('frontend.index') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>HimasiHub</h2>
+            <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="navbar-logo me-2"> 
+            <h2 class="text-himasi">HimasiHub</h2>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ route('frontend.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.index') ? 'active' : '' }}">Home</a>
+                <a href="{{ route('frontend.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.index') ? 'active' : '' }}">Beranda</a>
                 {{-- Contoh rute lain, Anda bisa membuat rute ini di web.php --}}
-                {{-- <a href="#" class="nav-item nav-link">About</a> --}}
-                {{-- <a href="#" class="nav-item nav-link">Courses</a> --}}
+                <a href="{{ route('frontend.about.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.about.index') ? 'active' : '' }}">Tentang Kami</a>
+                <a href="{{ route('frontend.konten.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.konten.index') ? 'active' : '' }}">Publikasi</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('frontend.anggota.index') ? 'active' : '' }}" data-bs-toggle="dropdown">Lain-lain</a>
                     <div class="dropdown-menu fade-down m-0">
-                        {{-- <a href="#" class="dropdown-item">Our Team</a> --}}
-                        {{-- <a href="#" class="dropdown-item">Testimonial</a> --}}
+                        <a href="{{ route('frontend.anggota.index') }}" class="dropdown-item">Anggota</a>
+                        <a href="#" class="dropdown-item">Belum ada ide lagi mau diisi apa...</a>
                     </div>
                 </div>
+                <a href="{{ route('frontend.contact.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.contact.index') ? 'active' : '' }}">Kontak Kami</a>
                 {{-- <a href="#" class="nav-item nav-link">Contact</a> --}}
                 @guest
                     {{-- Tautan ini akan muncul di menu mobile --}}

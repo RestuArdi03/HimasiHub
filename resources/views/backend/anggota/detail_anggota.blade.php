@@ -93,6 +93,22 @@
                                         <td>Alamat</td>
                                         <td>{{ $anggota->alamat ?? '-' }}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Moto Hidup</td>
+                                        <td>{{ $anggota->moto_hidup ?? '-' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>{{ $anggota->email ?? '-' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TikTok</td>
+                                        <td>{{ $anggota->tiktok ?? '-' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Instagram</td>
+                                        <td>{{ $anggota->instagram ?? '-' }}</td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>

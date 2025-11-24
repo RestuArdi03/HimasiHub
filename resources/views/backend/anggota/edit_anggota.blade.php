@@ -33,7 +33,7 @@
                     <h5 class="card-title">Form Edit Anggota: {{ $anggota->nama }}</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('backend.anggota.update', $anggota) }}" method="POST">
+                    <form action="{{ route('backend.anggota.update', $anggota) }}" method="POST" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         @include('backend.anggota.form_anggota')

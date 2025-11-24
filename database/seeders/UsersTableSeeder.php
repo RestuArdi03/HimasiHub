@@ -49,6 +49,14 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('humas123'),
             'role_id' => Role::where('nama_role', 'humas')->first()->id
         ]);
+        
+        User::create([
+            'nama' => 'Alek',
+            'email' => 'alek@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'role_id' => Role::where('nama_role', 'tamu')->first()->id
+        ]);
 
         // Create some random users with 'pengurus lain' role
         $pengurusRole = Role::where('nama_role', 'pengurus lain')->first();

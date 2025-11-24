@@ -21,6 +21,10 @@ return new class extends Migration
             $table->unsignedBigInteger('jabatan_id')->nullable();
             $table->string('alamat') ->nullable();
             $table->string('foto')->nullable();
+            $table->string('moto_hidup')->nullable();
+            $table->string('email')->nullable();
+            $table->string('tiktok')->nullable();
+            $table->string('instagram')->nullable();
             $table->unsignedBigInteger('users_id')->nullable();
             $table->softDeletes();
             $table->timestamps();

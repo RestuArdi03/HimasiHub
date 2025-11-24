@@ -30,7 +30,12 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         <li><h6 class="dropdown-header">Hello, {{ strtok(Auth::user()->nama, " ") }}!</h6></li>
-                        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> My Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i>Profil Saya</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('frontend.index') }}" onclick="event.preventDefault(); document.getElementById('logout-form-header').submit();">
+                                <i class="icon-mid bi bi-house me-2"></i> Halaman Frontend
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form-header').submit();">

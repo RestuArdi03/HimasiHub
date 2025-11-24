@@ -28,7 +28,8 @@
                     <h5 class="card-title">Form Tambah Anggota</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('backend.anggota.store') }}" method="POST">
+                    <form action="{{ route('backend.anggota.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         @include('backend.anggota.form_anggota')
 
                         <div class="col-12 d-flex justify-content-end mt-4">
