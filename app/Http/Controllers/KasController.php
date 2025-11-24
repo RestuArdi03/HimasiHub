@@ -54,7 +54,7 @@ class KasController extends Controller
             Transaksi::create([
                 'saldo_id' => $saldo->id,
                 'users_id' => $member->id, // ID anggota yang membayar
-                'keterangan' => "Iuran Kas ke-{$iuranKe}",
+                'keterangan' => "Iuran Kas ke-{$iuranKe} - {$member->nama}",
                 'debit' => $biayaIuran,
                 'kredit' => 0,
             ]);
