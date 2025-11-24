@@ -6,6 +6,8 @@ use App\Http\Requests\StoreSaldoRequest;
 use App\Http\Requests\UpdateSaldoRequest;
 use App\Models\Saldo;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SaldoController extends Controller
 {
@@ -143,5 +145,48 @@ class SaldoController extends Controller
         return view('backend.saldo.trash', compact('saldo'));
     }
 
+    // Laporan
+    public function report(Request $request)
+    {
+        $this->authorize('viewAny', Saldo::class);
+
+        $saldoQuery = Saldo::query();
+
+        // Filter berdasarkan saldo yang dipilih
+        if ($request->has('saldo_ids') && is_array($request->saldo_ids) && count($request->saldo_ids) > 0) {
+            $saldoQuery->whereIn('id', $request->saldo_ids);
+        }
+
+        // Eager load transaksi dengan filter tanggal
+        $saldoQuery->with(['transactions' => function ($query) use ($request) {
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $startDate = $request->start_date . ' 00:00:00';
+                $endDate = $request->end_date . ' 23:59:59';
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+            $query->orderBy('created_at', 'asc');
+        }]);
+
+        $saldos = $saldoQuery->orderBy('nama')->get();
+
+        // Hitung total saldo dari hasil query
+        $totalSaldo = $saldos->sum('balance');
+
+        // Data untuk dropdown filter
+        $allSaldos = Saldo::orderBy('nama')->get();
+
+        // Handle Ekspor PDF
+        if ($request->get('export') === 'pdf') {
+            $pdf = Pdf::loadView('backend.saldo.report_pdf', [
+                'saldos' => $saldos,
+                'totalSaldo' => $totalSaldo,
+                'startDate' => $request->start_date,
+                'endDate' => $request->end_date,
+            ]);
+            return $pdf->download('laporan-saldo-' . date('Y-m-d') . '.pdf');
+        }
+
+        return view('backend.saldo.report', compact('saldos', 'totalSaldo', 'allSaldos', 'request'));
+    }
 
 }
