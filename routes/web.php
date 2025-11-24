@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('saldo/trash', [SaldoController::class, 'trash'])->name('saldo.trash');
         Route::put('saldo/{saldo}/restore', [SaldoController::class, 'restore'])->name('saldo.restore')->withTrashed();
         Route::delete('saldo/{saldo}/force-delete', [SaldoController::class, 'forceDelete'])->name('saldo.forceDelete')->withTrashed();
+        Route::get('saldo/report', [SaldoController::class, 'report'])->name('saldo.report');
         Route::resource('saldo', SaldoController::class);
 
         // ROUTE KAS

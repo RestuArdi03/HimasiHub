@@ -63,10 +63,12 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="card-title mb-0">Riwayat Transaksi</h4>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ route('backend.transaksi.trash', $saldo->id) }}" class="btn btn-secondary" title="Tempat Sampah"><i class="bi bi-trash"></i></a>
-                                    <a href="{{ route('backend.transaksi.create', ['saldo_id' => $saldo->id]) }}" class="btn btn-primary" title="Tambah Transaksi"><i class="bi bi-plus-circle"></i> Tambah</a>
-                                </div>
+                                <div>
+                                    <a href="{{ route('backend.transaksi.create', ['saldo_id' => $saldo->id]) }}" class="btn btn-primary">
+                                        <i class="bi bi-plus-lg"></i> Tambah Transaksi
+                                    </a>
+                                    <a href="{{ route('backend.transaksi.trash', $saldo->id) }}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i> Tempat Sampah</a>
+                                </div>                                
                             </div>
                         </div>
                         <div class="card-body">
