@@ -89,7 +89,10 @@
                                             @else
                                                 <span class="badge bg-secondary">Kosong</span>
                                             @endif
-                                            <button class="btn btn-sm btn-danger" onclick="deleteNotulen({{ $item->id }}, '{{ $item->judul }}')">
+                                            <a href="{{ route('backend.notulen.edit', $item->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit Notulen">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteNotulen({{ $item->id }}, {!! json_encode($item->judul) !!})" title="Hapus Notulen">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
