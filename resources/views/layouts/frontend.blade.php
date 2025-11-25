@@ -94,7 +94,7 @@
                             @if(Auth::user()->role)
                                 <a href="{{ route('backend.dashboard') }}" class="dropdown-item">Dashboard</a>
                             @endif
-                            <a class="dropdown-item" href="#">Ubah Profil</a>
+                            <a class="dropdown-item" href="{{ route('frontend.user.edit', Auth::user()->id) }}">Ubah Profil</a>
                             <hr class="dropdown-divider">
                             <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out-alt me-2"></i>Keluar</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
