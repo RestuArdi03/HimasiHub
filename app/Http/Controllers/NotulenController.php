@@ -162,7 +162,36 @@ class NotulenController extends Controller
      */
     public function destroy(Notulen $notulen)
     {
-        //
+        try {
+            // Delete related files
+            if ($notulen->dokumentasi()->exists()) {
+                foreach ($notulen->dokumentasi as $doc) {
+                    if ($doc->file_path && file_exists(storage_path('app/public/' . $doc->file_path))) {
+                        unlink(storage_path('app/public/' . $doc->file_path));
+                    }
+                    $doc->delete();
+                }
+            }
+
+            // Delete related agenda
+            if ($notulen->agenda()->exists()) {
+                $notulen->agenda()->delete();
+            }
+
+            // Delete related presensi kehadiran
+            PresensiKehadiran::where('presensiable_id', $notulen->id)
+                ->where('presensiable_type', Notulen::class)
+                ->delete();
+
+            // Delete the notulen itself
+            $notulen->delete();
+
+            return redirect()->route('backend.notulen.index')
+                ->with('success', 'Notulen berhasil dihapus beserta semua data terkaitnya.');
+        } catch (\Exception $e) {
+            return redirect()->route('backend.notulen.index')
+                ->with('error', 'Gagal menghapus notulen: ' . $e->getMessage());
+        }
     }
 }
 

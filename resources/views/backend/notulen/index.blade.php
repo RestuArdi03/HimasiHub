@@ -49,9 +49,9 @@
                 @if($notulen->count())
                     <div class="list-group">
                         @foreach($notulen as $item)
-                            <a href="{{ route('backend.notulen.show', $item->id) }}" class="list-group-item list-group-item-action border-bottom py-3">
+                            <div class="list-group-item list-group-item-action border-bottom py-3">
                                 <div class="d-flex w-100 justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
+                                    <a href="{{ route('backend.notulen.show', $item->id) }}" class="flex-grow-1 text-decoration-none">
                                         <div class="d-flex align-items-center mb-2">
                                             <i class="bi bi-file-earmark-text me-2 text-muted"></i>
                                             <h6 class="mb-0 fw-600">{{ $item->judul }}</h6>
@@ -66,7 +66,7 @@
                                             </span>
                                             <span>
                                                 <i class="bi bi-person-circle"></i>
-                                                {{ $item->users->name ?? 'N/A' }}
+                                                {{ optional($item->users)->nama ?? 'N/A' }}
                                             </span>
                                             @if($item->agenda->count())
                                                 <span>
@@ -75,7 +75,7 @@
                                                 </span>
                                             @endif
                                         </div>
-                                    </div>
+                                    </a>
                                     <div class="text-end ms-3">
                                         <div class="mb-2">
                                             <small class="text-muted d-block">
@@ -83,14 +83,19 @@
                                                 {{ $item->created_at->format('H:i') }}
                                             </small>
                                         </div>
-                                        @if($item->agenda->count())
-                                            <span class="badge bg-info">{{ $item->agenda->count() }} Poin</span>
-                                        @else
-                                            <span class="badge bg-secondary">Kosong</span>
-                                        @endif
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            @if($item->agenda->count())
+                                                <span class="badge bg-info">{{ $item->agenda->count() }} Poin</span>
+                                            @else
+                                                <span class="badge bg-secondary">Kosong</span>
+                                            @endif
+                                            <button class="btn btn-sm btn-danger" onclick="deleteNotulen({{ $item->id }}, '{{ $item->judul }}')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         @endforeach
                     </div>
 
@@ -110,7 +115,47 @@
 @endsection
 
 @push('scripts')
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Hapus Notulen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Anda yakin ingin menghapus notulen "<span id="deleteItemTitle"></span>"?</p>
+                <p class="text-warning mb-0"><small><i class="bi bi-exclamation-triangle"></i> Data yang dihapus tidak dapat dikembalikan. Semua agenda, dokumentasi, dan data kehadiran juga akan dihapus.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    let deleteId = null;
+
+    function deleteNotulen(id, title) {
+        deleteId = id;
+        document.getElementById('deleteItemTitle').textContent = title;
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        if (deleteId) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/backend/notulen/' + deleteId;
+            form.innerHTML = '@csrf @method("DELETE")';
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+
     document.getElementById('btnSort')?.addEventListener('click', function() {
         // Implementasi sorting logic
         alert('Sorting feature');
