@@ -66,15 +66,15 @@
                 <a href="{{ route('frontend.about.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.about.*') ? 'active' : '' }}">Tentang Kami</a>
                 <a href="{{ route('frontend.konten.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.konten.*') ? 'active' : '' }}">Publikasi</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('frontend.anggota.*') ? 'active' : '' }}" data-bs-toggle="dropdown">Lain-lain</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('frontend.anggota.*', 'frontend.contact.*', 'frontend.bantuan.*') ? 'active' : '' }}" data-bs-toggle="dropdown">Lain-lain</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="{{ route('frontend.anggota.index') }}" class="dropdown-item">Anggota</a>
+                        <a href="{{ route('frontend.contact.index') }}" class="dropdown-item">Kontak Kami</a>
                         <a href="{{ route('frontend.bantuan.index') }}" class="dropdown-item">Bantuan</a>
                         <a href="#" class="dropdown-item">Belum ada ide lagi mau diisi apa...</a>
                     </div>
                 </div>
-                <a href="{{ route('frontend.contact.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.contact.*') ? 'active' : '' }}">Kontak Kami</a>
-                {{-- <a href="#" class="nav-item nav-link">Contact</a> --}}
+                
                 @guest
                     {{-- Tautan ini akan muncul di menu mobile --}}
                     <a href="{{ route('login') }}" class="nav-item nav-link d-lg-none">Login</a>
