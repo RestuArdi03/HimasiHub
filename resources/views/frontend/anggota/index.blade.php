@@ -3,6 +3,24 @@
 @section('title', 'Anggota - HimasiHub')
 
 @section('content')
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 header-gambar">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white text-shadow-lg animated slideInDown">Anggota</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white text-shadow-lg" href="{{ route('frontend.index') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-white active text-shadow-lg" aria-current="page">Anggota</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
     <!-- Anggota Start -->
     <div class="container-xxl py-5">
         <div class="container">

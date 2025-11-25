@@ -3,6 +3,24 @@
 @section('title', 'Kontak Kami - HimasiHub')
 
 @section('content')
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 header-gambar">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white text-shadow-lg animated slideInDown">Kontak Kami</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white text-shadow-lg" href="{{ route('frontend.index') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-white active text-shadow-lg" aria-current="page">Kontak Kami</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
     <!-- Contact Start -->
     <div class="container-xxl py-5">
         <div class="container">
@@ -82,7 +100,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
+                                <button class="btn btn-primary w-100 py-3" type="submit">Kirim Pesan</button>
                             </div>
                         </div>
                     </form>

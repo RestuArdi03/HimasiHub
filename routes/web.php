@@ -7,6 +7,7 @@ use App\Http\Controllers\FrontendAboutController;
 use App\Http\Controllers\FrontendContactController; 
 use App\Http\Controllers\FrontendAnggotaController;
 use App\Http\Controllers\FrontendKontenController;
+use App\Http\Controllers\FrontendBantuanController;
 use App\Http\Controllers\FrontendUserController;
 use App\Http\Controllers\KontenController;
 use App\Http\Controllers\SaldoController;
@@ -35,6 +36,7 @@ Route::prefix('frontend')->name('frontend.')->group(function () {
     Route::resource('anggota', FrontendAnggotaController::class);
     Route::resource('about', FrontendAboutController::class);
     Route::resource('contact', FrontendContactController::class);
+    Route::resource('bantuan', FrontendBantuanController::class);
 
     // Route Frontend User Profile
     Route::middleware(['auth'])->group(function () {
