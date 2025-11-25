@@ -10,6 +10,7 @@ use App\Models\Agenda;
 use App\Models\PresensiKehadiran;
 use App\Models\Dokumentasi;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class NotulenController extends Controller
 {
@@ -146,7 +147,28 @@ class NotulenController extends Controller
      */
     public function edit(Notulen $notulen)
     {
-        //
+        $kegiatan = Kegiatan::all();
+        $users = User::all();
+        $anggota = Anggota::all();
+
+        // Existing attendees (peserta_nama) for checking checkboxes
+        $existingAttendees = PresensiKehadiran::where('presensiable_id', $notulen->id)
+            ->where('presensiable_type', Notulen::class)
+            ->pluck('peserta_nama')
+            ->toArray();
+
+        $notulen->load('agenda', 'dokumentasi');
+
+        // Ensure tanggal_rapat is a Carbon instance so ->format() works in the view
+        try {
+            if (! $notulen->tanggal_rapat instanceof Carbon) {
+                $notulen->tanggal_rapat = Carbon::parse($notulen->tanggal_rapat);
+            }
+        } catch (\Exception $e) {
+            // If parsing fails, leave the value as-is; the view will fall back to old() or empty
+        }
+
+        return view('backend.notulen.edit', compact('notulen', 'kegiatan', 'users', 'anggota', 'existingAttendees'));
     }
 
     /**
@@ -154,7 +176,99 @@ class NotulenController extends Controller
      */
     public function update(Request $request, Notulen $notulen)
     {
-        //
+        $validated = $request->validate([
+            'judul_rapat' => 'required|string|max:255',
+            'catatan_tambahan' => 'required|string',
+            'tanggal_rapat' => 'required|date',
+            'waktu_mulai' => 'required|date_format:H:i',
+            'waktu_selesai' => 'nullable|date_format:H:i',
+            'lokasi' => 'required|string|max:255',
+            'tipe_rapat' => 'required|string|max:255',
+            'pimpinan_rapat' => 'required|exists:users,id',
+            'notulis_id' => 'required|exists:users,id',
+            'agenda' => 'nullable|array',
+            'agenda.*.pembahasan' => 'required_with:agenda|string',
+            'agenda.*.keputusan' => 'required_with:agenda|string',
+            'agenda.*.id' => 'nullable|exists:agenda,id',
+            'attendees' => 'nullable|array',
+            'attendees.*' => 'exists:anggota,id',
+            'dokumentasi' => 'nullable|array|max:5',
+            'dokumentasi.*' => 'file|mimes:jpeg,png,jpg,pdf,doc,docx|max:5120',
+        ]);
+
+        // Update notulen fields
+        $notulen->update([
+            'judul_rapat' => $validated['judul_rapat'],
+            'catatan_tambahan' => $validated['catatan_tambahan'],
+            'tanggal_rapat' => $validated['tanggal_rapat'],
+            'waktu_mulai' => $validated['waktu_mulai'],
+            'waktu_selesai' => $validated['waktu_selesai'] ?? null,
+            'lokasi' => $validated['lokasi'],
+            'tipe_rapat' => $validated['tipe_rapat'],
+            'pimpinan_rapat_id' => $validated['pimpinan_rapat'],
+            'notulis_id' => $validated['notulis_id'],
+            'pimpinan_rapat_nama' => User::find($validated['pimpinan_rapat'])->nama,
+            'notulis_nama' => User::find($validated['notulis_id'])->nama,
+        ]);
+
+        // Handle agenda: update existing or create new
+        if ($request->has('agenda') && is_array($request->get('agenda'))) {
+            foreach ($request->get('agenda') as $agendaData) {
+                if (!empty($agendaData['id'])) {
+                    $agenda = Agenda::find($agendaData['id']);
+                    if ($agenda) {
+                        $agenda->update([
+                            'topik' => $agendaData['topik'] ?? $agendaData['pembahasan'] ?? 'Agenda Item',
+                            'hasil_pembahasan' => $agendaData['pembahasan'] ?? '',
+                            'status' => $agendaData['keputusan'] ?? '',
+                        ]);
+                    }
+                } else {
+                    Agenda::create([
+                        'topik' => $agendaData['topik'] ?? $agendaData['pembahasan'] ?? 'Agenda Item',
+                        'hasil_pembahasan' => $agendaData['pembahasan'] ?? '',
+                        'status' => $agendaData['keputusan'] ?? '',
+                        'notulen_id' => $notulen->id,
+                    ]);
+                }
+            }
+        }
+
+        // Update presensi: remove existing for this notulen and recreate from attendees
+        PresensiKehadiran::where('presensiable_id', $notulen->id)
+            ->where('presensiable_type', Notulen::class)
+            ->delete();
+
+        if ($request->has('attendees') && is_array($request->get('attendees'))) {
+            foreach ($request->get('attendees') as $anggotaId) {
+                $anggota = Anggota::find($anggotaId);
+                if ($anggota) {
+                    PresensiKehadiran::create([
+                        'peserta_nama' => $anggota->nama,
+                        'user_id' => $anggota->users_id ?? null,
+                        'presensiable_id' => $notulen->id,
+                        'presensiable_type' => Notulen::class,
+                        'keterangan_kehadiran' => 'Hadir',
+                    ]);
+                }
+            }
+        }
+
+        // Handle file upload jika ada (menambahkan file baru)
+        if ($request->hasFile('dokumentasi')) {
+            foreach ($request->file('dokumentasi') as $file) {
+                $path = $file->store('dokumentasi', 'public');
+                $tipe = in_array($file->getClientOriginalExtension(), ['pdf', 'doc', 'docx']) ? 'file' : 'image';
+                Dokumentasi::create([
+                    'tipe' => $tipe,
+                    'path' => $path,
+                    'notulen_id' => $notulen->id,
+                ]);
+            }
+        }
+
+        return redirect()->route('backend.notulen.show', $notulen->id)
+            ->with('success', 'Notulen berhasil diperbarui');
     }
 
     /**
