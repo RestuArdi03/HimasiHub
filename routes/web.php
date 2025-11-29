@@ -11,6 +11,7 @@ use App\Http\Controllers\FrontendKontenController;
 use App\Http\Controllers\FrontendBantuanController;
 use App\Http\Controllers\FrontendUserController;
 use App\Http\Controllers\KomenController;
+use App\Http\Controllers\PesanController;
 use App\Http\Controllers\KontenController;
 use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\TransaksiController;
@@ -45,6 +46,7 @@ Route::prefix('frontend')->name('frontend.')->group(function () {
         Route::resource('user', FrontendUserController::class);
         Route::put('user/password/update', [FrontendUserController::class, 'updatePassword'])->name('user.password.update');
         Route::resource('komen', FrontendKomenController::class);
+        Route::resource('pesan', PesanController::class);
     });
 
 });
@@ -98,5 +100,8 @@ Route::middleware(['auth'])->group(function () {
 
         // ROUTE KOMEN
         Route::resource('komen', KomenController::class);
+        
+        // ROUTE PESAN
+        Route::resource('pesan', PesanController::class);
     });
 });
