@@ -61,7 +61,7 @@ class KontenController extends Controller
     public function show(Konten $konten)
     {
         $this->authorize('view', $konten);
-        // Anda perlu membuat view: resources/views/backend/konten/show.blade.php
+        $konten->load('user','komen');
         return view('backend.konten.show', compact('konten'));
     }
 

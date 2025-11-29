@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Komen;
+use App\Models\Konten;
 use Illuminate\Http\Request;
 
-class KomenController extends Controller
+class FrontendKomenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,9 +27,21 @@ class KomenController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Konten $konten)
     {
-        //
+        $request->validate([
+            'isi' => 'required|string|max:2000',
+        ]);
+
+        $isiKomen = [
+            'users_id' => auth()->id(),
+            'isi' => $request->isi,
+            'konten_id' => $request->konten_id,
+        ];
+        // dd($isiKomen);
+        Komen::create($isiKomen);
+
+        return back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 
     /**
@@ -58,12 +71,8 @@ class KomenController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Komen $komen)
     {
-        $komen = Komen::findOrFail($id);
-        $komen->delete();
-
-        // Gunakan konten_id dari request untuk redirect
-        return redirect()->route('backend.konten.show', ['konten' => $request->slug])->with('success', 'Komentar berhasil dihapus.');
+        //
     }
 }

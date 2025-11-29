@@ -50,11 +50,74 @@
                 </div>
             </div>
 
-            {{-- Placeholder Komentar --}}
+            {{-- Bagian Komentar --}}
             <div class="mt-5">
                 <h3>Komentar</h3>
-                <p class="text-muted">Fitur komentar akan segera hadir.</p>
-                {{-- Anda bisa menambahkan sistem komentar seperti Disqus atau lainnya di sini --}}
+
+                {{-- Form Tambah Komentar --}}
+                @auth
+                    <div class="card mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Tinggalkan Komentar</h5>
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0 me-3">
+                                    {{-- Avatar Pengguna --}}
+                                    @if(Auth::user()->foto)
+                                        <img src="{{ Str::startsWith(Auth::user()->foto, 'http') ? Auth::user()->foto : Storage::url(Auth::user()->foto) }}" alt="{{ Auth::user()->nama }}" class="rounded-circle" width="50" height="50" style="object-fit: cover;">
+                                    @else
+                                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                            {{ strtoupper(substr(Auth::user()->nama ?? 'U', 0, 1)) }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="flex-grow-1">
+                                    <form action="{{ route('frontend.komen.store') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="konten_id" value="{{ $konten->id }}">
+                                        <div class="mb-3">
+                                            <textarea class="form-control @error('isi') is-invalid @enderror" name="isi" rows="3" placeholder="Tulis komentar Anda sebagai {{ Auth::user()->nama }}..." required>{{ old('isi') }}</textarea>
+                                            @error('isi')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-secondary text-center" role="alert">
+                        <a href="{{ route('login') }}" class="alert-link">Masuk</a> untuk meninggalkan komentar.
+                    </div>
+                @endauth
+
+                {{-- Daftar Komentar --}}
+                @if ($konten->komenTerbaru->isNotEmpty())
+                    <h4 class="mb-3">Komentar Terbaru</h4>
+                    @foreach ($konten->komenTerbaru as $komen)
+                        <div class="d-flex mb-4">
+                            <div class="flex-shrink-0">
+                                {{-- Tampilkan foto profil jika ada, jika tidak, tampilkan inisial --}}
+                                @if(optional($komen->user)->foto)
+                                    <img src="{{ Str::startsWith(optional($komen->user)->foto, 'http') ? optional($komen->user)->foto : Storage::url(optional($komen->user)->foto) }}" alt="{{ optional($komen->user)->nama }}" class="rounded-circle" width="50" height="50" style="object-fit: cover;">
+                                @else
+                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                        {{ strtoupper(substr(optional($komen->user)->nama ?? 'U', 0, 1)) }}
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <div class="fw-bold">{{ optional($komen->user)->nama ?? 'Pengguna Anonim' }}</div>
+                                <div class="text-muted small">{{ $komen->created_at->diffForHumans() }}</div>
+                                <p class="mt-1 mb-0">{{ $komen->isi }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-muted">Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+                @endif
+
             </div>
         </div>
     </div>

@@ -33,4 +33,14 @@ class Konten extends Model
     {
         return 'slug';
     }
+
+    public function komen()
+    {
+        return $this->hasMany(Komen::class);
+    }
+
+    public function komenTerbaru()
+    {
+        return $this->komen()->with('user')->latest()->limit(10);
+    }
 }
