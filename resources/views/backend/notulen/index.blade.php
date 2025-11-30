@@ -129,7 +129,7 @@
             </div>
             <div class="modal-body">
                 <p>Anda yakin ingin menghapus notulen "<span id="deleteItemTitle"></span>"?</p>
-                <p class="text-warning mb-0"><small><i class="bi bi-exclamation-triangle"></i> Data yang dihapus tidak dapat dikembalikan. Semua agenda, dokumentasi, dan data kehadiran juga akan dihapus.</small></p>
+                <p class="text-warning mb-0"><small><i class="bi bi-exclamation-triangle"></i> Notulen akan dipindahkan ke arsip dan dapat dipulihkan kemudian.</small></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

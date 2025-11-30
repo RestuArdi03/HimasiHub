@@ -168,12 +168,12 @@
                 <a href="{{ route('backend.notulen.index') }}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Kembali
                 </a>
-                <a href="#" class="btn btn-primary">
+                <a href="{{ route('backend.notulen.edit', $notulen->id) }}" class="btn btn-primary">
                     <i class="bi bi-pencil"></i> Edit
                 </a>
-                <a href="#" class="btn btn-danger">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     <i class="bi bi-trash"></i> Hapus
-                </a>
+                </button>
             </div>
         </div>
     </section>
@@ -189,6 +189,34 @@
             </div>
             <div class="modal-body">
                 <img id="modalImage" src="" alt="Dokumentasi" class="img-fluid w-100">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle"></i> Konfirmasi Hapus
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus notulen <strong>"{{ $notulen->judul }}"</strong>?</p>
+                <p class="text-muted small">Notulen akan dipindahkan ke arsip dan dapat dipulihkan kemudian.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <form id="deleteForm" method="POST" action="{{ route('backend.notulen.destroy', $notulen->id) }}" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Hapus
+                    </button>
+                </form>
             </div>
         </div>
     </div>
