@@ -19,7 +19,7 @@ class NotulenController extends Controller
      */
     public function index()
     {
-        $notulen = Notulen::with('kegiatan', 'users', 'agenda')
+        $notulen = Notulen::with('kegiatan', 'users', 'agenda', 'pimpinan', 'notulis')
             ->whereNull('deleted_at')
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
@@ -33,7 +33,7 @@ class NotulenController extends Controller
     public function archive()
     {
         $notulen = Notulen::onlyTrashed()
-            ->with('kegiatan', 'users', 'agenda')
+            ->with('kegiatan', 'users', 'agenda', 'pimpinan', 'notulis')
             ->orderBy('deleted_at', 'DESC')
             ->paginate(15);
         
@@ -65,8 +65,8 @@ class NotulenController extends Controller
             'waktu_selesai' => 'nullable|date_format:H:i',
             'lokasi' => 'required|string|max:255',
             'tipe_rapat' => 'required|string|max:255',
-            'pimpinan_rapat' => 'required|exists:users,id',
-            'notulis_id' => 'required|exists:users,id',
+            'pimpinan_rapat' => 'required|exists:anggota,id',
+            'notulis_id' => 'required|exists:anggota,id',
             'agenda' => 'nullable|array',
             'agenda.*.pembahasan' => 'required_with:agenda|string|max:255',
             'agenda.*.keputusan' => 'required_with:agenda|string|max:255',
@@ -87,8 +87,8 @@ class NotulenController extends Controller
             'tipe_rapat' => $validated['tipe_rapat'],
             'pimpinan_rapat_id' => $validated['pimpinan_rapat'],
             'notulis_id' => $validated['notulis_id'],
-            'pimpinan_rapat_nama' => User::find($validated['pimpinan_rapat'])->nama,
-            'notulis_nama' => User::find($validated['notulis_id'])->nama,
+            'pimpinan_rapat_nama' => optional(Anggota::find($validated['pimpinan_rapat']))->nama ?? null,
+            'notulis_nama' => optional(Anggota::find($validated['notulis_id']))->nama ?? null,
         ]);
 
         // Simpan agenda
@@ -152,7 +152,7 @@ class NotulenController extends Controller
      */
     public function show(Notulen $notulen)
     {
-        $notulen->load('kegiatan', 'users', 'agenda', 'dokumentasi');
+        $notulen->load('kegiatan', 'users', 'agenda', 'dokumentasi', 'pimpinan', 'notulis');
         return view('backend.notulen.show', compact('notulen'));
     }
 
@@ -198,8 +198,8 @@ class NotulenController extends Controller
             'waktu_selesai' => 'nullable|date_format:H:i',
             'lokasi' => 'required|string|max:255',
             'tipe_rapat' => 'required|string|max:255',
-            'pimpinan_rapat' => 'required|exists:users,id',
-            'notulis_id' => 'required|exists:users,id',
+            'pimpinan_rapat' => 'required|exists:anggota,id',
+            'notulis_id' => 'required|exists:anggota,id',
             'agenda' => 'nullable|array',
             'agenda.*.pembahasan' => 'required_with:agenda|string',
             'agenda.*.keputusan' => 'required_with:agenda|string',
@@ -221,8 +221,8 @@ class NotulenController extends Controller
             'tipe_rapat' => $validated['tipe_rapat'],
             'pimpinan_rapat_id' => $validated['pimpinan_rapat'],
             'notulis_id' => $validated['notulis_id'],
-            'pimpinan_rapat_nama' => User::find($validated['pimpinan_rapat'])->nama,
-            'notulis_nama' => User::find($validated['notulis_id'])->nama,
+            'pimpinan_rapat_nama' => optional(Anggota::find($validated['pimpinan_rapat']))->nama ?? null,
+            'notulis_nama' => optional(Anggota::find($validated['notulis_id']))->nama ?? null,
         ]);
 
         // Handle agenda: update existing or create new

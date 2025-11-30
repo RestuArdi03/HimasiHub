@@ -101,9 +101,9 @@
                             <select class="form-select @error('pimpinan_rapat') is-invalid @enderror" 
                                     id="pimpinan_rapat" name="pimpinan_rapat" required>
                                 <option value="" disabled>-- Pilih Pimpinan Rapat --</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('pimpinan_rapat', $notulen->pimpinan_rapat_id) == $user->id ? 'selected' : '' }}>
-                                        {{ $user->nama }}
+                                @foreach($anggota as $item)
+                                    <option value="{{ $item->id }}" {{ old('pimpinan_rapat', $notulen->pimpinan_rapat_id) == $item->id ? 'selected' : '' }}>
+                                        {{ $item->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -117,9 +117,9 @@
                             <select class="form-select @error('notulis_id') is-invalid @enderror" 
                                     id="notulis_id" name="notulis_id" required>
                                 <option value="" disabled>-- Pilih Notulis --</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('notulis_id', $notulen->notulis_id) == $user->id ? 'selected' : '' }}>
-                                        {{ $user->nama }}
+                                @foreach($anggota as $item)
+                                    <option value="{{ $item->id }}" {{ old('notulis_id', $notulen->notulis_id) == $item->id ? 'selected' : '' }}>
+                                        {{ $item->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
                                     </option>
                                 @endforeach
                             </select>
