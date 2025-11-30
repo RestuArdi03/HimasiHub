@@ -17,14 +17,52 @@ class NotulenController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $notulen = Notulen::with('kegiatan', 'users', 'agenda', 'pimpinan', 'notulis')
-            ->whereNull('deleted_at')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(15);
-        
-        return view('backend.notulen.index', compact('notulen'));
+        $query = Notulen::with('kegiatan', 'users', 'agenda', 'pimpinan', 'notulis')
+            ->whereNull('deleted_at');
+
+        // Filters
+        if ($request->filled('q')) {
+            $q = $request->get('q');
+            $query->where(function($sub) use ($q) {
+                $sub->where('judul_rapat', 'like', "%{$q}%")
+                    ->orWhere('judul', 'like', "%{$q}%")
+                    ->orWhere('catatan_tambahan', 'like', "%{$q}%");
+            });
+        }
+
+        if ($request->filled('tipe_rapat')) {
+            $query->where('tipe_rapat', $request->get('tipe_rapat'));
+        }
+
+        if ($request->filled('pimpinan')) {
+            $query->where('pimpinan_rapat_id', $request->get('pimpinan'));
+        }
+
+        if ($request->filled('notulis')) {
+            $query->where('notulis_id', $request->get('notulis'));
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('tanggal_rapat', '>=', $request->get('date_from'));
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('tanggal_rapat', '<=', $request->get('date_to'));
+        }
+
+        // Sorting
+        $allowedSorts = ['tanggal_rapat', 'created_at', 'tipe_rapat'];
+        $sortBy = in_array($request->get('sort_by'), $allowedSorts) ? $request->get('sort_by') : 'created_at';
+        $order = $request->get('order') === 'asc' ? 'asc' : 'desc';
+
+        $notulen = $query->orderBy($sortBy, $order)->paginate(15);
+
+        // Pass anggota list for filter selects
+        $anggota = Anggota::all();
+
+        return view('backend.notulen.index', compact('notulen', 'anggota'));
     }
 
     /**
