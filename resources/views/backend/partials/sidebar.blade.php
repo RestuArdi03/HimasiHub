@@ -34,8 +34,8 @@
                     </a>
                 </li>
                 
-                <li class="sidebar-item  ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item  {{ request()->routeIs('backend.user.*') ? 'active' : '' }} ">
+                    <a href="{{ route('backend.user.index') }}" class='sidebar-link'>
                         <i class="bi bi-person-fill"></i>
                         <span>Users</span>
                     </a>

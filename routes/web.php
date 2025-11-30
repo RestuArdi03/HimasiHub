@@ -10,6 +10,7 @@ use App\Http\Controllers\FrontendAnggotaController;
 use App\Http\Controllers\FrontendKontenController;
 use App\Http\Controllers\FrontendBantuanController;
 use App\Http\Controllers\FrontendUserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\KomenController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\KontenController;
@@ -103,5 +104,8 @@ Route::middleware(['auth'])->group(function () {
         
         // ROUTE PESAN
         Route::resource('pesan', PesanController::class);
+        
+        // ROUTE USER
+        Route::resource('user', UserController::class);
     });
 });
