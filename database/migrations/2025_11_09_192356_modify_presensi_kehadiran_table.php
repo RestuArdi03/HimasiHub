@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Delete all existing data to avoid foreign key conflicts
+        \DB::table('presensi_kehadiran')->truncate();
+
         Schema::table('presensi_kehadiran', function (Blueprint $table) {
             
             // --- LANGKAH 1: HAPUS FOREIGN KEY & KOLOM LAMA (YANG BENAR) ---
@@ -42,19 +45,28 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('presensi_kehadiran', function (Blueprint $table) {
-            // --- LANGKAH 1: HAPUS FOREIGN KEY BARU ---
-            $table->dropForeign(['user_id']); // Hapus foreign key 'user_id'
+            // --- LANGKAH 1: HAPUS FOREIGN KEY BARU (JIKA ADA) ---
+            try {
+                if (Schema::hasColumn('presensi_kehadiran', 'user_id')) {
+                    $table->dropForeign(['user_id']); 
+                }
+            } catch (\Exception $e) {
+                // Foreign key might not exist
+            }
 
-            // --- LANGKAH 2: HAPUS KOLOM BARU ---
-            $table->dropColumn('peserta_nama');
-            $table->dropColumn('user_id'); // Hapus kolom 'user_id'
-            $table->dropColumn('presensiable_id');
-            $table->dropColumn('presensiable_type');
-            $table->dropColumn('keterangan_kehadiran');
-
-            // --- LANGKAH 3: BUAT KEMBALI KOLOM LAMA ---
-            $table->foreignId('kegiatan_id')->constrained('kegiatan')->onDelete('restrict');
-            $table->foreignId('anggota_id')->constrained('anggota')->onDelete('restrict');
+            // --- LANGKAH 2: HAPUS KOLOM BARU (HANYA YANG ADA) ---
+            $columnsToCheck = ['peserta_nama', 'user_id', 'presensiable_id', 'presensiable_type', 'keterangan_kehadiran'];
+            $columnsToDelete = [];
+            
+            foreach ($columnsToCheck as $col) {
+                if (Schema::hasColumn('presensi_kehadiran', $col)) {
+                    $columnsToDelete[] = $col;
+                }
+            }
+            
+            if (!empty($columnsToDelete)) {
+                $table->dropColumn($columnsToDelete);
+            }
         });
     }
 };

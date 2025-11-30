@@ -5,7 +5,7 @@
 ?>
 @extends('backend.layouts.app')
 
-@section('title', 'Detail Saldo: ' . $anggota->nama)
+@section('title', 'Detail Anggota: ' . $anggota->nama)
 
 @section('content')
     <div class="page-heading">
@@ -29,7 +29,7 @@
 
         <section class="section">
             <div class="row">
-                {{-- Detail Saldo Card --}}
+                {{-- Detail Anggota Card --}}
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">

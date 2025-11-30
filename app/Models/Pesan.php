@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Usulan extends Model
+class Pesan extends Model
 {
     use HasFactory;
-    protected $table = 'usulan';
+    protected $table = 'pesan';
 
     protected $fillable = [
+        'subjek',
         'isi',
-        'users_id',
+        'users_id'
     ];
 
     // RELASI DENGAN TABEL USER

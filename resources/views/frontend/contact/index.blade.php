@@ -73,38 +73,95 @@
                         tabindex="0"></iframe>
                 </div>
                 <div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-                    <form>
+
+                    {{-- START: NOTIFIKASI --}}
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        {{-- Pesan error jika Anda menggunakannya di Controller --}}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    {{-- END: NOTIFIKASI --}}
+
+                    @php
+                        // Tentukan kondisi jika user belum login
+                        $isGuest = !Auth::check(); 
+                    @endphp
+
+                    <form action="{{ route('frontend.pesan.store') }}" method="POST">
+                        @csrf
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="nama" placeholder="Nama">
-                                    <label for="nama">Nama</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="email" class="form-control" id="email" placeholder="Email">
-                                    <label for="email">Email</label>
-                                </div>
-                            </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="subjek" placeholder="Subjek">
+                                    <input type="text" 
+                                        class="form-control" 
+                                        id="subjek" 
+                                        name="subjek" 
+                                        placeholder="Subjek" 
+                                        required
+                                        {{-- Kunci jika belum login --}}
+                                        @if ($isGuest) 
+                                            readonly 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#loginPromptModal"
+                                        @endif
+                                    >
                                     <label for="subjek">Subjek</label>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <textarea class="form-control" placeholder="Masukkan pesan" id="pesan" style="height: 150px"></textarea>
+                                    <textarea class="form-control" 
+                                            placeholder="Masukkan pesan" 
+                                            id="pesan" 
+                                            name="pesan" 
+                                            style="height: 225px" 
+                                            required
+                                            {{-- Kunci jika belum login --}}
+                                            @if ($isGuest) 
+                                                readonly 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#loginPromptModal"
+                                            @endif
+                                    ></textarea>
                                     <label for="pesan">Pesan</label>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-primary w-100 py-3" type="submit">Kirim Pesan</button>
+                                {{-- Tombol Kirim: Disabled jika belum login --}}
+                                <button class="btn btn-primary w-100 py-3" type="submit" {{ $isGuest ? 'disabled' : '' }}>Kirim Pesan</button>
                             </div>
                         </div>
                     </form>
                 </div>
+                @guest
+                <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="loginPromptModalLabel">Akses Terbatas</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <p>Anda harus **Login** terlebih dahulu untuk dapat mengisi dan mengirim pesan.</p>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <a href="{{ route('login') }}" class="btn btn-primary w-100">
+                                    <i class="bi bi-box-arrow-in-right"></i> Login Sekarang
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endguest
             </div>
         </div>
     </div>

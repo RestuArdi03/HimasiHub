@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('usulan', function (Blueprint $table) {
-            $table->id();
-            $table->string('isi');
-            $table->foreignId('users_id')->constrained('users')->onDelete('restrict');
-            $table->timestamps();
+        Schema::table('notulen', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('usulan');
+        Schema::table('notulen', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

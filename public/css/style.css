@@ -75,7 +75,7 @@
     /* Pastikan isi rata tengah */
     .navbar .navbar-brand,
     .navbar .nav-item {
-    display: flex !important;
+    /* display: flex !important; */
     align-items: center !important;
     }
 

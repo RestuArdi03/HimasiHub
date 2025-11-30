@@ -61,11 +61,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ route('frontend.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.index') ? 'active' : '' }}">Beranda</a>
+                <a href="{{ route('frontend.index') }}" class="nav-item d-flex nav-link {{ request()->routeIs('frontend.index') ? 'active' : '' }}">Beranda</a>
                 {{-- Contoh rute lain, Anda bisa membuat rute ini di web.php --}}
-                <a href="{{ route('frontend.about.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.about.*') ? 'active' : '' }}">Tentang Kami</a>
-                <a href="{{ route('frontend.konten.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.konten.*') ? 'active' : '' }}">Publikasi</a>
-                <div class="nav-item dropdown">
+                <a href="{{ route('frontend.about.index') }}" class="nav-item d-flex nav-link {{ request()->routeIs('frontend.about.*') ? 'active' : '' }}">Tentang Kami</a>
+                <a href="{{ route('frontend.konten.index') }}" class="nav-item d-flex nav-link {{ request()->routeIs('frontend.konten.*') ? 'active' : '' }}">Publikasi</a>
+                <div class="nav-item d-flex dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('frontend.anggota.*', 'frontend.contact.*', 'frontend.bantuan.*') ? 'active' : '' }}" data-bs-toggle="dropdown">Lain-lain</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="{{ route('frontend.anggota.index') }}" class="dropdown-item">Anggota</a>

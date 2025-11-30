@@ -11,7 +11,9 @@ use App\Http\Controllers\FrontendAnggotaController;
 use App\Http\Controllers\FrontendKontenController;
 use App\Http\Controllers\FrontendBantuanController;
 use App\Http\Controllers\FrontendUserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\KomenController;
+use App\Http\Controllers\PesanController;
 use App\Http\Controllers\KontenController;
 use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\TransaksiController;
@@ -46,6 +48,7 @@ Route::prefix('frontend')->name('frontend.')->group(function () {
         Route::resource('user', FrontendUserController::class);
         Route::put('user/password/update', [FrontendUserController::class, 'updatePassword'])->name('user.password.update');
         Route::resource('komen', FrontendKomenController::class);
+        Route::resource('pesan', PesanController::class);
     });
 
 });
@@ -92,7 +95,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('anggota', AnggotaController::class, ['parameters' => ['anggota' => 'anggota']]);
 
         // ROUTE NOTULEN
+        Route::get('notulen/archive/index', [NotulenController::class, 'archive'])->name('notulen.archive');
+        Route::put('notulen/{id}/restore', [NotulenController::class, 'restore'])->name('notulen.restore')->withTrashed();
+        Route::delete('notulen/{id}/force-delete', [NotulenController::class, 'forceDelete'])->name('notulen.forceDelete')->withTrashed();
         Route::resource('notulen', NotulenController::class);
+        Route::get('notulen/{notulen}/download', [NotulenController::class, 'downloadPdf'])->name('notulen.download');
 
         // ROUTE KONTEN
         Route::resource('konten', KontenController::class);
@@ -104,5 +111,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('diskusi', DiskusiController::class);
         Route::get('/fetch', [DiskusiController::class, 'fetch'])->name('diskusi.fetch');
 
+        
+        // ROUTE PESAN
+        Route::resource('pesan', PesanController::class);
+        
+        // ROUTE USER
+        Route::resource('user', UserController::class);
     });
 });
