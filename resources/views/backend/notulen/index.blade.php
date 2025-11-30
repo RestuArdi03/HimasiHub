@@ -23,26 +23,27 @@
     </div>
 
     <section class="section">
+        {{-- Tombol Aksi --}}
+        <div class="mb-3">
+            <a href="{{ route('backend.notulen.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Tambah Notulen
+            </a>
+            <a href="{{ route('backend.notulen.archive') }}" class="btn btn-danger">
+                <i class="bi bi-archive-fill"></i> Arsip
+            </a>
+        </div>
+
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span>Semua Notulen</span>
-                @if($notulen->count())
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" id="btnSort">
-                            <i class="bi bi-arrow-up-down"></i> Urutkan
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" id="btnFilter">
-                            <i class="bi bi-funnel"></i> Filter
-                        </button>
-                        <a href="{{ route('backend.notulen.create') }}" class="btn btn-sm btn-primary">
-                            <i class="bi bi-plus"></i> Notulen Baru
-                        </a>
-                    </div>
-                @else
-                    <a href="{{ route('backend.notulen.create') }}" class="btn btn-sm btn-primary">
-                        <i class="bi bi-plus"></i> Notulen Baru
-                    </a>
-                @endif
+                <h5 class="card-title">Daftar Notulen Aktif</h5>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btnSort">
+                        <i class="bi bi-arrow-up-down"></i> Urutkan
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btnFilter">
+                        <i class="bi bi-funnel"></i> Filter
+                    </button>
+                </div>
             </div>
 
             <div class="card-body">

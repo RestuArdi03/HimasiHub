@@ -20,10 +20,24 @@ class NotulenController extends Controller
     public function index()
     {
         $notulen = Notulen::with('kegiatan', 'users', 'agenda')
+            ->whereNull('deleted_at')
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
         
         return view('backend.notulen.index', compact('notulen'));
+    }
+
+    /**
+     * Display a listing of archived (soft-deleted) notulen.
+     */
+    public function archive()
+    {
+        $notulen = Notulen::onlyTrashed()
+            ->with('kegiatan', 'users', 'agenda')
+            ->orderBy('deleted_at', 'DESC')
+            ->paginate(15);
+        
+        return view('backend.notulen.archive', compact('notulen'));
     }
 
     /**
@@ -276,34 +290,63 @@ class NotulenController extends Controller
      */
     public function destroy(Notulen $notulen)
     {
+        // Soft delete (archive) the notulen
+        $notulen->delete();
+
+        return redirect()->route('backend.notulen.index')
+            ->with('success', 'Notulen berhasil diarsipkan.');
+    }
+
+    /**
+     * Restore a soft-deleted notulen.
+     */
+    public function restore($id)
+    {
         try {
+            $notulen = Notulen::withTrashed()->findOrFail($id);
+            $notulen->restore();
+
+            return redirect()->route('backend.notulen.archive')
+                ->with('success', 'Notulen berhasil dipulihkan.');
+        } catch (\Exception $e) {
+            return redirect()->route('backend.notulen.archive')
+                ->with('error', 'Gagal memulihkan notulen: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Permanently delete a soft-deleted notulen.
+     */
+    public function forceDelete($id)
+    {
+        try {
+            $notulen = Notulen::withTrashed()->findOrFail($id);
+
             // Delete related files
             if ($notulen->dokumentasi()->exists()) {
                 foreach ($notulen->dokumentasi as $doc) {
-                    if ($doc->file_path && file_exists(storage_path('app/public/' . $doc->file_path))) {
-                        unlink(storage_path('app/public/' . $doc->file_path));
+                    if ($doc->path && file_exists(storage_path('app/public/' . $doc->path))) {
+                        unlink(storage_path('app/public/' . $doc->path));
                     }
                     $doc->delete();
                 }
             }
 
             // Delete related agenda
-            if ($notulen->agenda()->exists()) {
-                $notulen->agenda()->delete();
-            }
+            $notulen->agenda()->forceDelete();
 
             // Delete related presensi kehadiran
             PresensiKehadiran::where('presensiable_id', $notulen->id)
                 ->where('presensiable_type', Notulen::class)
                 ->delete();
 
-            // Delete the notulen itself
-            $notulen->delete();
+            // Permanently delete the notulen
+            $notulen->forceDelete();
 
-            return redirect()->route('backend.notulen.index')
-                ->with('success', 'Notulen berhasil dihapus beserta semua data terkaitnya.');
+            return redirect()->route('backend.notulen.archive')
+                ->with('success', 'Notulen berhasil dihapus secara permanen.');
         } catch (\Exception $e) {
-            return redirect()->route('backend.notulen.index')
+            return redirect()->route('backend.notulen.archive')
                 ->with('error', 'Gagal menghapus notulen: ' . $e->getMessage());
         }
     }
