@@ -8,7 +8,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>📋 Notulen</h3>
+                <h3>Daftar Notulen</h3>
                 <p class="text-subtitle text-muted">Pantau catatan dan poin tindak lanjut dari setiap rapat.</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
@@ -83,9 +83,6 @@
 
                 {{-- Active filters badges --}}
                 <div class="mt-2">
-                    @if(request()->filled('q'))
-                        <span class="badge bg-info text-dark">Cari: {{ request('q') }}</span>
-                    @endif
                     @if(request()->filled('tipe_rapat'))
                         <span class="badge bg-primary">Tipe: {{ request('tipe_rapat') }}</span>
                     @endif

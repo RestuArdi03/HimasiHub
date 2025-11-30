@@ -27,7 +27,6 @@ class NotulenController extends Controller
             $q = $request->get('q');
             $query->where(function($sub) use ($q) {
                 $sub->where('judul_rapat', 'like', "%{$q}%")
-                    ->orWhere('judul', 'like', "%{$q}%")
                     ->orWhere('catatan_tambahan', 'like', "%{$q}%");
             });
         }
