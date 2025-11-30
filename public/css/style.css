@@ -66,7 +66,27 @@
 
 
 /* INI UNTUK FRONTEND */
-    /* STYLE WARNA */
+    /* Navbar */
+    /* Tetapkan tinggi navbar */
+    .navbar {
+    height: 80px; /* atau sesuai kebutuhan */
+    }
+
+    /* Pastikan isi rata tengah */
+    .navbar .navbar-brand,
+    .navbar .nav-item {
+    display: flex !important;
+    align-items: center !important;
+    }
+
+    /* Avatar styling */
+    .navbar .avatar-img {
+    width: 40px !important;
+    height: 40px !important;
+    object-fit: cover !important;
+    }
+
+    /* STYLE text */
     .text-himasi {
         color: #060497 !important; 
     }
@@ -75,11 +95,21 @@
         color: #081fff !important; 
     }
 
+    .text-shadow-lg {
+        text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Logo */
     .navbar-logo {
-    /* Atur tinggi logo */
-    height: 40px !important; 
-    /* Atur lebar agar proporsional */
-    width: auto !important; 
+        /* Atur tinggi logo */
+        height: 40px !important; 
+        /* Atur lebar agar proporsional */
+        width: auto !important; 
+    }
+
+    .footer-logo {
+        height: 200px !important;
+        width: auto !important;
     }
 
     /* Opsional: Untuk responsivitas di layar kecil */
@@ -87,5 +117,15 @@
         .navbar-logo {
             height: 30px !important; 
         }
+    }
+
+    /* PAGE HEADER */
+    .header-gambar {
+        background-image: url('../asset/himasi.png'); 
+    
+        /* [OPSIONAL] Aturan agar gambar terisi penuh tanpa terulang */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
     }
 /* AKHIR FRONTEND */

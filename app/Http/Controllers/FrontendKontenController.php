@@ -59,7 +59,10 @@ class FrontendKontenController extends Controller
      */
     public function show(Konten $konten)
     {
-        return view('frontend.konten.show', compact('konten'));
+        $konten->load(['user', 'komenTerbaru']);
+        return view('frontend.konten.show', [
+            'konten' => $konten
+        ]);
     }
 
     /**

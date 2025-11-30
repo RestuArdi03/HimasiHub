@@ -63,33 +63,36 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ route('frontend.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.index') ? 'active' : '' }}">Beranda</a>
                 {{-- Contoh rute lain, Anda bisa membuat rute ini di web.php --}}
-                <a href="{{ route('frontend.about.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.about.index') ? 'active' : '' }}">Tentang Kami</a>
-                <a href="{{ route('frontend.konten.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.konten.index') ? 'active' : '' }}">Publikasi</a>
+                <a href="{{ route('frontend.about.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.about.*') ? 'active' : '' }}">Tentang Kami</a>
+                <a href="{{ route('frontend.konten.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.konten.*') ? 'active' : '' }}">Publikasi</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('frontend.anggota.index') ? 'active' : '' }}" data-bs-toggle="dropdown">Lain-lain</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('frontend.anggota.*', 'frontend.contact.*', 'frontend.bantuan.*') ? 'active' : '' }}" data-bs-toggle="dropdown">Lain-lain</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="{{ route('frontend.anggota.index') }}" class="dropdown-item">Anggota</a>
+                        <a href="{{ route('frontend.contact.index') }}" class="dropdown-item">Kontak Kami</a>
+                        <a href="{{ route('frontend.bantuan.index') }}" class="dropdown-item">Bantuan</a>
                         <a href="#" class="dropdown-item">Belum ada ide lagi mau diisi apa...</a>
                     </div>
                 </div>
-                <a href="{{ route('frontend.contact.index') }}" class="nav-item nav-link {{ request()->routeIs('frontend.contact.index') ? 'active' : '' }}">Kontak Kami</a>
-                {{-- <a href="#" class="nav-item nav-link">Contact</a> --}}
+                
                 @guest
                     {{-- Tautan ini akan muncul di menu mobile --}}
                     <a href="{{ route('login') }}" class="nav-item nav-link d-lg-none">Login</a>
                 @else
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="#" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="d-flex align-items-center">
                                 <div class="me-2">
-                                    <img src="{{ Auth::user()->avatar ?? 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(Auth::user()->email))) . '?d=mp' }}" alt="avatar" class="rounded-circle" width="35" height="35">
+                                    <img src="{{ Auth::user()->avatar ?? 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(Auth::user()->email))) . '?d=mp' }}"
+                                        alt="avatar"
+                                        class="rounded-circle avatar-img">
                                 </div>
                                 <div class="d-none d-lg-block">
                                     <div class="user-name">{{ Auth::user()->nama }}</div>
                                 </div>
                             </div>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end fade-down m-0">
+                        <div class="dropdown-menu fade-down m-0">
                             <h6 class="dropdown-header">Hello, {{ strtok(Auth::user()->nama, " ") }}!</h6>
                             @if(Auth::user()->role)
                                 <a href="{{ route('backend.dashboard') }}" class="dropdown-item">Dashboard</a>
@@ -118,14 +121,33 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-white mb-3">Quick Link</h4>
-                    <a class="btn btn-link" href="">About Us</a>
-                    <a class="btn btn-link" href="">Contact Us</a>
+                    <a href="{{ route('frontend.index') }}">
+                        <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="footer-logo">
+                    </a>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-white mb-3">Contact</h4>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Sekretariat Himasi</p>
-                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>himasi@example.com</p>
+                    <h4 class="text-white mb-3">Menu Pintas</h4>
+                    <a class="btn btn-link" href="{{ route('frontend.about.index') }}">Tentang Kami</a>
+                    <a class="btn btn-link" href="{{ route('frontend.konten.index') }}">Publikasi</a>
+                    <a class="btn btn-link" href="{{ route('frontend.anggota.index') }}">Anggota</a>
+                    <a class="btn btn-link" href="{{ route('frontend.contact.index') }}">Kontak Kami</a>
+                    <a class="btn btn-link" href="{{ route('frontend.bantuan.index') }}">Bantuan</a>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <h4 class="text-white mb-3">Hubungi Kami di</h4>
+                    <p class="mb-0">Sekretariat:</p>
+                    <p class="mb-2">UBSI Yogyakarta, Jl. Ringroad Barat, Gamping Kidul, Ambarketawang, Kec. Gamping, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55184</p>
+                    <p class="mb-2"><i class="bi bi-envelope me-2"></i>himasi.yog@bsi.ac.id</p>
+                    <p class="mb-2"><i class="bi bi-instagram me-2"></i>@himasi_ubsiyogyakarta</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-12 text-center mb-3">
+                        &copy; <a class="border-bottom" href="{{ route('frontend.index') }}">HimasiHub</a>, All Right Reserved.
+                    </div>
                 </div>
             </div>
         </div>

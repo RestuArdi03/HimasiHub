@@ -60,4 +60,9 @@ class User extends Authenticatable
         return $this->role->nama_role === $role;
     }
 
+    public function komen()
+    {
+        return $this->hasMany(Komen::class);
+    }
+
 }

@@ -19,12 +19,12 @@ class Komen extends Model
     // RELASI DENGAN TABEL KONTEN
     public function konten()
     {
-        return $this->belongsTo(Konten::class);
+        return $this->belongsTo(Konten::class, 'konten_id');
     }
 
     // RELASI DENGAN TABEL USER
-    public function users()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id');
     }
 }

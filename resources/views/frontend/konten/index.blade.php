@@ -3,9 +3,27 @@
 @section('title', 'Berita & Informasi - HimasiHub')
 
 @section('content')
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 header-gambar">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white text-shadow-lg animated slideInDown">Publikasi</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white text-shadow-lg" href="{{ route('frontend.index') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-white active text-shadow-lg" aria-current="page">Publikasi</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    {{-- Mulai Halaman --}}
     <div class="container-xxl py-5">
         <div class="container">
-            {{-- Header Halaman --}}
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Publikasi</h6>
                 <h1 class="mb-5">Berita & Artikel</h1>

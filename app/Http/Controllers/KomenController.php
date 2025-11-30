@@ -58,8 +58,12 @@ class KomenController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Komen $komen)
+    public function destroy(Request $request, $id)
     {
-        //
+        $komen = Komen::findOrFail($id);
+        $komen->delete();
+
+        // Gunakan konten_id dari request untuk redirect
+        return redirect()->route('backend.konten.show', ['konten' => $request->slug])->with('success', 'Komentar berhasil dihapus.');
     }
 }
