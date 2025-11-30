@@ -27,22 +27,25 @@ class GoogleLoginController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
   
-            // Cari user berdasarkan email, atau buat instance baru jika tidak ada.
-            $user = User::firstOrNew(['email' => $googleUser->getEmail()]);
- 
-            // Isi atau update data dari Google.
-            $user->fill([
-                'nama' => $googleUser->getName(),
-                'google_id' => $googleUser->getId(),
-                'avatar' => $googleUser->getAvatar(),
-            ]);
- 
-            // Hanya set password jika ini adalah user baru.
-            if (!$user->exists) {
-                $user->password = bcrypt(Str::random(16));
+            // Cari user berdasarkan email.
+            $user = User::where('email', $googleUser->getEmail())->first();
+
+            if ($user) {
+                // Jika user sudah ada, update google_id dan avatar saja. Nama tidak diubah.
+                $user->update([
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                ]);
+            } else {
+                // Jika user belum ada, buat user baru dengan semua data.
+                $user = User::create([
+                    'nama' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                    'password' => bcrypt(Str::random(16)),
+                ]);
             }
- 
-            $user->save();
  
             Auth::login($user, true);
  
