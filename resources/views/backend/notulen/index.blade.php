@@ -52,17 +52,17 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Daftar Notulen Aktif</h5>
 
-                    <div class="d-flex align-items-center">
-                        <form method="GET" class="d-flex align-items-center me-2">
-                            <select name="sort_by" class="form-select form-select-sm me-1">
+                    <div class="d-flex align-items-center gap-2">
+                        <form method="GET" id="sortForm" class="d-flex align-items-center">
+                            <select name="sort_by" class="form-select form-select-sm me-2" onchange="document.getElementById('sortForm').submit()">
                                 <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>Urutkan: Terbaru</option>
                                 <option value="tanggal_rapat" {{ request('sort_by') == 'tanggal_rapat' ? 'selected' : '' }}>Urutkan: Tanggal Rapat</option>
                                 <option value="tipe_rapat" {{ request('sort_by') == 'tipe_rapat' ? 'selected' : '' }}>Urutkan: Tipe Rapat</option>
                             </select>
-                            <select name="order" class="form-select form-select-sm me-2">
-                                <option value="desc" {{ request('order', 'desc') == 'desc' ? 'selected' : '' }}>Menurun</option>
-                                <option value="asc" {{ request('order') == 'asc' ? 'selected' : '' }}>Menaik</option>
-                            </select>
+                            {{-- Toggle order button (arrow icon) --}}
+                            <button type="submit" name="order" value="{{ request('order') == 'asc' ? 'desc' : 'asc' }}" class="btn btn-sm btn-outline-secondary" title="Toggle sort direction">
+                                <i class="bi {{ request('order') == 'asc' ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                            </button>
                             {{-- Preserve other query params when sorting --}}
                             @foreach(request()->except(['sort_by','order','page']) as $k => $v)
                                 @if(is_array($v))
@@ -73,10 +73,9 @@
                                     <input type="hidden" name="{{ $k }}" value="{{ $v }}" />
                                 @endif
                             @endforeach
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">Terapkan</button>
                         </form>
 
-                        <button type="button" class="btn btn-sm btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#filterModal">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal">
                             <i class="bi bi-funnel"></i> Filter
                         </button>
                     </div>

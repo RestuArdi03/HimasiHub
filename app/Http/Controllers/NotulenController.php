@@ -388,5 +388,17 @@ class NotulenController extends Controller
                 ->with('error', 'Gagal menghapus notulen: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Download notulen as PDF
+     */
+    public function downloadPdf(Notulen $notulen)
+    {
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('backend.notulen.pdf', compact('notulen'));
+
+        $fileName = 'notulen-' . ($notulen->id) . '-' . now()->format('Ymd') . '.pdf';
+        return $pdf->download($fileName);
+    }
 }
 

@@ -9,7 +9,6 @@
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>{{ $notulen->judul }}</h3>
-                <p class="text-subtitle text-muted">Detail notulen dari kegiatan {{ optional($notulen->kegiatan)->nama ?? '-' }}</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -34,6 +33,14 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
+                                <label class="text-muted small">Judul Rapat</label>
+                                <p class="mb-0 fw-600">{{ $notulen->judul_rapat ?? $notulen->judul ?? '-' }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small">Tipe Rapat</label>
+                                <p class="mb-0 fw-600">{{ $notulen->tipe_rapat ?? '-' }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label class="text-muted small">Kegiatan</label>
                                 <p class="mb-0 fw-600">{{ optional($notulen->kegiatan)->nama ?? '-' }}</p>
                             </div>
@@ -48,6 +55,18 @@
                             <div class="col-md-6 mb-3">
                                 <label class="text-muted small">Notulis</label>
                                 <p class="mb-0 fw-600">{{ optional($notulen->notulis)->nama ?? $notulen->notulis_nama ?? '-' }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small">Tanggal Rapat</label>
+                                <p class="mb-0 fw-600">{{ $notulen->tanggal_rapat ? \Carbon\Carbon::parse($notulen->tanggal_rapat)->format('d F Y') : '-' }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small">Waktu</label>
+                                <p class="mb-0 fw-600">{{ $notulen->waktu_mulai ?? '-' }} @if($notulen->waktu_selesai) - {{ $notulen->waktu_selesai }} @endif</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small">Lokasi</label>
+                                <p class="mb-0 fw-600">{{ $notulen->lokasi ?? '-' }}</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="text-muted small">Tanggal Dibuat</label>
@@ -74,37 +93,31 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <div class="accordion" id="accordionAgenda">
+                            <div class="list-group list-group-flush">
                                 @foreach($notulen->agenda as $index => $item)
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="heading{{ $index }}">
-                                            <button class="accordion-button @if($index !== 0) collapsed @endif" 
-                                                    type="button" 
-                                                    data-bs-toggle="collapse" 
-                                                    data-bs-target="#collapse{{ $index }}" 
-                                                    aria-expanded="@if($index === 0) true @else false @endif" 
-                                                    aria-controls="collapse{{ $index }}">
-                                                <strong>{{ $index + 1 }}. {{ $item->topik ?? $item->hasil_pembahasan }}</strong>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse{{ $index }}" 
-                                             class="accordion-collapse collapse @if($index === 0) show @endif" 
-                                             aria-labelledby="heading{{ $index }}" 
-                                             data-bs-parent="#accordionAgenda">
-                                            <div class="accordion-body">
-                                                <div class="mb-3">
-                                                      <label class="text-muted small"><strong>Pembahasan:</strong></label>
-                                                      <div class="content" style="line-height: 1.6;">
-                                                         {!! $item->hasil_pembahasan !!}
-                                                      </div>
-                                                </div>
-                                                <div class="mb-0">
-                                                      <label class="text-muted small"><strong>Status/Keputusan:</strong></label>
-                                                    <p class="mb-0">{{ $item->status }}</p>
+                                    <button class="list-group-item list-group-item-action text-start" 
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#agenda{{ $index }}" 
+                                            aria-expanded="@if($index === 0) true @else false @endif" 
+                                            aria-controls="agenda{{ $index }}">
+                                        <div class="d-flex justify-content-between align-items-center w-100">
+                                            <strong>{{ $index + 1 }}. {{ $item->topik ?? $item->hasil_pembahasan }}</strong>
+                                            <i class="bi bi-chevron-down"></i>
+                                        </div>
+                                        <div id="agenda{{ $index }}" class="collapse @if($index === 0) show @endif mt-2">
+                                            <div class="mb-2">
+                                                <label class="text-muted small d-block"><strong>Pembahasan:</strong></label>
+                                                <div class="content text-body" style="line-height: 1.6;">
+                                                    {!! $item->hasil_pembahasan !!}
                                                 </div>
                                             </div>
+                                            <div>
+                                                <label class="text-muted small d-block"><strong>Status/Keputusan:</strong></label>
+                                                <p class="mb-0 text-body">{{ $item->status }}</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </button>
                                 @endforeach
                             </div>
                         </div>
@@ -178,6 +191,9 @@
                 </a>
                 <a href="{{ route('backend.notulen.edit', $notulen->id) }}" class="btn btn-primary">
                     <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a href="{{ route('backend.notulen.download', $notulen->id) }}" class="btn btn-success">
+                    <i class="bi bi-file-earmark-pdf"></i> Download PDF
                 </a>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     <i class="bi bi-trash"></i> Hapus
