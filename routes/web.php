@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\DiskusiController;
 use App\Http\Controllers\FrontendDashboardController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\FrontendKomenController;
@@ -98,5 +99,10 @@ Route::middleware(['auth'])->group(function () {
 
         // ROUTE KOMEN
         Route::resource('komen', KomenController::class);
+
+        // ROUTE DISKUSI
+        Route::resource('diskusi', DiskusiController::class);
+        Route::get('/fetch', [DiskusiController::class, 'fetch'])->name('diskusi.fetch');
+
     });
 });

@@ -65,4 +65,8 @@ class User extends Authenticatable
         return $this->hasMany(Komen::class);
     }
 
+    public function diskusi()
+    {
+        return $this->hasMany(Diskusi::class);
+    }
 }

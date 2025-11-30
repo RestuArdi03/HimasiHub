@@ -41,8 +41,8 @@
                     </a>
                 </li>
                 
-                <li class="sidebar-item  ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('backend.diskusi.*') ? 'active' : '' }} ">
+                    <a href="{{ route('backend.diskusi.index') }}" class='sidebar-link'>
                         <i class="bi bi-chat-dots-fill"></i>
                         <span>Diskusi</span>
                     </a>

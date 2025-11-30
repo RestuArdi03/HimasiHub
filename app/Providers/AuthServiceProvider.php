@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Diskusi;
 use App\Models\Konten;
 use App\Models\Saldo;
 use App\Models\Transaksi;
+use App\Policies\DiskusiPolicy;
 use App\Policies\KontenPolicy;
 use App\Policies\SaldoPolicy;
 use App\Policies\TransaksiPolicy;
@@ -22,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
         Saldo::class => SaldoPolicy::class,
         Transaksi::class => TransaksiPolicy::class,
         Konten::class => KontenPolicy::class,
+        Diskusi::class => DiskusiPolicy::class,
     ];
 
     /**
