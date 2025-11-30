@@ -94,7 +94,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('anggota', AnggotaController::class, ['parameters' => ['anggota' => 'anggota']]);
 
         // ROUTE NOTULEN
+        Route::get('notulen/archive/index', [NotulenController::class, 'archive'])->name('notulen.archive');
+        Route::put('notulen/{id}/restore', [NotulenController::class, 'restore'])->name('notulen.restore')->withTrashed();
+        Route::delete('notulen/{id}/force-delete', [NotulenController::class, 'forceDelete'])->name('notulen.forceDelete')->withTrashed();
         Route::resource('notulen', NotulenController::class);
+        Route::get('notulen/{notulen}/download', [NotulenController::class, 'downloadPdf'])->name('notulen.download');
 
         // ROUTE KONTEN
         Route::resource('konten', KontenController::class);
