@@ -11,6 +11,7 @@ use App\Http\Controllers\FrontendAnggotaController;
 use App\Http\Controllers\FrontendKontenController;
 use App\Http\Controllers\FrontendBantuanController;
 use App\Http\Controllers\FrontendUserController;
+use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KomenController;
 use App\Http\Controllers\PesanController;
@@ -119,3 +120,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('user', UserController::class);
     });
 });
+
+// Route untuk menampilkan halaman kalender
+Route::get('/kegiatan/kalender', [KegiatanController::class, 'kalender'])->name('kegiatan.kalender');
+
+// Route API untuk mendapatkan data event
+Route::get('/api/kegiatan/events', [KegiatanController::class, 'getEvents'])->name('kegiatan.events');

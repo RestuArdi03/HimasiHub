@@ -37,7 +37,7 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
-    
+    @stack('styles')
 </head>
 
 <body>
@@ -169,6 +169,9 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('frontend-assets/js/main.js') }}"></script>
+
+    {{-- Slot untuk script tambahan dari halaman lain --}}
+    @stack('scripts')
 </body>
 
 </html>
