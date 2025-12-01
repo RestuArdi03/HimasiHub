@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="/backend-assets/css/app.css">
     <link rel="shortcut icon" href="/backend-assets/images/favicon.svg" type="image/x-icon">
 
+    {{-- CSS untuk FullCalendar (digunakan di dashboard) --}}
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css' rel='stylesheet' />
+
     {{-- STYLE CSS HANDMADE --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     
@@ -47,5 +50,3 @@
 </body>
 
 </html>
-
-

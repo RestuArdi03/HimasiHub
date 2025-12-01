@@ -8,58 +8,30 @@ use Illuminate\Http\Request;
 class KegiatanController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan halaman kalender kegiatan.
      */
-    public function index()
+    public function kalender()
     {
-        //
+        return view('kegiatan.kalender');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menyediakan data kegiatan untuk kalender (API endpoint).
      */
-    public function create()
+    public function getEvents(Request $request)
     {
-        //
-    }
+        $events = Kegiatan::all()->map(function ($kegiatan) {
+            return [
+                'title' => $kegiatan->nama,
+                'start' => $kegiatan->waktu_mulai,
+                'end' => $kegiatan->waktu_selesai,
+                'extendedProps' => [
+                    'tipe' => $kegiatan->tipe,
+                    'tempat' => $kegiatan->tempat,
+                ]
+            ];
+        });
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Kegiatan $kegiatan)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Kegiatan $kegiatan)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Kegiatan $kegiatan)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Kegiatan $kegiatan)
-    {
-        //
+        return response()->json($events);
     }
 }
