@@ -1,4 +1,4 @@
-<header class="mb-3">
+<header class="mb-3 sticky-top bg-white shadow-sm rounded">
     <nav class="navbar navbar-expand navbar-light ">
         <div class="container-fluid">
             <a href="#" class="burger-btn d-block d-xl-none">

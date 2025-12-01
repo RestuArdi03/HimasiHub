@@ -45,5 +45,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('konten.delete', [KontenPolicy::class, 'delete']);
         Gate::define('konten.restore', [KontenPolicy::class, 'restore']);
         Gate::define('konten.forceDelete', [KontenPolicy::class, 'forceDelete']);
+
+        // Gate untuk membatasi akses hanya untuk Admin
+        Gate::define('access-backup', function (User $user) {
+            return $user->role->nama_role == 'admin';
+        });
     }
 }
