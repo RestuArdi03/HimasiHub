@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\BackupController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\DiskusiController;
 use App\Http\Controllers\FrontendDashboardController;
@@ -118,6 +119,10 @@ Route::middleware(['auth'])->group(function () {
         
         // ROUTE USER
         Route::resource('user', UserController::class);
+
+        // ROUTE BACKUP
+        Route::post('/backup/create', [BackupController::class, 'create'])->name('backup.create');
+        Route::post('/backup/restore', [BackupController::class, 'restore'])->name('backup.restore');
     });
 });
 
@@ -126,3 +131,7 @@ Route::get('/kegiatan/kalender', [KegiatanController::class, 'kalender'])->name(
 
 // Route API untuk mendapatkan data event
 Route::get('/api/kegiatan/events', [KegiatanController::class, 'getEvents'])->name('kegiatan.events');
+
+Route::get('/cek-php', function () {
+    phpinfo();
+});
