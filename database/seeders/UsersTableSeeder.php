@@ -23,57 +23,70 @@ class UsersTableSeeder extends Seeder
             'role_id' => Role::where('nama_role', 'admin')->first()->id
         ]);
 
-        // Create bendahara user
+        // Create user
         User::create([
-            'nama' => 'Bendahara HimasiHub',
-            'email' => 'bendahara@himasihub.test',
+            'nama' => 'Restu Ardi Putranto',
+            'email' => '19232150@bsi.ac.id',
             'email_verified_at' => now(),
-            'password' => Hash::make('bendahara123'),
-            'role_id' => Role::where('nama_role', 'bendahara')->first()->id
+            'password' => Hash::make('restu123'),
+            'role_id' => Role::where('nama_role', 'admin')->first()->id
         ]);
-
-        // Create sekretaris user
+        
         User::create([
-            'nama' => 'Sekretaris HimasiHub',
-            'email' => 'sekretaris@himasihub.test',
+            'nama' => 'Marcus Dewantoro',
+            'email' => '19240021@bsi.ac.id',
             'email_verified_at' => now(),
-            'password' => Hash::make('sekretaris123'),
+            'password' => Hash::make('marcus123'),
+            'role_id' => Role::where('nama_role', 'admin')->first()->id
+        ]);
+        
+        User::create([
+            'nama' => 'Chritina Yuli Anggita',
+            'email' => '19230947@bsi.ac.id',
+            'email_verified_at' => now(),
+            'password' => Hash::make('chritina123'),
             'role_id' => Role::where('nama_role', 'sekretaris')->first()->id
         ]);
-
-        // Create humas user
+        
         User::create([
-            'nama' => 'Humas HimasiHub',
-            'email' => 'humas@himasihub.test',
+            'nama' => 'Zahra Salsabila Afifah',
+            'email' => '19240328@bsi.ac.id',
             'email_verified_at' => now(),
-            'password' => Hash::make('humas123'),
+            'password' => Hash::make('zahra123'),
+            'role_id' => Role::where('nama_role', 'sekretaris')->first()->id
+        ]);
+        
+        User::create([
+            'nama' => 'Bara Rifki Annajib',
+            'email' => '19230480@bsi.ac.id',
+            'email_verified_at' => now(),
+            'password' => Hash::make('bara123'),
+            'role_id' => Role::where('nama_role', 'bendahara')->first()->id
+        ]);
+        
+        User::create([
+            'nama' => 'Rifatun Nisa',
+            'email' => '19240339@bsi.ac.id',
+            'email_verified_at' => now(),
+            'password' => Hash::make('rifatun123'),
+            'role_id' => Role::where('nama_role', 'bendahara')->first()->id
+        ]);
+        
+        User::create([
+            'nama' => 'Aura Ayunda Putri',
+            'email' => '19240514@bsi.ac.id',
+            'email_verified_at' => now(),
+            'password' => Hash::make('aura123'),
             'role_id' => Role::where('nama_role', 'humas')->first()->id
         ]);
         
         User::create([
-            'nama' => 'Alek',
-            'email' => 'alek@gmail.com',
+            'nama' => 'Putri Fiki Amalina',
+            'email' => '19240981@bsi.ac.id',
             'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'role_id' => Role::where('nama_role', 'tamu')->first()->id
+            'password' => Hash::make('putri123'),
+            'role_id' => Role::where('nama_role', 'pengurus lain')->first()->id
         ]);
 
-        // Create some random users with 'pengurus lain' role
-        $pengurusRole = Role::where('nama_role', 'pengurus lain')->first();
-        User::factory()
-            ->count(3)
-            ->state(function (array $attributes) use ($pengurusRole) {
-                return ['role_id' => $pengurusRole->id];
-            })
-            ->create();
-
-        // Create some random users with 'tamu' role
-        $tamuRole = Role::where('nama_role', 'tamu')->first();
-        User::factory()
-            ->count(5)
-            ->state(function (array $attributes) use ($tamuRole) {
-                return ['role_id' => $tamuRole->id];
-            })
-            ->create();
     }
 }

@@ -45,7 +45,7 @@
     <div class="col-md-6 mb-2">
         <label for="jurusan">Jurusan</label>
         <fieldset class="form-group">
-            <select class="form-select" id="jurusan" name="jurusan" required>
+            <select class="choices form-select" id="jurusan" name="jurusan" required>
                 <option value="" disabled {{ old('jurusan', $anggota->jurusan ?? '') == '' ? 'selected' : '' }}>Pilih Jurusan</option>
                 <option value="Sistem Informasi" {{ old('jurusan', $anggota->jurusan ?? '') == 'Sistem Informasi' ? 'selected' : '' }}>Sistem Informasi</option>
             </select>
@@ -71,22 +71,29 @@
     <div class="col-md-6 mb-2">
         <label for="_id">Jabatan</label>
         <fieldset class="form-group">
-            <select class="form-select" id="jabatan_id" name="jabatan_id" required>
+            <select class="choices form-select" id="jabatan_id" name="jabatan_id" required>
                 <option value="" disabled selected>Pilih Jabatan</option>
-            
-                    {{-- Loop untuk mengisi opsi dari data tabel jabatan --}}
-                    @foreach ($jabatan as $jab)
-                        
-                        {{-- Dapatkan nilai yang tersimpan/lama untuk perbandingan --}}
-                        @php
-                            $selectedValue = old('jabatan_id', $anggota->jabatan_id ?? '');
-                        @endphp
 
-                        <option value="{{ $jab->id }}"
-                            {{ $selectedValue == $jab->id ? 'selected' : '' }}>
-                            {{ $jab->nama_jabatan }}
-                        </option>
-                    @endforeach
+                {{-- Dapatkan ID role anggota saat ini untuk pre-selection --}}
+                @php
+                    $currentRoleId = old('role_id', $anggota->users->role_id ?? ''); 
+                @endphp
+                
+                @foreach ($jabatan as $jab)
+                    @php
+                        // 1. Ambil role_id dari relasi Model Jabatan
+                        $roleId = $jab->role->id ?? ''; 
+                        $selectedValue = old('jabatan_id', $anggota->jabatan_id ?? '');
+                    @endphp
+
+                    <option 
+                        value="{{ $jab->id }}"
+                        {{-- Tambahkan atribut data-role-id untuk JS --}}
+                        data-role-id="{{ $roleId }}" 
+                        {{ $selectedValue == $jab->id ? 'selected' : '' }}>
+                        {{ $jab->nama_jabatan }} (Role: {{ $jab->role->nama_role ?? 'N/A' }})
+                    </option>
+                @endforeach
             </select>
         </fieldset>
         @error('jabatan_id')
@@ -95,6 +102,9 @@
             </div>
         @enderror
     </div>
+    {{-- FIELD TERSEMBUNYI UNTUK MENYIMPAN ROLE_ID --}}
+    <input type="hidden" name="role_id" id="role_id_input" value="{{ $currentRoleId }}">
+
     <div class="col-md-6 mb-2">
         <div class="form-group">
             <label for="alamat">Alamat</label>
@@ -120,16 +130,31 @@
         </div>
     </div>
     <div class="col-md-6 mb-2">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
-                   value="{{ old('email', $anggota->email ?? '') }}" placeholder="Masukkan Email anggota">
-            @error('email')
+        <label for="_id">Email</label>
+        <fieldset class="form-group">
+            <select class="choices form-select" id="users_id" name="users_id" required>
+                <option value="" disabled selected>Pilih Email</option>
+            
+                    {{-- Loop untuk mengisi opsi dari data tabel jabatan --}}
+                    @foreach ($users as $user)
+                        
+                        {{-- Dapatkan nilai yang tersimpan/lama untuk perbandingan --}}
+                        @php
+                            $selectedValue = old('users_id', $anggota->users_id ?? '');
+                        @endphp
+
+                        <option value="{{ $user->id }}"
+                            {{ $selectedValue == $user->id ? 'selected' : '' }}>
+                            {{ $user->email }}
+                        </option>
+                    @endforeach
+            </select>
+        </fieldset>
+        @error('users_id')
             <div class="invalid-feedback">
                 {{ $message }}
             </div>
-            @enderror
-        </div>
+        @enderror
     </div>
     <div class="col-md-6 mb-2">
         <div class="form-group">
@@ -157,7 +182,7 @@
     </div>
     <div class="col-md-6 mb-2">
         <div class="form-group">
-            <label for="foto">Foto</label>
+            <label for="foto">Foto (rasio 1x1)</label>
             <input type="file" class="form-control @error('foto') is-invalid @enderror" id="foto" name="foto"
                    value="{{ old('foto', $anggota->foto ?? '') }}" placeholder="Tambahkan foto anggota">
             @error('foto')
@@ -169,3 +194,33 @@
     </div>
     
 </div>
+
+@section('scripts')
+<script>
+    // Pastikan ini berjalan setelah Choices.js diinisialisasi
+    document.addEventListener('DOMContentLoaded', function () {
+        // ... (Kode inisialisasi Choices.js Anda untuk #jabatan_id di sini) ...
+        
+        // Panggil setRole() saat halaman dimuat untuk mengatur nilai awal
+        setRole();
+    });
+
+    function setRole() {
+        const selectElement = document.getElementById('jabatan_id');
+        const roleIdInput = document.getElementById('role_id_input');
+        
+        // Cek apakah Choices.js sudah mengubah select asli
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        
+        if (selectedOption) {
+            // Ambil nilai dari atribut data-role-id
+            const roleId = selectedOption.getAttribute('data-role-id');
+            
+            // Perbarui nilai hidden input
+            if (roleIdInput) {
+                roleIdInput.value = roleId;
+            }
+        }
+    }
+</script>
+@endsection

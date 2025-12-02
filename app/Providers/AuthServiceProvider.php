@@ -6,10 +6,12 @@ use App\Models\Konten;
 use App\Models\Saldo;
 use App\Models\Transaksi;
 use App\Models\User;
+use App\Models\Anggota;
 use App\Policies\KontenPolicy;
 use App\Policies\SaldoPolicy;
 use App\Policies\TransaksiPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\AnggotaPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         Transaksi::class => TransaksiPolicy::class,
         Konten::class => KontenPolicy::class,
         User::class => UserPolicy::class,
+        Anggota::class => AnggotaPolicy::class,
     ];
 
     /**

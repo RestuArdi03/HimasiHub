@@ -107,5 +107,6 @@ Route::middleware(['auth'])->group(function () {
         
         // ROUTE USER
         Route::resource('user', UserController::class);
+        Route::put('user/password/update', [UserController::class, 'updatePassword'])->name('user.password.update');
     });
 });

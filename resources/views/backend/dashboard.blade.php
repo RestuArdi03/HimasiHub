@@ -5,6 +5,13 @@
 @section('page-heading', 'Profile Statistics')
 
 @section('content')
+    {{-- Tampilkan pesan sukses --}}
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
     <section class="row">
         <div class="col-12 col-lg-9">
             <div class="row">

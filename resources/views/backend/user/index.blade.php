@@ -44,9 +44,9 @@
                                 <th>Nama</th>
                                 <th>Email</th>
                                 <th>Role</th> 
-                                @if (Auth::check() && Auth::user()->role->nama_role === 'admin')
+                                {{-- @if (Auth::check() && Auth::user()->role->nama_role === 'admin')
                                     <th>Aksi</th>
-                                @endif
+                                @endif --}}
                             </tr>
                             </thead>
                             <tbody>
@@ -61,11 +61,11 @@
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                         @endcan --}}
-                                        @can('delete', $item)
+                                        {{-- @can('delete', $item)
                                             <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
-                                        @endcan
+                                        @endcan --}}
 
                                         {{-- Modal Konfirmasi Hapus --}}
                                         <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
@@ -80,7 +80,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                        <form action="#" method="POST" class="d-inline">
+                                                        <form action="{{ route('backend.user.destroy', $item->id) }}" method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger">Hapus</button>

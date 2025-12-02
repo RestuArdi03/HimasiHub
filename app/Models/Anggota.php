@@ -31,7 +31,7 @@ class Anggota extends Model
     // RELASI DENGAN TABEL USER
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id');
     }
     
     // RELASI DENGAN TABEL JABATAN

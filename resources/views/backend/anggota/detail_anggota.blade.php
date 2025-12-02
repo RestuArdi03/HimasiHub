@@ -45,18 +45,22 @@
                                 <a href="{{ route('backend.anggota.index') }}" class="btn btn-secondary me-2">
                                     <i class="bi bi-arrow-left"></i> Kembali
                                 </a>
-                                <a href="{{ route('backend.anggota.edit', $anggota) }}" class="btn btn-warning me-2">
-                                    <i class="bi bi-pencil-fill"></i> Edit
-                                </a>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $anggota->id }}" title="Berhentikan">
-                                    <i class="bi bi-x-square-fill"></i> Berhentikan
-                                </button>
+                                @can('update', $anggota)
+                                    <a href="{{ route('backend.anggota.edit', $anggota) }}" class="btn btn-warning me-2">
+                                        <i class="bi bi-pencil-fill"></i> Edit
+                                    </a>
+                                @endcan
+                                @can('delete', $anggota)
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $anggota->id }}" title="Berhentikan">
+                                        <i class="bi bi-x-square-fill"></i> Berhentikan
+                                    </button>
+                                @endcan
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Riwayat Transaksi Card --}}
+                {{-- Informasi Anggota Card --}}
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">
@@ -67,7 +71,7 @@
                                 <table class="table table-striped table-hover">
                                     <tr>
                                         <td>Nama</td>
-                                        <td>{{ $anggota->nama ?? '-' }}</td>
+                                        <td>{{ $user->nama ?? $anggota->nama ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td>NIM</td>
@@ -90,6 +94,10 @@
                                         <td>{{ $anggota->jabatan->nama_jabatan ?? '-'}}</td>
                                     </tr>
                                     <tr>
+                                        <td>Role</td>
+                                        <td>{{ $anggota->users->role->nama_role ?? '-'}}</td>
+                                    </tr>
+                                    <tr>
                                         <td>Alamat</td>
                                         <td>{{ $anggota->alamat ?? '-' }}</td>
                                     </tr>
@@ -99,7 +107,7 @@
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td>{{ $anggota->email ?? '-' }}</td>
+                                        <td>{{ $anggota->users->email ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td>TikTok</td>

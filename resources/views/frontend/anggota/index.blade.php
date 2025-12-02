@@ -37,7 +37,7 @@
                             </div>
                             <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
                                 <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                    <a class="btn btn-sm-square btn-primary mx-1" href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $agt->email }}" target="_blank"><i class="bi bi-envelope"></i></=>
+                                    <a class="btn btn-sm-square btn-primary mx-1" href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $agt->users->email ?? '' }}" target="_blank"><i class="bi bi-envelope"></i></=>
                                     <a class="btn btn-sm-square btn-primary mx-1" href="{{ $agt->tiktok }}" target="blank"><i class="bi bi-tiktok"></i></a>
                                     <a class="btn btn-sm-square btn-primary mx-1" href="{{ $agt->instagram }}" target="blank"><i class="bi bi-instagram"></i></a>
                                 </div>

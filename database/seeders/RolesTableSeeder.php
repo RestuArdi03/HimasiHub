@@ -25,8 +25,8 @@ class RolesTableSeeder extends Seeder
         $roles = [
             ['nama_role' => 'tamu', 'created_at' => $now, 'updated_at' => $now],
             ['nama_role' => 'admin', 'created_at' => $now, 'updated_at' => $now],
-            ['nama_role' => 'bendahara', 'created_at' => $now, 'updated_at' => $now],
             ['nama_role' => 'sekretaris', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_role' => 'bendahara', 'created_at' => $now, 'updated_at' => $now],
             ['nama_role' => 'humas', 'created_at' => $now, 'updated_at' => $now],
             ['nama_role' => 'pengurus lain', 'created_at' => $now, 'updated_at' => $now],
         ];

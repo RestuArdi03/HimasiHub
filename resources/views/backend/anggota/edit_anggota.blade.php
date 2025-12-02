@@ -27,15 +27,28 @@
             </div>
         </div>
 
+        {{-- START: TEMPAT MELETAKKAN PESAN ERROR VALIDASI GLOBAL --}}
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h5 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Validasi Gagal:</h5>
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <section class="section">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Form Edit Anggota: {{ $anggota->nama }}</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('backend.anggota.update', $anggota) }}" method="POST" enctype="multipart/form-data">
-                        @method('PUT')
+                    <form action="{{ route('backend.anggota.update', $anggota->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         @include('backend.anggota.form_anggota')
 
                         <div class="col-12 d-flex justify-content-end mt-4">
