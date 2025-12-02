@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Diskusi;
 use App\Models\Konten;
 use App\Models\Saldo;
 use App\Models\Transaksi;
+use App\Policies\DiskusiPolicy;
 use App\Models\User;
 use App\Models\Anggota;
 use App\Policies\KontenPolicy;
@@ -26,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         Saldo::class => SaldoPolicy::class,
         Transaksi::class => TransaksiPolicy::class,
         Konten::class => KontenPolicy::class,
+        Diskusi::class => DiskusiPolicy::class,
         User::class => UserPolicy::class,
         Anggota::class => AnggotaPolicy::class,
     ];
@@ -45,5 +48,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('konten.delete', [KontenPolicy::class, 'delete']);
         Gate::define('konten.restore', [KontenPolicy::class, 'restore']);
         Gate::define('konten.forceDelete', [KontenPolicy::class, 'forceDelete']);
+
+        // Gate untuk membatasi akses hanya untuk Admin
+        Gate::define('access-backup', function (User $user) {
+            return $user->role->nama_role == 'admin';
+        });
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Backend\BackupController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\DiskusiController;
 use App\Http\Controllers\FrontendDashboardController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\FrontendKomenController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\FrontendAnggotaController;
 use App\Http\Controllers\FrontendKontenController;
 use App\Http\Controllers\FrontendBantuanController;
 use App\Http\Controllers\FrontendUserController;
+use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KomenController;
 use App\Http\Controllers\PesanController;
@@ -94,19 +97,41 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('anggota', AnggotaController::class, ['parameters' => ['anggota' => 'anggota']]);
 
         // ROUTE NOTULEN
+        Route::get('notulen/archive/index', [NotulenController::class, 'archive'])->name('notulen.archive');
+        Route::put('notulen/{id}/restore', [NotulenController::class, 'restore'])->name('notulen.restore')->withTrashed();
+        Route::delete('notulen/{id}/force-delete', [NotulenController::class, 'forceDelete'])->name('notulen.forceDelete')->withTrashed();
         Route::resource('notulen', NotulenController::class);
+        Route::get('notulen/{notulen}/download', [NotulenController::class, 'downloadPdf'])->name('notulen.download');
 
         // ROUTE KONTEN
         Route::resource('konten', KontenController::class);
 
         // ROUTE KOMEN
         Route::resource('komen', KomenController::class);
+
+        // ROUTE DISKUSI
+        Route::resource('diskusi', DiskusiController::class);
+        Route::get('/fetch', [DiskusiController::class, 'fetch'])->name('diskusi.fetch');
+
         
         // ROUTE PESAN
         Route::resource('pesan', PesanController::class);
         
         // ROUTE USER
         Route::resource('user', UserController::class);
-        Route::put('user/password/update', [UserController::class, 'updatePassword'])->name('user.password.update');
+
+        // ROUTE BACKUP
+        Route::post('/backup/create', [BackupController::class, 'create'])->name('backup.create');
+        Route::post('/backup/restore', [BackupController::class, 'restore'])->name('backup.restore');
     });
+});
+
+// Route untuk menampilkan halaman kalender
+Route::get('/kegiatan/kalender', [KegiatanController::class, 'kalender'])->name('kegiatan.kalender');
+
+// Route API untuk mendapatkan data event
+Route::get('/api/kegiatan/events', [KegiatanController::class, 'getEvents'])->name('kegiatan.events');
+
+Route::get('/cek-php', function () {
+    phpinfo();
 });

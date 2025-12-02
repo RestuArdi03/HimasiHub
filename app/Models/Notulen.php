@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Anggota;
 
 class Notulen extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'notulen';
 
     protected $fillable = [
@@ -34,6 +36,18 @@ class Notulen extends Model
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // RELASI DENGAN TABEL ANGGOTA (Pimpinan Rapat)
+    public function pimpinan()
+    {
+        return $this->belongsTo(Anggota::class, 'pimpinan_rapat_id');
+    }
+
+    // RELASI DENGAN TABEL ANGGOTA (Notulis)
+    public function notulis()
+    {
+        return $this->belongsTo(Anggota::class, 'notulis_id');
     }
 
     // RELASI DENGAN TABEL AGENDA

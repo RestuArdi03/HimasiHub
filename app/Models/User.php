@@ -69,4 +69,8 @@ class User extends Authenticatable
         return $this->hasOne(Anggota::class, 'users_id'); 
     }
 
+    public function diskusi()
+    {
+        return $this->hasMany(Diskusi::class);
+    }
 }
