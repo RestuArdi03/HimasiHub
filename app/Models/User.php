@@ -64,6 +64,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Komen::class);
     }
+    public function anggota()
+    {
+        return $this->hasOne(Anggota::class, 'users_id'); 
+    }
 
     public function diskusi()
     {

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Anggota;
 use App\Models\Jabatan;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,8 +31,9 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        $jabatan = Jabatan::all();
-        return view('backend.anggota.tambah_anggota', compact('jabatan'));
+        $jabatan = Jabatan::with('role')->get();
+        $users = User::all();
+        return view('backend.anggota.tambah_anggota', compact('jabatan', 'users'));
     }
 
     /**
@@ -38,33 +42,48 @@ class AnggotaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama'     => 'required|string|max:255',
-            'nim'      => 'required|string|max:50',
-            'kelas'    => 'required|string|max:50',
-            'jurusan'  => 'required|string|max:100',
-            'no_hp'    => 'nullable|string|max:20',
-            'jabatan_id'  => 'required|integer|exists:jabatan,id',
-            'alamat'   => 'nullable|string|max:255',
-            'moto_hidup'   => 'nullable|string|max:255',
-            'email'   => 'nullable|string|max:255',
-            'tiktok'   => 'nullable|string|max:255',
-            'instagram'   => 'nullable|string|max:255',
-            'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'nama'          => 'required|string|max:255',
+            'nim'           => 'required|string|max:50|unique:anggota,nim', 
+            'kelas'         => 'required|string|max:50',
+            'jurusan'       => 'required|string|max:100',
+            'no_hp'         => 'nullable|string|max:20',
+            'jabatan_id'    => 'required|integer|exists:jabatan,id',
+            'alamat'        => 'nullable|string|max:255',
+            'moto_hidup'    => 'nullable|string|max:255',
+            'users_id'      => 'required|integer|exists:users,id', // ID User yang sudah ada
+            'tiktok'        => 'nullable|string|max:255',
+            'instagram'     => 'nullable|string|max:255',
+            'foto'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:ratio=1/1',
         ], [
             'foto.image' => 'File harus berupa gambar.',
             'foto.mimes' => 'Format gambar hanya boleh jpg, jpeg, atau png.',
             'foto.max'   => 'Ukuran gambar maksimal 2MB.',
+            'foto.dimensions' => 'Foto harus memiliki rasio 1:1.',
         ]);
 
-        // cek apakah ada file foto
-        if ($request->hasFile('foto')) {
-            // simpan file ke folder public/storage/foto
-            $path = $request->file('foto')->store('foto', 'public');
-            // simpan path ke field foto
-            $validated['foto'] = $path;
-        }
+        // Ambil data jabatan terpilih
+        $jabatanTerpilih = Jabatan::findOrFail($validated['jabatan_id']);
+        
+        // Ambil role_id yang benar dari jabatan (Asumsi ada kolom role_id di tabel jabatan)
+        $newRoleId = $jabatanTerpilih->role_id; 
 
-        Anggota::create($validated);
+        // Lakukan transaksi untuk memastikan kedua Model (User dan Anggota) terupdate/tercipta
+        DB::transaction(function () use ($validated, $request, $newRoleId) {
+
+            // 1. UPDATE ROLE USER YANG SUDAH ADA
+            $user = User::findOrFail($validated['users_id']);
+            $user->update([
+                'role_id' => $newRoleId, // <-- PENTING: Update role_id
+            ]);
+            
+            // 2. SIMPAN FOTO
+            if ($request->hasFile('foto')) {
+                $validated['foto'] = $request->file('foto')->store('anggota', 'public');
+            }
+
+            // 3. BUAT ANGGOTA
+            Anggota::create($validated);
+        });
 
         return redirect()->route('backend.anggota.index')->with('success', 'Data anggota berhasil ditambahkan.');
     }
@@ -81,11 +100,10 @@ class AnggotaController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Anggota $anggota)
-    {   
-        $jabatan = Jabatan::all();
-        return view('backend.anggota.edit_anggota', [
-            'anggota' => $anggota
-        ], compact('jabatan'));
+    {
+        $jabatan = Jabatan::with('role')->get(); 
+        $users = User::all();
+        return view('backend.anggota.edit_anggota', compact('anggota', 'jabatan', 'users'));
     }
 
     /**
@@ -93,40 +111,73 @@ class AnggotaController extends Controller
      */
     public function update(Request $request, Anggota $anggota)
     {
+        // Cek ID User terkait
+        $userId = $anggota->users_id; 
+
+        // Jika field email TIDAK ADA di form Anda, gunakan email lama:
+        $currentEmail = $anggota->user?->email ?? '';
+
         $validated = $request->validate([
             'nama'      => 'required|string|max:255',
-            'nim'       => 'required|string|max:50',
+            // KOREKSI: Gunakan Rule::unique untuk mengabaikan NIM yang sedang diedit
+            'nim'       => ['required', 'string', 'max:50', Rule::unique('anggota', 'nim')->ignore($anggota->id)], 
             'kelas'     => 'required|string|max:50',
             'jurusan'   => 'required|string|max:100',
             'no_hp'     => 'nullable|string|max:20',
-            'jabatan_id'  => 'required|integer|exists:jabatan,id',
+            'jabatan_id' => 'required|integer|exists:jabatan,id',
             'alamat'    => 'nullable|string|max:255',
-            'moto_hidup'   => 'nullable|string|max:255',
-            'email'   => 'nullable|string|max:255',
-            'tiktok'   => 'nullable|string|max:255',
-            'instagram'   => 'nullable|string|max:255',
-            'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'moto_hidup' => 'nullable|string|max:255',
+            
+            'users_id'  => 'required|integer|exists:users,id', // Dipertahankan untuk field dropdown
+            'tiktok'    => 'nullable|string|max:255',
+            'instagram' => 'nullable|string|max:255',
+            'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:ratio=1/1',
         ], [
             'foto.image' => 'File harus berupa gambar.',
             'foto.mimes' => 'Format gambar hanya boleh jpg, jpeg, atau png.',
             'foto.max'   => 'Ukuran gambar maksimal 2MB.',
+            'foto.dimensions' => 'Foto harus memiliki rasio 1:1.',
         ]);
+
+        // --- 1. AMBIL NILAI HIDDEN INPUT KODE ---
+        $redirectCode = $request->input('kode'); // Ambil nilai kode (akan bernilai '1' jika dikirim)
+
+        // 1. Ambil Model Jabatan yang baru dipilih
+        $jabatanTerpilih = Jabatan::findOrFail($validated['jabatan_id']);
+        
+        // 2. Dapatkan role_id yang terkait dengan jabatan tersebut
+        // (Asumsi kolom role_id ada di tabel jabatan)
+        $newRoleId = $jabatanTerpilih->role_id; 
 
         // --- LOGIKA PENANGANAN FOTO BARU ---
         if ($request->hasFile('foto')) {
-            // 1. Hapus foto lama (kecuali jika itu adalah foto default)
-            if ($anggota->foto) {
+            if ($anggota->foto && Storage::disk('public')->exists($anggota->foto)) {
                 Storage::disk('public')->delete($anggota->foto);
             }
-            
-            // 2. Simpan foto baru dan dapatkan path
             $validated['foto'] = $request->file('foto')->store('anggota', 'public');
         }
-        // Jika tidak ada file baru di-upload, kolom 'foto' tidak perlu dikirim ke update
-        // Laravel secara otomatis mengabaikannya karena tidak ada di $validated tanpa file
-        
-        // --- KOREKSI KRITIS: Menggunakan update() pada objek model yang ada ---
-        $anggota->update($validated);
+
+        // --- PEMBARUAN USER DAN ANGGOTA ---
+        // Tambahkan $newRoleId ke variabel yang digunakan oleh closure
+        DB::transaction(function () use ($validated, $anggota, $userId, $newRoleId) { 
+            
+            // 1. UPDATE DATA USER
+            $user = User::findOrFail($userId);
+            $user->update([
+                'nama' => $validated['nama'],
+                'role_id' => $newRoleId, 
+            ]);
+            // 2. UPDATE DATA ANGGOTA (Hapus field yang sudah di update di user)
+            // Jika Anda TIDAK memperbarui email di form edit, hapus baris ini
+            unset($validated['email']); 
+            
+            $anggota->update($validated);
+        });
+
+        if ($redirectCode == 1) {
+            // Jika ini adalah submission dari form Profil Pribadi
+            return redirect()->route('backend.dashboard')->with('success', 'Profil berhasil diperbarui.');
+        }
 
         return redirect()->route('backend.anggota.index')->with('success', 'Data anggota berhasil diperbarui.');
     }

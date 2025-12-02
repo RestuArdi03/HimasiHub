@@ -13,6 +13,9 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    <!-- Include Choices CSS -->
+    <link rel="stylesheet" href="{{ asset('backend-assets/vendors/choices.js/choices.min.css') }}"/>
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
@@ -76,5 +79,9 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Include Choices JavaScript -->
+    <script src="{{ asset('backend-assets/vendors/choices.js/choices.min.js') }}"></script>
+
 </body>
 </html>

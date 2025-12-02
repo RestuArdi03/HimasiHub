@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_jabatan');
             $table->string('kode_jabatan');
+            $table->unsignedBigInteger('role_id');
             $table->timestamps();
         });
     }

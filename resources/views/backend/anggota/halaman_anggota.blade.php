@@ -34,9 +34,11 @@
             <div class="row">
                 {{-- Tombol Aksi --}}
                 <div class="col-12" style="margin-bottom: -20px;">
-                    <a href="{{ route('backend.anggota.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-lg"></i> Tambah Anggota
-                    </a>
+                    @can('create', App\Models\Anggota::class)
+                        <a href="{{ route('backend.anggota.create') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg"></i> Tambah Anggota
+                        </a>
+                    @endcan
                     <a href="{{ route('backend.anggota.trash') }}" class="btn btn-danger">
                         <i class="bi bi-trash3-fill"></i> Mantan Anggota
                     </a>
@@ -59,8 +61,9 @@
     
                                     {{-- Keterangan --}}
                                     <div>
+                                        <h6 class="card-text text-truncate">{{ $agt->jabatan->nama_jabatan }}</h6>
                                         <h5 class="card-title text-truncate">{{ $agt->nama }}</h5>
-                                        <p class="card-text text-truncate text-muted">{{ $agt->jabatan->nama_jabatan }}</p>
+                                        <p class="card-text text-truncate text-muted">{{ $agt->nim }}</p>
                                     </div>
 
                                     {{-- Tombol Aksi --}}
@@ -72,14 +75,18 @@
                                         </a>
                                         
                                         {{-- Tombol Edit --}}
-                                        <a href="{{ route('backend.anggota.edit', $agt) }}" class="btn btn-warning btn-sq" title="Edit">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
+                                        @can('update', $agt)
+                                            <a href="{{ route('backend.anggota.edit', $agt) }}" class="btn btn-warning btn-sq" title="Edit">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                        @endcan
                                         
                                         {{-- Tombol Hapus --}}
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $agt->id }}" title="Berhentikan">
-                                                <i class="bi bi-x-square-fill"></i>
-                                        </button>
+                                        @can('delete', $agt)
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $agt->id }}" title="Berhentikan">
+                                                    <i class="bi bi-x-square-fill"></i>
+                                            </button>
+                                        @endcan
 
                                         {{-- Modal Konfirmasi Hapus --}}
                                         <div class="modal fade" id="deleteModal{{ $agt->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $agt->id }}" aria-hidden="true">
