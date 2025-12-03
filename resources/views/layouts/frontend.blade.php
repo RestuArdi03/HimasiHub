@@ -53,7 +53,7 @@
 
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0 h-100">
         <a href="{{ route('frontend.index') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
             <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="navbar-logo me-2"> 
             <h2 class="text-himasi">HimasiHub</h2>
@@ -61,7 +61,7 @@
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ route('frontend.index') }}" class="nav-item d-flex nav-link {{ request()->routeIs('frontend.index') ? 'active' : '' }}">Beranda</a>
                 {{-- Contoh rute lain, Anda bisa membuat rute ini di web.php --}}
