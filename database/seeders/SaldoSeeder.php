@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\Saldo;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SaldoSeeder extends Seeder
@@ -15,20 +14,24 @@ class SaldoSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat saldo untuk kas
-        Saldo::create([
-            'nama' => 'Kas',
-            'balance' => 0,
-            // cari user admin
-            'user_id' => User::where('role_id', Role::where('nama_role', 'admin')->first()->id)->first()->id
-        ]);
+        // Cari user admin sekali saja untuk efisiensi
+        $adminUser = User::whereHas('role', function ($query) {
+            $query->where('nama_role', 'admin');
+        })->first();
 
-        // Buat saldo untuk lain-lain
-        Saldo::create([
-            'nama' => 'Lain-lain',
-            'balance' => 0,
-            // cari user admin
-            'user_id' => User::where('role_id', Role::where('nama_role', 'admin')->first()->id)->first()->id
-        ]);
+        if (!$adminUser) {
+            $this->command->warn('Admin user not found, skipping SaldoSeeder.');
+            return;
+        }
+
+        // Buat saldo untuk kas
+        $saldos = [
+            ['nama' => 'Kas', 'balance' => 0, 'user_id' => $adminUser->id],
+            ['nama' => 'Lain-lain', 'balance' => 0, 'user_id' => $adminUser->id],
+        ];
+
+        foreach ($saldos as $saldo) {
+            Saldo::create($saldo);
+        }
     }
 }

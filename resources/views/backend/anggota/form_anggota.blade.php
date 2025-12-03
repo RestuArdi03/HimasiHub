@@ -1,226 +1,131 @@
 @csrf
 <div class="row">
-    <div class="col-md-6 mb-2">
+    <div class="col-md-6">
         <div class="form-group">
-            <label for="nama">Nama</label>
-            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama"
-                   value="{{ old('nama', $anggota->nama ?? '') }}" placeholder="Masukkan nama lengkap anggota" required>
-            @error('nama')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-    </div>
-    <div class="col-md-6 mb-2">
-        <div class="form-group">
-            <label for="nim">NIM</label>
-            <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim"
-                   value="{{ old('nim', $anggota->nim ?? '') }}" placeholder="Masukkan NIM anggota" required>
-            @error('nim')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-    </div>
-    <div class="col-md-6 mb-2">
-        <label for="kelas">Kelas</label>
-        <fieldset class="form-group">
-            <select class="form-select" id="kelas" name="kelas" required>
-                 <option value="" disabled {{ old('kelas', $anggota->kelas ?? '') == '' ? 'selected' : '' }}>Pilih Kelas</option>
-                <option value="19.1A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.1A.09' ? 'selected' : '' }}>19.1A.09</option>
-                <option value="19.2A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.2A.09' ? 'selected' : '' }}>19.2A.09</option>
-                <option value="19.3A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.3A.09' ? 'selected' : '' }}>19.3A.09</option>
-                <option value="19.4A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.4A.09' ? 'selected' : '' }}>19.4A.09</option>
-                <option value="19.5A.09" {{ old('kelas', $anggota->kelas ?? '') == '19.5A.09' ? 'selected' : '' }}>19.5A.09</option>
-            </select>
-        </fieldset>
-        @error('kelas')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
-    <div class="col-md-6 mb-2">
-        <label for="jurusan">Jurusan</label>
-        <fieldset class="form-group">
-            <select class="choices form-select" id="jurusan" name="jurusan" required>
-                <option value="" disabled {{ old('jurusan', $anggota->jurusan ?? '') == '' ? 'selected' : '' }}>Pilih Jurusan</option>
-                <option value="Sistem Informasi" {{ old('jurusan', $anggota->jurusan ?? '') == 'Sistem Informasi' ? 'selected' : '' }}>Sistem Informasi</option>
-            </select>
-        </fieldset>
-        @error('jurusan')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
-    <div class="col-md-6 mb-2">
-        <div class="form-group">
-            <label for="no_hp">No HP</label>
-            <input type="number" class="form-control @error('no_hp') is-invalid @enderror" id="no_hp" name="no_hp"
-                   value="{{ old('no_hp', $anggota->no_hp ?? '') }}" placeholder="Masukkan No HP anggota">
-            @error('no_hp')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-    </div>
-    <div class="col-md-6 mb-2">
-        <label for="_id">Jabatan</label>
-        <fieldset class="form-group">
-            <select class="choices form-select" id="jabatan_id" name="jabatan_id" required>
-                <option value="" disabled selected>Pilih Jabatan</option>
-
-                {{-- Dapatkan ID role anggota saat ini untuk pre-selection --}}
-                @php
-                    $currentRoleId = old('role_id', $anggota->users->role_id ?? ''); 
-                @endphp
-                
-                @foreach ($jabatan as $jab)
-                    @php
-                        // 1. Ambil role_id dari relasi Model Jabatan
-                        $roleId = $jab->role->id ?? ''; 
-                        $selectedValue = old('jabatan_id', $anggota->jabatan_id ?? '');
-                    @endphp
-
-                    <option 
-                        value="{{ $jab->id }}"
-                        {{-- Tambahkan atribut data-role-id untuk JS --}}
-                        data-role-id="{{ $roleId }}" 
-                        {{ $selectedValue == $jab->id ? 'selected' : '' }}>
-                        {{ $jab->nama_jabatan }} (Role: {{ $jab->role->nama_role ?? 'N/A' }})
-                    </option>
+            <label for="users_id">Pilih User (Berdasarkan Email)</label>
+            <select class="form-select @error('users_id') is-invalid @enderror" id="users_id" name="users_id" required>
+                <option value="" disabled selected>-- Pilih User --</option>
+                @foreach ($users as $user)
+                    <option value="{{ $user->id }}" data-nama="{{ $user->nama }}" {{ old('users_id', $anggota->users_id ?? '') == $user->id ? 'selected' : '' }}>{{ $user->email }} - ({{ $user->nama }})</option>
                 @endforeach
             </select>
-        </fieldset>
-        @error('jabatan_id')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
-    {{-- FIELD TERSEMBUNYI UNTUK MENYIMPAN ROLE_ID --}}
-    <input type="hidden" name="role_id" id="role_id_input" value="{{ $currentRoleId }}">
+            @error('users_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
 
-    <div class="col-md-6 mb-2">
+        <div class="form-group">
+            <label for="nama">Nama Anggota</label>
+            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama', $anggota->users->nama ?? '') }}" required>
+            @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            <small class="text-muted">Nama akan terisi otomatis saat memilih user, namun dapat diubah jika perlu.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="nim">NIM</label>
+            <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim', $anggota->nim ?? '') }}" required>
+            @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="kelas">Kelas</label>
+            <input type="text" class="form-control @error('kelas') is-invalid @enderror" id="kelas" name="kelas" value="{{ old('kelas', $anggota->kelas ?? '') }}" required placeholder="Contoh: 19.1A.09">
+            @error('kelas')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="jurusan">Jurusan</label>
+            <select class="form-select @error('jurusan') is-invalid @enderror" id="jurusan" name="jurusan" required>
+                <option value="" disabled {{ old('jurusan', $anggota->jurusan ?? '') == '' ? 'selected' : '' }}>-- Pilih Jurusan --</option>
+                <option value="Sistem Informasi" {{ old('jurusan', $anggota->jurusan ?? '') == 'Sistem Informasi' ? 'selected' : '' }}>Sistem Informasi</option>
+            </select>
+            @error('jurusan')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="jabatan_id">Jabatan</label>
+            <select class="form-select @error('jabatan_id') is-invalid @enderror" id="jabatan_id" name="jabatan_id" required>
+                <option value="" disabled selected>-- Pilih Jabatan --</option>
+                @foreach ($jabatan as $j)
+                    <option value="{{ $j->id }}" {{ old('jabatan_id', $anggota->jabatan_id ?? '') == $j->id ? 'selected' : '' }}>{{ $j->nama_jabatan }} (Role: {{ $j->role->nama_role }})</option>
+                @endforeach
+            </select>
+            @error('jabatan_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="no_hp">No. HP</label>
+            <input type="text" class="form-control @error('no_hp') is-invalid @enderror" id="no_hp" name="no_hp" value="{{ old('no_hp', $anggota->no_hp ?? '') }}">
+            @error('no_hp')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
         <div class="form-group">
             <label for="alamat">Alamat</label>
-            <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat"
-                   value="{{ old('alamat', $anggota->alamat ?? '') }}" placeholder="Masukkan alamat lengkap anggota">
-            @error('alamat')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
+            <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" rows="3">{{ old('alamat', $anggota->alamat ?? '') }}</textarea>
+            @error('alamat')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
-    </div>
-    <div class="col-md-6 mb-2">
+
         <div class="form-group">
             <label for="moto_hidup">Moto Hidup</label>
-            <input type="text" class="form-control @error('moto_hidup') is-invalid @enderror" id="moto_hidup" name="moto_hidup"
-                   value="{{ old('moto_hidup', $anggota->moto_hidup ?? '') }}" placeholder="Masukkan moto hidup anggota">
-            @error('moto_hidup')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
+            <input type="text" class="form-control @error('moto_hidup') is-invalid @enderror" id="moto_hidup" name="moto_hidup" value="{{ old('moto_hidup', $anggota->moto_hidup ?? '') }}">
+            @error('moto_hidup')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
-    </div>
-    <div class="col-md-6 mb-2">
-        <label for="_id">Email</label>
-        <fieldset class="form-group">
-            <select class="choices form-select" id="users_id" name="users_id" required>
-                <option value="" disabled selected>Pilih Email</option>
-            
-                    {{-- Loop untuk mengisi opsi dari data tabel jabatan --}}
-                    @foreach ($users as $user)
-                        
-                        {{-- Dapatkan nilai yang tersimpan/lama untuk perbandingan --}}
-                        @php
-                            $selectedValue = old('users_id', $anggota->users_id ?? '');
-                        @endphp
 
-                        <option value="{{ $user->id }}"
-                            {{ $selectedValue == $user->id ? 'selected' : '' }}>
-                            {{ $user->email }}
-                        </option>
-                    @endforeach
-            </select>
-        </fieldset>
-        @error('users_id')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
-    <div class="col-md-6 mb-2">
         <div class="form-group">
-            <label for="tiktok">Tiktok</label>
-            <input type="text" class="form-control @error('tiktok') is-invalid @enderror" id="tiktok" name="tiktok"
-                   value="{{ old('tiktok', $anggota->tiktok ?? '') }}" placeholder="Masukkan link TikTok anggota">
-            @error('tiktok')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
+            <label for="instagram">Instagram (URL)</label>
+            <input type="url" class="form-control @error('instagram') is-invalid @enderror" id="instagram" name="instagram" value="{{ old('instagram', $anggota->instagram ?? '') }}" placeholder="https://instagram.com/username">
+            @error('instagram')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="tiktok">TikTok (URL)</label>
+            <input type="url" class="form-control @error('tiktok') is-invalid @enderror" id="tiktok" name="tiktok" value="{{ old('tiktok', $anggota->tiktok ?? '') }}" placeholder="https://tiktok.com/@username">
+            @error('tiktok')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="foto">Foto (Rasio 1:1)</label>
+            <input type="file" class="form-control @error('foto') is-invalid @enderror" id="foto" name="foto" accept="image/png, image/jpeg, image/jpg">
+            @error('foto')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
     </div>
-    <div class="col-md-6 mb-2">
-        <div class="form-group">
-            <label for="instagram">Instagram</label>
-            <input type="text" class="form-control @error('instagram') is-invalid @enderror" id="instagram" name="instagram"
-                   value="{{ old('instagram', $anggota->instagram ?? '') }}" placeholder="Masukkan link Instagram anggota">
-            @error('instagram')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-    </div>
-    <div class="col-md-6 mb-2">
-        <div class="form-group">
-            <label for="foto">Foto (rasio 1x1)</label>
-            <input type="file" class="form-control @error('foto') is-invalid @enderror" id="foto" name="foto"
-                   value="{{ old('foto', $anggota->foto ?? '') }}" placeholder="Tambahkan foto anggota">
-            @error('foto')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-    </div>
-    
 </div>
 
-@section('scripts')
+@push('scripts')
 <script>
-    // Pastikan ini berjalan setelah Choices.js diinisialisasi
     document.addEventListener('DOMContentLoaded', function () {
-        // ... (Kode inisialisasi Choices.js Anda untuk #jabatan_id di sini) ...
-        
-        // Panggil setRole() saat halaman dimuat untuk mengatur nilai awal
-        setRole();
-    });
+        const userSelect = document.getElementById('users_id');
+        const namaInput = document.getElementById('nama');
 
-    function setRole() {
-        const selectElement = document.getElementById('jabatan_id');
-        const roleIdInput = document.getElementById('role_id_input');
-        
-        // Cek apakah Choices.js sudah mengubah select asli
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-        
-        if (selectedOption) {
-            // Ambil nilai dari atribut data-role-id
-            const roleId = selectedOption.getAttribute('data-role-id');
-            
-            // Perbarui nilai hidden input
-            if (roleIdInput) {
-                roleIdInput.value = roleId;
-            }
+        // Fungsi untuk mengisi nama berdasarkan user yang dipilih
+        const updateNamaField = () => {
+            const selectedOption = userSelect.options[userSelect.selectedIndex];
+            namaInput.value = selectedOption ? selectedOption.getAttribute('data-nama') || '' : '';
+        };
+
+        userSelect.addEventListener('change', updateNamaField);
+
+        // --- LOGIKA UNTUK INPUT ANGKA (NIM & NO HP) ---
+        const nimInput = document.getElementById('nim');
+        const noHpInput = document.getElementById('no_hp');
+
+        const restrictToNumbers = (event) => {
+            // Ganti semua karakter non-digit menjadi string kosong
+            event.target.value = event.target.value.replace(/\D/g, '');
+        };
+
+        nimInput.addEventListener('input', restrictToNumbers);
+        noHpInput.addEventListener('input', restrictToNumbers);
+
+        // Panggil fungsi saat halaman dimuat untuk menangani nilai dari old()
+        updateNamaField();
+
+        // --- LOGIKA UNTUK SUBMIT FORM UTAMA ---
+        const mainForm = userSelect.closest('form');
+        if (mainForm) {
+            mainForm.addEventListener('submit', function() {
+                mainForm.classList.add('was-validated');
+            });
         }
-    }
+    });
 </script>
-@endsection
+@endpush

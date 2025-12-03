@@ -62,7 +62,7 @@
                                     {{-- Keterangan --}}
                                     <div>
                                         <h6 class="card-text text-truncate">{{ $agt->jabatan->nama_jabatan }}</h6>
-                                        <h5 class="card-title text-truncate">{{ $agt->nama }}</h5>
+                                        <h5 class="card-title text-truncate">{{ $agt->users->nama ?? $agt->nama }}</h5>
                                         <p class="card-text text-truncate text-muted">{{ $agt->nim }}</p>
                                     </div>
 
@@ -97,7 +97,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Apakah Anda yakin ingin memberhentikan anggota '{{ $agt->nama }}'?
+                                                        Apakah Anda yakin ingin memberhentikan anggota '{{ $agt->users->nama ?? $agt->nama }}'?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

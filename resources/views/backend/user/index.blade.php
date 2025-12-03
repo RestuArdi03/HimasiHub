@@ -54,7 +54,7 @@
                                 <tr>
                                     <td>{{ $item->nama }}</td>
                                     <td>{{ $item->email }}</td>
-                                    <td>{{ ($item->role)->nama_role ?? 'N/A' }}</td>
+                                    <td>{{ ($item->role)->nama_role ?? 'tamu' }}</td>
                                     <td>
                                         {{-- @can('update', $item)
                                             <a href="#" class="btn btn-sm btn-warning" title="Edit">

@@ -23,6 +23,28 @@
         </div>
 
         <section class="section">
+            {{-- Menampilkan Pesan Error Validasi --}}
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Terdapat Kesalahan</h4>
+                    <p>Silakan periksa kembali isian Anda:</p>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            {{-- Menampilkan Pesan Sukses --}}
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Form Tambah Anggota</h5>
@@ -30,7 +52,8 @@
                 <div class="card-body">
                     <form action="{{ route('backend.anggota.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @include('backend.anggota.form_anggota')
+                        {{-- Menggunakan form parsial --}}
+                        @include('backend.anggota.form_anggota', ['anggota' => null])
 
                         <div class="col-12 d-flex justify-content-end mt-4">
                             <button type="submit" class="btn btn-primary me-1 mb-1">

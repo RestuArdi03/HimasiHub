@@ -50,11 +50,11 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="text-muted small">Pimpinan Rapat</label>
-                                <p class="mb-0 fw-600">{{ optional($notulen->pimpinan)->nama ?? $notulen->pimpinan_rapat_nama ?? '-' }}</p>
+                                <p class="mb-0 fw-600">{{ optional($notulen->pimpinan->users)->nama ?? $notulen->pimpinan_rapat_nama ?? '-' }}</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="text-muted small">Notulis</label>
-                                <p class="mb-0 fw-600">{{ optional($notulen->notulis)->nama ?? $notulen->notulis_nama ?? '-' }}</p>
+                                <p class="mb-0 fw-600">{{ optional($notulen->notulis->users)->nama ?? $notulen->notulis_nama ?? '-' }}</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="text-muted small">Tanggal Rapat</label>
