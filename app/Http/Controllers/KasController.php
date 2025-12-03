@@ -20,8 +20,8 @@ class KasController extends Controller
         }
         $this->authorize('view', $saldo);
 
-        // Ambil semua anggota (asumsi semua user adalah anggota)
-        $members = User::orderBy('nama')->get();
+        // Ambil semua anggota yang memiliki anggota_id
+        $members = User::whereNotNull('anggota_id')->orderBy('nama')->get();
 
         // Ambil semua transaksi kas (debit) dan kelompokkan berdasarkan user_id
         // Format keterangan diasumsikan: "Iuran Kas ke-X"
@@ -35,7 +35,10 @@ class KasController extends Controller
         $maxPayments = $saldo->jumlah_iuran ?? 12;
         $biayaIuran = $saldo->iuran_nominal ?? 5000;
 
-        return view('backend.kas.index', compact('saldo', 'members', 'transactions', 'maxPayments', 'biayaIuran'));
+        // Cek apakah user memiliki hak akses untuk mengelola kas (create/delete transaksi)
+        $canManageKas = auth()->user()->can('create', Transaksi::class);
+
+        return view('backend.kas.index', compact('saldo', 'members', 'transactions', 'maxPayments', 'biayaIuran', 'canManageKas'));
     }
 
     /**
@@ -102,12 +105,55 @@ class KasController extends Controller
         return redirect()->route('backend.kas.index', $saldo->id)->with('success', 'Pengaturan iuran kas berhasil diperbarui.');
     }
 
-
-    private function recalculateSaldo(Saldo $saldo)
+    /**
+     * Reset the 'Kas' saldo by moving all its transactions to a new archive saldo.
+     */
+    public function resetKas(Saldo $saldo)
     {
-        $saldo = Saldo::lockForUpdate()->find($saldo->id);
+        // Pastikan ini adalah saldo 'Kas'
+        if ($saldo->nama !== 'Kas') {
+            abort(404, 'Hanya saldo "Kas" yang dapat direset.');
+        }
+
+        // Otorisasi aksi (misalnya, izin 'update' pada model Saldo)
+        $this->authorize('update', $saldo);
+
+        $archiveSaldoName = 'Iuran Kas ' . date('M Y');
+
+        DB::transaction(function () use ($saldo, $archiveSaldoName) {
+            // 1. Buat saldo arsip baru untuk transaksi tahun ini
+            $archiveSaldo = Saldo::create([
+                'nama' => $archiveSaldoName, // Gunakan variabel dari scope luar
+                'balance' => 0, // Akan diperbarui setelah memindahkan transaksi
+                'iuran_nominal' => $saldo->iuran_nominal, // Salin pengaturan
+                'jumlah_iuran' => $saldo->jumlah_iuran,   // Salin pengaturan
+            ]);
+
+            // 2. Pindahkan semua transaksi dari saldo 'Kas' ke saldo arsip yang baru
+            // Ini akan memindahkan semua transaksi yang terkait dengan saldo 'Kas' saat ini.
+            $saldo->transactions()->update(['saldo_id' => $archiveSaldo->id]);
+
+            // 3. Reset saldo 'Kas' yang asli
+            $saldo->balance = 0;
+            // Pengaturan iuran_nominal dan jumlah_iuran tetap dipertahankan untuk periode berikutnya
+            $saldo->save();
+
+            // 4. Hitung ulang saldo untuk saldo arsip
+            $this->recalculateSaldo($archiveSaldo); // Ini akan menghitung berdasarkan transaksi yang dipindahkan.
+            // Saldo 'Kas' yang asli sudah diatur ke 0 dan disimpan, tidak perlu dihitung ulang.
+        });
+
+        return redirect()->route('backend.kas.index', $saldo->id)->with('success', 'Saldo "Kas" berhasil direset. Transaksi lama dipindahkan ke "' . $archiveSaldoName . '".');
+    }
+
+    /**
+     * Helper method to recalculate and update a saldo's balance.
+     * @param Saldo $saldo
+     */
+    protected function recalculateSaldo(Saldo $saldo)
+    {
+        $saldo->refresh(); // Refresh model to get latest transactions if any were just moved/added
         $newBalance = $saldo->transactions()->sum('debit') - $saldo->transactions()->sum('kredit');
-        $saldo->balance = $newBalance;
-        $saldo->save();
+        $saldo->update(['balance' => $newBalance]);
     }
 }

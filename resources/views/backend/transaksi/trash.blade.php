@@ -70,43 +70,47 @@
                                     </td>
                                     <td>{{ $transaksi->deleted_at->format('d M Y, H:i') }}</td>
                                     <td class="text-center">
-                                        {{-- Tombol Restore --}}
-                                        <form action="{{ route('backend.transaksi.restore', $transaksi->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" class="btn btn-sm btn-success btn-sq" title="Pulihkan">
-                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                        @can('restore', $transaksi)
+                                            {{-- Tombol Restore --}}
+                                            <form action="{{ route('backend.transaksi.restore', $transaksi->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="btn btn-sm btn-success btn-sq" title="Pulihkan">
+                                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+
+                                        @can('forceDelete', $transaksi)
+                                            {{-- Tombol Hapus Permanen --}}
+                                            <button type="button" class="btn btn-sm btn-danger btn-sq" data-bs-toggle="modal" data-bs-target="#forceDeleteModal{{ $transaksi->id }}" title="Hapus Permanen">
+                                                <i class="bi bi-trash-fill"></i>
                                             </button>
-                                        </form>
 
-                                        {{-- Tombol Hapus Permanen --}}
-                                        <button type="button" class="btn btn-sm btn-danger btn-sq" data-bs-toggle="modal" data-bs-target="#forceDeleteModal{{ $transaksi->id }}" title="Hapus Permanen">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-
-                                        {{-- Modal Konfirmasi Hapus Permanen --}}
-                                        <div class="modal fade" id="forceDeleteModal{{ $transaksi->id }}" tabindex="-1" aria-labelledby="forceDeleteModalLabel{{ $transaksi->id }}" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="forceDeleteModalLabel{{ $transaksi->id }}">Konfirmasi Hapus Permanen</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Apakah Anda yakin ingin menghapus transaksi '<strong>{{ $transaksi->keterangan }}</strong>' secara permanen?</p>
-                                                        <p class="text-danger"><strong>Peringatan:</strong> Tindakan ini tidak dapat diurungkan.</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                        <form action="{{ route('backend.transaksi.forceDelete', $transaksi->id) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger">Ya, Hapus Permanen</button>
-                                                        </form>
+                                            {{-- Modal Konfirmasi Hapus Permanen --}}
+                                            <div class="modal fade" id="forceDeleteModal{{ $transaksi->id }}" tabindex="-1" aria-labelledby="forceDeleteModalLabel{{ $transaksi->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="forceDeleteModalLabel{{ $transaksi->id }}">Konfirmasi Hapus Permanen</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Apakah Anda yakin ingin menghapus transaksi '<strong>{{ $transaksi->keterangan }}</strong>' secara permanen?</p>
+                                                            <p class="text-danger"><strong>Peringatan:</strong> Tindakan ini tidak dapat diurungkan.</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                            <form action="{{ route('backend.transaksi.forceDelete', $transaksi->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Ya, Hapus Permanen</button>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endcan
                                     </td>
                                 </tr>
                             @empty

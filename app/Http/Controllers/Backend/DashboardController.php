@@ -34,6 +34,6 @@ class DashboardController extends Controller
             'pesan_terakhir' => $pesan_terakhir,
         ];
 
-        return view('backend.dashboard', $data);
+        return view('backend.dashboard.dashboard', $data);
     }
 }

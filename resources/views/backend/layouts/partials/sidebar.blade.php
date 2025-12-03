@@ -1,14 +1,17 @@
-<div id="sidebar" class="active">
+<div id="sidebar" class="active sticky-top bg-white shadow-sm rounded">
     <div class="sidebar-wrapper active">
 
         {{-- SIDEBAR HEADER --}}
         <div class="sidebar-header">
             <div class="d-flex justify-content-between">
                 <div class="logo">
-                    <a href="{{ route('backend.dashboard') }}"><img src="/backend-assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                    <a href="{{ route('backend.dashboard') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+                        <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="navbar-logo me-2"> 
+                        <h4 class="text-himasi">HimasiHub</h4>
+                    </a>
                 </div>
                 <div class="toggler">
-                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    <a href="javascript:void(0)" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
                 </div>
             </div>
         </div>

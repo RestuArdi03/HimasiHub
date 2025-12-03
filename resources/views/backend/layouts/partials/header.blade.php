@@ -1,7 +1,7 @@
 <header class="mb-3 sticky-top bg-white shadow-sm rounded">
     <nav class="navbar navbar-expand navbar-light ">
         <div class="container-fluid">
-            <a href="#" class="burger-btn d-block d-xl-none">
+            <a href="javascript:void(0)" class="burger-btn d-block d-xl-none" data-bs-toggle="sidebar" data-bs-target="#sidebar">
                 <i class="bi bi-justify fs-3"></i>
             </a>
 

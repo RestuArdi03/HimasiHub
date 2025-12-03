@@ -83,6 +83,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('kas/{saldo}/pay/{member}', [\App\Http\Controllers\KasController::class, 'pay'])->name('kas.pay');
         Route::post('kas/{saldo}/settings', [\App\Http\Controllers\KasController::class, 'updateSettings'])->name('kas.settings');
         Route::delete('kas/unpay/{transaksi}', [\App\Http\Controllers\KasController::class, 'unpay'])->name('kas.unpay');
+        Route::post('/kas/{saldo}/reset', [App\Http\Controllers\KasController::class, 'resetKas'])->name('kas.reset');
+
 
         // ROUTE TRANSAKSI
         Route::get('saldo/{saldo}/transaksi/trash', [TransaksiController::class, 'trash'])->name('transaksi.trash');
@@ -112,7 +114,7 @@ Route::middleware(['auth'])->group(function () {
         // ROUTE DISKUSI
         Route::resource('diskusi', DiskusiController::class);
         Route::get('/fetch', [DiskusiController::class, 'fetch'])->name('diskusi.fetch');
-
+        Route::get('/diskusi/fetch-latest', [DiskusiController::class, 'fetchLatest'])->name('diskusi.fetch-latest');
         
         // ROUTE PESAN
         Route::resource('pesan', PesanController::class);

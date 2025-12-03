@@ -31,7 +31,7 @@
             <div class="row g-4 justify-content-center">
                 @forelse ($anggota as $agt)
                     <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="team-item bg-light">
+                        <div class="team-item bg-light h-100">
                             <div class="overflow-hidden">
                                 <img class="img-fluid" src="{{ !empty($agt->foto) ? asset('storage/' . $agt->foto) : asset('backend-assets/images/default.png') }}">
                             </div>
