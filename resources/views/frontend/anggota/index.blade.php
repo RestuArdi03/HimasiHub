@@ -43,9 +43,9 @@
                                 </div>
                             </div>
                             <div class="text-center p-4">
-                                <h5 class="mb-0">{{ $agt->nama }}</h5>
+                                <h5 class="mb-0">{{ $agt->users->nama ?? 'Nama Tidak Ditemukan' }}</h5>
                                 <p>{{ $agt->jabatan->nama_jabatan }}</p>
-                                <small><em>"{{ $agt->moto_hidup ?? ' - '}}"</em></small>
+                                <small><em>"{{ $agt->moto_hidup ?? '-'}}"</em></small>
                             </div>
                         </div>
                     </div>

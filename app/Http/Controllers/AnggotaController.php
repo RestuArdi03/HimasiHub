@@ -32,7 +32,8 @@ class AnggotaController extends Controller
     public function create()
     {
         $jabatan = Jabatan::with('role')->get();
-        $users = User::all();
+        // Ambil hanya user yang belum menjadi anggota
+        $users = User::whereNull('anggota_id')->orderBy('nama')->get();
         return view('backend.anggota.tambah_anggota', compact('jabatan', 'users'));
     }
 
@@ -50,7 +51,7 @@ class AnggotaController extends Controller
             'jabatan_id'    => 'required|integer|exists:jabatan,id',
             'alamat'        => 'nullable|string|max:255',
             'moto_hidup'    => 'nullable|string|max:255',
-            'users_id'      => 'required|integer|exists:users,id', // ID User yang sudah ada
+            'users_id'      => 'required|integer|exists:users,id|unique:anggota,users_id', // ID User yang sudah ada
             'tiktok'        => 'nullable|string|max:255',
             'instagram'     => 'nullable|string|max:255',
             'foto'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:ratio=1/1',
@@ -59,31 +60,32 @@ class AnggotaController extends Controller
             'foto.mimes' => 'Format gambar hanya boleh jpg, jpeg, atau png.',
             'foto.max'   => 'Ukuran gambar maksimal 2MB.',
             'foto.dimensions' => 'Foto harus memiliki rasio 1:1.',
+            'users_id.unique' => 'User ini sudah terdaftar sebagai anggota.',
         ]);
 
         // Ambil data jabatan terpilih
         $jabatanTerpilih = Jabatan::findOrFail($validated['jabatan_id']);
         
-        // Ambil role_id yang benar dari jabatan (Asumsi ada kolom role_id di tabel jabatan)
         $newRoleId = $jabatanTerpilih->role_id; 
 
-        // Lakukan transaksi untuk memastikan kedua Model (User dan Anggota) terupdate/tercipta
+        // Lakukan transaksi untuk memastikan Anggota dibuat dan User diupdate
         DB::transaction(function () use ($validated, $request, $newRoleId) {
-
-            // 1. UPDATE ROLE USER YANG SUDAH ADA
-            $user = User::findOrFail($validated['users_id']);
-            $user->update([
-                'role_id' => $newRoleId, // <-- PENTING: Update role_id
-            ]);
-            
-            // 2. SIMPAN FOTO
+            // 1. SIMPAN FOTO
             if ($request->hasFile('foto')) {
                 $validated['foto'] = $request->file('foto')->store('anggota', 'public');
             }
 
-            // 3. BUAT ANGGOTA
-            Anggota::create($validated);
-        });
+            // 2. BUAT ANGGOTA BARU
+            $anggota = Anggota::create($validated);
+
+            // 3. UPDATE USER TERKAIT
+            $user = User::findOrFail($validated['users_id']);
+            $user->update([
+                'nama' => $validated['nama'], // Update nama user
+                'role_id' => $newRoleId,
+                'anggota_id' => $anggota->id, // Set anggota_id pada user
+            ]);
+        }, 3); // Retry 3 times on deadlock
 
         return redirect()->route('backend.anggota.index')->with('success', 'Data anggota berhasil ditambahkan.');
     }
@@ -102,7 +104,8 @@ class AnggotaController extends Controller
     public function edit(Anggota $anggota)
     {
         $jabatan = Jabatan::with('role')->get(); 
-        $users = User::all();
+        // Ambil user yang belum jadi anggota, DAN user yang sedang diedit saat ini
+        $users = User::whereNull('anggota_id')->orWhere('id', $anggota->users_id)->orderBy('nama')->get();
         return view('backend.anggota.edit_anggota', compact('anggota', 'jabatan', 'users'));
     }
 
@@ -111,11 +114,7 @@ class AnggotaController extends Controller
      */
     public function update(Request $request, Anggota $anggota)
     {
-        // Cek ID User terkait
-        $userId = $anggota->users_id; 
-
-        // Jika field email TIDAK ADA di form Anda, gunakan email lama:
-        $currentEmail = $anggota->user?->email ?? '';
+        $oldUserId = $anggota->users_id;
 
         $validated = $request->validate([
             'nama'      => 'required|string|max:255',
@@ -128,7 +127,7 @@ class AnggotaController extends Controller
             'alamat'    => 'nullable|string|max:255',
             'moto_hidup' => 'nullable|string|max:255',
             
-            'users_id'  => 'required|integer|exists:users,id', // Dipertahankan untuk field dropdown
+            'users_id'  => ['required', 'integer', 'exists:users,id', Rule::unique('anggota', 'users_id')->ignore($anggota->id)],
             'tiktok'    => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',
             'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:ratio=1/1',
@@ -137,17 +136,12 @@ class AnggotaController extends Controller
             'foto.mimes' => 'Format gambar hanya boleh jpg, jpeg, atau png.',
             'foto.max'   => 'Ukuran gambar maksimal 2MB.',
             'foto.dimensions' => 'Foto harus memiliki rasio 1:1.',
+            'users_id.unique' => 'User ini sudah terdaftar sebagai anggota lain.',
         ]);
 
-        // --- 1. AMBIL NILAI HIDDEN INPUT KODE ---
-        $redirectCode = $request->input('kode'); // Ambil nilai kode (akan bernilai '1' jika dikirim)
-
-        // 1. Ambil Model Jabatan yang baru dipilih
         $jabatanTerpilih = Jabatan::findOrFail($validated['jabatan_id']);
-        
-        // 2. Dapatkan role_id yang terkait dengan jabatan tersebut
-        // (Asumsi kolom role_id ada di tabel jabatan)
         $newRoleId = $jabatanTerpilih->role_id; 
+        $newUserId = $validated['users_id'];
 
         // --- LOGIKA PENANGANAN FOTO BARU ---
         if ($request->hasFile('foto')) {
@@ -158,26 +152,32 @@ class AnggotaController extends Controller
         }
 
         // --- PEMBARUAN USER DAN ANGGOTA ---
-        // Tambahkan $newRoleId ke variabel yang digunakan oleh closure
-        DB::transaction(function () use ($validated, $anggota, $userId, $newRoleId) { 
+        DB::transaction(function () use ($validated, $anggota, $oldUserId, $newUserId, $newRoleId) {
             
-            // 1. UPDATE DATA USER
-            $user = User::findOrFail($userId);
-            $user->update([
-                'nama' => $validated['nama'],
-                'role_id' => $newRoleId, 
-            ]);
-            // 2. UPDATE DATA ANGGOTA (Hapus field yang sudah di update di user)
-            // Jika Anda TIDAK memperbarui email di form edit, hapus baris ini
-            unset($validated['email']); 
-            
+            // 1. UPDATE DATA ANGGOTA
             $anggota->update($validated);
-        });
 
-        if ($redirectCode == 1) {
-            // Jika ini adalah submission dari form Profil Pribadi
-            return redirect()->route('backend.dashboard')->with('success', 'Profil berhasil diperbarui.');
-        }
+            // 2. JIKA USER DIGANTI, RESET USER LAMA
+            if ($oldUserId != $newUserId) {
+                $oldUser = User::find($oldUserId); // find() can return null
+                if ($oldUser) {
+                    $oldUser->update([
+                        'anggota_id' => null,
+                        'role_id' => null, // Atau set ke role default 'user'
+                    ]);
+                }
+            }
+
+            // 3. UPDATE USER BARU
+            $newUser = User::find($newUserId);
+            if ($newUser) {
+                $newUser->update([
+                    'nama' => $validated['nama'], // Update nama user
+                    'anggota_id' => $anggota->id, 
+                    'role_id' => $newRoleId
+                ]);
+            }
+        });
 
         return redirect()->route('backend.anggota.index')->with('success', 'Data anggota berhasil diperbarui.');
     }
@@ -187,6 +187,16 @@ class AnggotaController extends Controller
      */
     public function destroy(Anggota $anggota)
     {
+        // Reset user yang terkait sebelum soft delete
+        DB::transaction(function () use ($anggota) {
+            $user = $anggota->users;
+            if ($user) {
+                $user->update([
+                    'anggota_id' => null,
+                    'role_id' => null, // Atau set ke role default 'user'
+                ]);
+            }
+        });
         $anggota->delete();
         return redirect()->route('backend.anggota.index')->with('success', 'Anggota berhasil diberhentikan.');
     }

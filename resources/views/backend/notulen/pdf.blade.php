@@ -54,11 +54,11 @@
             </tr>
             <tr>
                 <td><strong>Pimpinan</strong></td>
-                <td>{{ optional($notulen->pimpinan)->nama ?? $notulen->pimpinan_rapat_nama ?? '-' }}</td>
+                <td>{{ optional($notulen->pimpinan->users)->nama ?? $notulen->pimpinan_rapat_nama ?? '-' }}</td>
             </tr>
             <tr>
                 <td><strong>Notulis</strong></td>
-                <td>{{ optional($notulen->notulis)->nama ?? $notulen->notulis_nama ?? '-' }}</td>
+                <td>{{ optional($notulen->notulis->users)->nama ?? $notulen->notulis_nama ?? '-' }}</td>
             </tr>
         </table>
     </div>

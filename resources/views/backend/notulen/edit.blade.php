@@ -103,7 +103,7 @@
                                 <option value="" disabled>-- Pilih Pimpinan Rapat --</option>
                                 @foreach($anggota as $item)
                                     <option value="{{ $item->id }}" {{ old('pimpinan_rapat', $notulen->pimpinan_rapat_id) == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
+                                        {{ optional($item->users)->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -119,7 +119,7 @@
                                 <option value="" disabled>-- Pilih Notulis --</option>
                                 @foreach($anggota as $item)
                                     <option value="{{ $item->id }}" {{ old('notulis_id', $notulen->notulis_id) == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
+                                        {{ optional($item->users)->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -202,9 +202,9 @@
                                            id="anggota{{ $item->id }}" 
                                            name="attendees[]" 
                                            value="{{ $item->id }}"
-                                           {{ in_array($item->nama, $existingAttendees ?? []) || (is_array(old('attendees', [])) && in_array($item->id, old('attendees', []))) ? 'checked' : '' }}>
+                                           {{ in_array(optional($item->users)->nama, $existingAttendees ?? []) || (is_array(old('attendees', [])) && in_array($item->id, old('attendees', []))) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="anggota{{ $item->id }}">
-                                        {{ $item->nama }} ({{ optional($item->jabatan)->nama_jabatan ?? '-' }})
+                                        {{ optional($item->users)->nama }} ({{ optional($item->jabatan)->nama_jabatan ?? '-' }})
                                     </label>
                                 </div>
                             </div>

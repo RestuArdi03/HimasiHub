@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Notulen;
 use App\Models\Agenda;
-use App\Models\Kegiatan;
 use App\Models\User;
 use App\Models\PresensiKehadiran;
 use App\Models\Anggota;
@@ -18,13 +17,12 @@ class NotulenSeeder extends Seeder
     public function run(): void
     {
         // Dapatkan data yang diperlukan
-        $kegiatan = Kegiatan::first();
         $users = User::limit(3)->get();
         $anggota = Anggota::limit(5)->get();
 
         // Jika belum ada kegiatan, skip
-        if (!$kegiatan || $users->isEmpty()) {
-            $this->command->warn('Kegiatan atau User tidak ditemukan. Lewati NotulenSeeder.');
+        if ($users->isEmpty()) {
+            $this->command->warn('User tidak ditemukan. Lewati NotulenSeeder.');
             return;
         }
 
@@ -74,8 +72,8 @@ class NotulenSeeder extends Seeder
                 PresensiKehadiran::create([
                     'peserta_nama' => $member->nama ?? 'Peserta',
                     'user_id' => $users->first()->id ?? null,
-                    'presensiable_id' => $kegiatan->id,
-                    'presensiable_type' => 'App\Models\Kegiatan',
+                    'presensiable_id' => $notulen1->id,
+                    'presensiable_type' => Notulen::class,
                     'keterangan_kehadiran' => 'Hadir',
                 ]);
             }
@@ -121,8 +119,8 @@ class NotulenSeeder extends Seeder
                     PresensiKehadiran::firstOrCreate([
                         'peserta_nama' => $member->nama ?? 'Peserta',
                         'user_id' => $users->get(1)->id ?? null,
-                        'presensiable_id' => $kegiatan->id,
-                        'presensiable_type' => 'App\Models\Kegiatan',
+                        'presensiable_id' => $notulen2->id,
+                        'presensiable_type' => Notulen::class,
                         'keterangan_kehadiran' => 'Hadir',
                     ]);
                 }

@@ -88,11 +88,11 @@
                     @endif
                     @if(request()->filled('pimpinan'))
                         @php $p = $anggota->firstWhere('id', request('pimpinan')); @endphp
-                        <span class="badge bg-success">Pimpinan: {{ $p?->nama ?? request('pimpinan') }}</span>
+                        <span class="badge bg-success">Pimpinan: {{ $p?->users?->nama ?? request('pimpinan') }}</span>
                     @endif
                     @if(request()->filled('notulis'))
                         @php $n = $anggota->firstWhere('id', request('notulis')); @endphp
-                        <span class="badge bg-warning text-dark">Notulis: {{ $n?->nama ?? request('notulis') }}</span>
+                        <span class="badge bg-warning text-dark">Notulis: {{ $n?->users?->nama ?? request('notulis') }}</span>
                     @endif
                     @if(request()->filled('date_from') || request()->filled('date_to'))
                         <span class="badge bg-secondary">Tanggal: {{ request('date_from') ?? '-' }} — {{ request('date_to') ?? '-' }}</span>
@@ -208,8 +208,8 @@
                                         <label class="form-label">Notulis</label>
                                         <select name="notulis" class="form-select">
                                             <option value="">-- Semua --</option>
-                                            @foreach($anggota as $a)
-                                                <option value="{{ $a->id }}" {{ request('notulis') == $a->id ? 'selected' : '' }}>{{ $a->nama }}</option>
+                                            @foreach($anggota->sortBy('users.nama') as $a)
+                                                <option value="{{ $a->id }}" {{ request('notulis') == $a->id ? 'selected' : '' }}>{{ optional($a->users)->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>

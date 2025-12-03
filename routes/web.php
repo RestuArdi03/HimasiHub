@@ -96,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('anggota/mantan-anggota', [AnggotaController::class, 'trash'])->name('anggota.trash');
         Route::put('anggota/{id}/restore', [AnggotaController::class, 'restore'])->name('anggota.restore')->withTrashed();
         Route::delete('anggota/{id}/force-delete', [AnggotaController::class, 'forceDelete'])->name('anggota.forceDelete')->withTrashed();
+        Route::post('/users/{user}/update-name', [AnggotaController::class, 'updateUserName'])->name('users.updateName');
         Route::resource('anggota', AnggotaController::class, ['parameters' => ['anggota' => 'anggota']]);
 
         // ROUTE NOTULEN

@@ -23,7 +23,6 @@ class RolesTableSeeder extends Seeder
         $now = Carbon::now()->toDateTimeString();
 
         $roles = [
-            ['nama_role' => 'tamu', 'created_at' => $now, 'updated_at' => $now],
             ['nama_role' => 'admin', 'created_at' => $now, 'updated_at' => $now],
             ['nama_role' => 'sekretaris', 'created_at' => $now, 'updated_at' => $now],
             ['nama_role' => 'bendahara', 'created_at' => $now, 'updated_at' => $now],

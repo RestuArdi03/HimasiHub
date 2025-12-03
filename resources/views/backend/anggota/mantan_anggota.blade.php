@@ -55,12 +55,12 @@
                             <div class="card-content image-sq-container overflow-hidden"> 
                                 <img src="{{ !empty($agt->foto) ? asset('storage/' . $agt->foto) : asset('backend-assets/images/default.png') }}"
                                 class="card-img-top object-fit-cover w-100 h-100" 
-                                alt="{{ $agt->nama }}">
+                                alt="{{ $agt->users->nama ?? $agt->nama }}">
                             </div>
                             
                             <div class="card-body d-flex flex-column justify-content-between"> 
                                 <div>
-                                    <h5 class="card-title text-truncate">{{ $agt->nama }}</h5>
+                                    <h5 class="card-title text-truncate">{{ $agt->users->nama ?? $agt->nama }}</h5>
                                     <p class="card-text text-truncate text-muted">{{ $agt->jabatan->nama_jabatan }}</p>
                                     {{-- Tampilkan waktu dihapus sebagai info tambahan --}}
                                     <small class="text-danger">Dihentikan/Purnatugas pada: {{ $agt->deleted_at->format('d/m/Y') }}</small> 
@@ -95,7 +95,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body text-start text-danger">
-                                                ⚠️ Anda yakin ingin menghapus data anggota '{{ $agt->nama }}' secara **PERMANEN**? Tindakan ini tidak dapat dibatalkan.
+                                                ⚠️ Anda yakin ingin menghapus data anggota '{{ $agt->users->nama ?? $agt->nama }}' secara **PERMANEN**? Tindakan ini tidak dapat dibatalkan.
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

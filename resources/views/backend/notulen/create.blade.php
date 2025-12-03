@@ -107,7 +107,7 @@
                                 <option value="" selected disabled>-- Pilih Pimpinan Rapat --</option>
                                 @foreach($anggota as $item)
                                     <option value="{{ $item->id }}" {{ old('pimpinan_rapat') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
+                                        {{ optional($item->users)->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -123,7 +123,7 @@
                                 <option value="" selected disabled>-- Pilih Notulis --</option>
                                 @foreach($anggota as $item)
                                     <option value="{{ $item->id }}" {{ old('notulis_id') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
+                                        {{ optional($item->users)->nama }} @if(optional($item->jabatan)->nama_jabatan) ({{ optional($item->jabatan)->nama_jabatan }}) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -195,7 +195,7 @@
                                            value="{{ $item->id }}"
                                            @if(old('attendees') && in_array($item->id, old('attendees'))) checked @endif>
                                     <label class="form-check-label" for="anggota{{ $item->id }}">
-                                        {{ $item->nama }} ({{ optional($item->jabatan)->nama_jabatan ?? '-' }})
+                                        {{ optional($item->users)->nama }} ({{ optional($item->jabatan)->nama_jabatan ?? '-' }})
                                     </label>
                                 </div>
                             </div>
