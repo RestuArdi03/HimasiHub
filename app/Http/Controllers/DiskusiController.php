@@ -76,4 +76,18 @@ class DiskusiController extends Controller
             ->get();
         return view('backend.diskusi._messages', compact('diskusi'))->render();
     }
+
+    public function fetchLatest()
+    {
+        // Ambil satu pesan terakhir dengan relasi yang dibutuhkan
+        $pesan_terakhir = Diskusi::with('user.role')->latest()->first();
+
+        if ($pesan_terakhir) {
+            // Kembalikan hanya partial view message bubble
+            return view('backend.diskusi._message_simple', ['pesan' => $pesan_terakhir]);
+        }
+
+        // Jika tidak ada pesan, kembalikan response kosong
+        return response('');
+    }
 }

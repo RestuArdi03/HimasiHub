@@ -64,9 +64,11 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="card-title mb-0">Riwayat Transaksi</h4>
                                 <div>
-                                    <a href="{{ route('backend.transaksi.create', ['saldo_id' => $saldo->id]) }}" class="btn btn-primary">
-                                        <i class="bi bi-plus-lg"></i> Tambah Transaksi
-                                    </a>
+                                    @can('create', $transaksiClass)
+                                        <a href="{{ route('backend.transaksi.create', ['saldo_id' => $saldo->id]) }}" class="btn btn-primary">
+                                            <i class="bi bi-plus-lg"></i> Tambah Transaksi
+                                        </a>
+                                    @endcan
                                     <a href="{{ route('backend.transaksi.trash', $saldo->id) }}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i> Tempat Sampah</a>
                                 </div>                                
                             </div>
@@ -107,12 +109,17 @@
                                                 {{ number_format($transaksi->saldo_akhir, 2, ',', '.') }}
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('backend.transaksi.edit', $transaksi->id) }}" class="btn btn-sm btn-warning btn-sq" title="Edit">
-                                                    <i class="bi bi-pencil-fill"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-danger btn-sq" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $transaksi->id }}" title="Hapus">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </button>
+                                                @can('update', $transaksi)
+                                                    <a href="{{ route('backend.transaksi.edit', $transaksi->id) }}" class="btn btn-sm btn-warning btn-sq" title="Edit">
+                                                        <i class="bi bi-pencil-fill"></i>
+                                                    </a>
+                                                @endcan
+                                                
+                                                @can('delete', $transaksi)
+                                                    <button type="button" class="btn btn-sm btn-danger btn-sq" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $transaksi->id }}" title="Hapus">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                @endcan
 
                                                 {{-- Modal Konfirmasi Hapus --}}
                                                 <div class="modal fade" id="deleteModal{{ $transaksi->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $transaksi->id }}" aria-hidden="true">

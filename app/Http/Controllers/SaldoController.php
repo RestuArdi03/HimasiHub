@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSaldoRequest;
 use App\Http\Requests\UpdateSaldoRequest;
 use App\Models\Saldo;
+use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -19,6 +20,7 @@ class SaldoController extends Controller
         $this->authorize('viewAny', Saldo::class);
         $saldos = Saldo::with(['user'])->orderBy('nama')->paginate(15);
         $totalSaldo = Saldo::sum('balance');
+        $saldoClass = Saldo::class;
 
         // Mengambil data bendahara. Asumsi hanya ada satu bendahara.
         $bendahara = User::whereHas('role', function ($query) {
@@ -29,6 +31,7 @@ class SaldoController extends Controller
             'saldos' => $saldos,
             'totalSaldo' => $totalSaldo,
             'bendahara' => $bendahara,
+            'saldoClass' => $saldoClass
         ]);
     }
 
@@ -80,7 +83,9 @@ class SaldoController extends Controller
             'user',
             'transactions',
         ]);
-        return view('backend.saldo.show', compact('saldo'));
+
+        $transaksiClass = Transaksi::class;
+        return view('backend.saldo.show', compact('saldo', 'transaksiClass'));
     }
 
     /**

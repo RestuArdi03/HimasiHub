@@ -58,9 +58,16 @@
                             </p>
                         </div>
                         @can('update', $saldo)
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#settingsModal">
-                            <i class="bi bi-gear-fill"></i> Pengaturan
-                        </button>
+                        <div>
+                            {{-- Tombol Reset Kas --}}
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#resetKasModal">
+                                <i class="bi bi-arrow-clockwise"></i> Reset Kas
+                            </button>
+                            {{-- Tombol Pengaturan --}}
+                            <button type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                                <i class="bi bi-gear-fill"></i> Pengaturan
+                            </button>
+                        </div>
                         @endcan
                     </div>
                 </div>
@@ -95,79 +102,89 @@
                                             @endphp
 
                                             @if ($payment)
-                                                {{-- Jika sudah bayar, tampilkan tombol hijau dengan opsi batal --}}
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Lunas pada {{ $payment->created_at->format('d M Y') }}">
-                                                        Lunas
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#unpayModal{{ $payment->id }}">
-                                                                Batalkan
-                                                            </button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                @if ($canManageKas)
+                                                    {{-- Jika sudah bayar & punya akses, tampilkan tombol hijau dengan opsi batal --}}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Lunas pada {{ $payment->created_at->format('d M Y') }}">
+                                                            Lunas
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#unpayModal{{ $payment->id }}">
+                                                                    Batalkan
+                                                                </button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
 
-                                                {{-- Modal Konfirmasi Pembatalan --}}
-                                                <div class="modal fade" id="unpayModal{{ $payment->id }}" tabindex="-1" aria-labelledby="unpayModalLabel{{ $payment->id }}" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="unpayModalLabel{{ $payment->id }}">Konfirmasi Pembatalan</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body text-start">
-                                                                Apakah Anda yakin ingin membatalkan pembayaran <strong>Iuran ke-{{ $i }}</strong> untuk <strong>{{ $member->nama }}</strong>?
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                                                                <form action="{{ route('backend.kas.unpay', $payment->id) }}" method="POST" class="d-inline">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
-                                                                </form>
+                                                    {{-- Modal Konfirmasi Pembatalan --}}
+                                                    <div class="modal fade" id="unpayModal{{ $payment->id }}" tabindex="-1" aria-labelledby="unpayModalLabel{{ $payment->id }}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="unpayModalLabel{{ $payment->id }}">Konfirmasi Pembatalan</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body text-start">
+                                                                    Apakah Anda yakin ingin membatalkan pembayaran <strong>Iuran ke-{{ $i }}</strong> untuk <strong>{{ $member->nama }}</strong>?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                                                    <form action="{{ route('backend.kas.unpay', $payment->id) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    {{-- Jika sudah bayar & tidak punya akses, tampilkan badge --}}
+                                                    <span class="badge bg-success" title="Lunas pada {{ $payment->created_at->format('d M Y') }}">Lunas</span>
+                                                @endif
                                             @else
-                                                {{-- Jika belum bayar, tampilkan tombol merah dengan opsi bayar --}}
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Belum Lunas">
-                                                        Belum
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <button type="button" class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#payModal{{ $member->id }}_{{ $i }}">
-                                                                Tandai Lunas
-                                                            </button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                @if ($canManageKas)
+                                                    {{-- Jika belum bayar & punya akses, tampilkan tombol merah dengan opsi bayar --}}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Belum Lunas">
+                                                            Belum
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <button type="button" class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#payModal{{ $member->id }}_{{ $i }}">
+                                                                    Tandai Lunas
+                                                                </button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
 
-                                                {{-- Modal Konfirmasi Pembayaran --}}
-                                                <div class="modal fade" id="payModal{{ $member->id }}_{{ $i }}" tabindex="-1" aria-labelledby="payModalLabel{{ $member->id }}_{{ $i }}" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="payModalLabel{{ $member->id }}_{{ $i }}">Konfirmasi Pembayaran</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body text-start">
-                                                                Konfirmasi pembayaran <strong>Iuran ke-{{ $i }}</strong> untuk <strong>{{ $member->nama }}</strong>?
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                                <form action="{{ route('backend.kas.pay', ['saldo' => $saldo->id, 'member' => $member->id]) }}" method="POST" class="d-inline">
-                                                                    @csrf
-                                                                    <input type="hidden" name="iuran_ke" value="{{ $i }}">
-                                                                    <button type="submit" class="btn btn-primary">Ya, Konfirmasi</button>
-                                                                </form>
+                                                    {{-- Modal Konfirmasi Pembayaran --}}
+                                                    <div class="modal fade" id="payModal{{ $member->id }}_{{ $i }}" tabindex="-1" aria-labelledby="payModalLabel{{ $member->id }}_{{ $i }}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="payModalLabel{{ $member->id }}_{{ $i }}">Konfirmasi Pembayaran</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body text-start">
+                                                                    Konfirmasi pembayaran <strong>Iuran ke-{{ $i }}</strong> untuk <strong>{{ $member->nama }}</strong>?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                                    <form action="{{ route('backend.kas.pay', ['saldo' => $saldo->id, 'member' => $member->id]) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        <input type="hidden" name="iuran_ke" value="{{ $i }}">
+                                                                        <button type="submit" class="btn btn-primary">Ya, Konfirmasi</button>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    {{-- Jika belum bayar & tidak punya akses, tampilkan badge --}}
+                                                    <span class="badge bg-danger" title="Belum Lunas">Belum</span>
+                                                @endif
                                             @endif
                                         </td>
                                     @endfor
@@ -226,5 +243,30 @@
             </div>
         </div>
     </div>
+    {{-- Modal Konfirmasi Reset Kas --}}
+    @can('update', $saldo)
+    <div class="modal fade" id="resetKasModal" tabindex="-1" aria-labelledby="resetKasModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resetKasModalLabel">Konfirmasi Reset Saldo Kas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Anda yakin ingin mereset saldo "Kas"?</p>
+                    <p>Semua transaksi iuran yang ada saat ini akan dipindahkan ke saldo baru bernama "Iuran Kas {{ date('M Y') }}" dan saldo "Kas" akan diatur ulang menjadi Rp 0.</p>
+                    <p class="text-danger fw-bold">Tindakan ini tidak dapat dibatalkan!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form action="{{ route('backend.kas.reset', $saldo->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Ya, Reset Saldo Kas</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
     @endcan
 @endsection

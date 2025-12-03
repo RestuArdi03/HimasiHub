@@ -30,9 +30,11 @@
         @endif
         {{-- Tombol Aksi --}}
         <div class="mb-3">
-            <a href="{{ route('backend.saldo.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Tambah Saldo
-            </a>
+            @can('create', $saldoClass)
+                <a href="{{ route('backend.saldo.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Tambah Saldo
+                </a>
+            @endcan
             <a href="{{ route('backend.saldo.trash') }}" class="btn btn-danger">
                 <i class="bi bi-trash3-fill"></i> Tempat Sampah
             </a>

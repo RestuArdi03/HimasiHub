@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/backend-assets/css/bootstrap.css">
 
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('asset/logo.png') }}">
+    
     <link rel="stylesheet" href="/backend-assets/vendors/iconly/bold.css">
 
     <link rel="stylesheet" href="/backend-assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
@@ -22,22 +24,27 @@
 
     {{-- STYLE CSS HANDMADE --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    {{-- Override z-index sidebar agar selalu di depan --}}
+    <style>
+        #sidebar {
+            z-index: 1030 !important;
+        }
+    </style>
     
     @stack('styles')
 </head>
 
 <body>
     <div id="app">
-        @include('backend.partials.sidebar')
+        @include('backend.layouts.partials.sidebar')
 
-        <div id="main">
-            @include('backend.partials.header')
-            
-            <div class="page-content">
+        <div id="main" class="layout-navbar">
+            @include('backend.layouts.partials.header')
+            <div id="main-content">
                 @yield('content')
             </div>
-
-            @include('backend.partials.footer')
+            @include('backend.layouts.partials.footer')
         </div>
     </div>
 
