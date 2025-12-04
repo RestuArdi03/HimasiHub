@@ -26,6 +26,10 @@
                     <i class="bi bi-person-fill"></i>
                     <span class="ms-1">{{ optional($konten->user)->nama ?? 'Penulis' }}</span>
                 </div>
+                <div class="me-3">
+                    <i class="bi bi-eye-fill"></i>
+                    <span class="ms-1">{{ $konten->views }}x dilihat</span>
+                </div>
                 <div>
                     <i class="bi bi-calendar-event-fill"></i>
                     <span class="ms-1">{{ $konten->created_at->translatedFormat('d F Y') }}</span>

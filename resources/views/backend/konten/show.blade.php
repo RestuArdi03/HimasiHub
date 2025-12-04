@@ -53,6 +53,10 @@
                                 <span class="badge bg-light-secondary">Draft</span>
                             @endif
                         </div>
+                        <div class="me-3">
+                            <i class="bi bi-eye-fill"></i>
+                            <span>{{ $konten->views }}x dilihat</span>
+                        </div>
                         <div>
                             <i class="bi bi-calendar-event-fill"></i>
                             <span>{{ $konten->created_at->format('d F Y') }}</span>

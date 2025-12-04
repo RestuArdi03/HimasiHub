@@ -64,7 +64,7 @@
                                 <div class="form-group">
                                     <label for="nama">Nama</label>
                                     <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama"
-                                        value="{{ old('nama', $anggota->nama ?? '') }}" placeholder="Masukkan nama lengkap anggota" required disabled>
+                                        value="{{ old('nama', $anggota->users->nama ?? '') }}" placeholder="Masukkan nama lengkap anggota" required disabled>
                                     @error('nama')
                                     <div class="invalid-feedback">
                                         {{ $message }}

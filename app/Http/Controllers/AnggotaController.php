@@ -43,7 +43,6 @@ class AnggotaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama'          => 'required|string|max:255',
             'nim'           => 'required|string|max:50|unique:anggota,nim', 
             'kelas'         => 'required|string|max:50',
             'jurusan'       => 'required|string|max:100',
@@ -117,7 +116,6 @@ class AnggotaController extends Controller
         $oldUserId = $anggota->users_id;
 
         $validated = $request->validate([
-            'nama'      => 'required|string|max:255',
             // KOREKSI: Gunakan Rule::unique untuk mengabaikan NIM yang sedang diedit
             'nim'       => ['required', 'string', 'max:50', Rule::unique('anggota', 'nim')->ignore($anggota->id)], 
             'kelas'     => 'required|string|max:50',
@@ -172,7 +170,6 @@ class AnggotaController extends Controller
             $newUser = User::find($newUserId);
             if ($newUser) {
                 $newUser->update([
-                    'nama' => $validated['nama'], // Update nama user
                     'anggota_id' => $anggota->id, 
                     'role_id' => $newRoleId
                 ]);
