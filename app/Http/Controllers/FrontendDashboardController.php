@@ -12,8 +12,8 @@ class FrontendDashboardController extends Controller
     public function index()
     {
         // Ambil 3 konten terbaru untuk ditampilkan di carousel
-        $carouselKonten = Konten::latest()->take(3)->get();
-        $latestNews = Konten::latest()->take(6)->get();
+        $carouselKonten = Konten::where('status', 'published')->latest()->take(3)->get();
+        $latestNews = Konten::where('status', 'published')->latest()->take(6)->get();
         $anggota = Anggota::all();
         $jabatan = Jabatan::all();
 

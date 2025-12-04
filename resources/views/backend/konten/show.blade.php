@@ -46,6 +46,13 @@
                             <i class="bi bi-person-fill"></i>
                             <span>{{ optional($konten->user)->nama ?? 'Penulis tidak diketahui' }}</span>
                         </div>
+                        <div class="me-3">
+                            @if ($konten->status == 'published')
+                                <span class="badge bg-light-success">Published</span>
+                            @else
+                                <span class="badge bg-light-secondary">Draft</span>
+                            @endif
+                        </div>
                         <div>
                             <i class="bi bi-calendar-event-fill"></i>
                             <span>{{ $konten->created_at->format('d F Y') }}</span>

@@ -12,7 +12,7 @@ class FrontendKontenController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Konten::with('user')->latest();
+        $query = Konten::with('user')->where('status', 'published')->latest();
 
         // Filter berdasarkan kata kunci pencarian
         if ($request->filled('search')) {
@@ -59,6 +59,11 @@ class FrontendKontenController extends Controller
      */
     public function show(Konten $konten)
     {
+        // Hanya tampilkan konten jika statusnya 'published'
+        if ($konten->status !== 'published') {
+            abort(404);
+        }
+
         $konten->load(['user', 'komenTerbaru']);
         return view('frontend.konten.show', [
             'konten' => $konten

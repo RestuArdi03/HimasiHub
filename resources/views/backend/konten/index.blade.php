@@ -59,6 +59,7 @@
                                 <th>Judul</th>
                                 <th>Penulis</th>
                                 <th>Tanggal</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                             </thead>
@@ -73,6 +74,13 @@
                                     </td>
                                     <td>{{ optional($item->user)->nama ?? 'N/A' }}</td>
                                     <td>{{ $item->created_at->format('d M Y') }}</td>
+                                    <td>
+                                        @if ($item->status == 'published')
+                                            <span class="badge bg-light-success">Published</span>
+                                        @else
+                                            <span class="badge bg-light-secondary">Draft</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         @can('konten.view')
                                             <a href="{{ route('backend.konten.show', $item) }}" class="btn btn-sm btn-info" title="Detail">
@@ -116,7 +124,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center">Tidak ada data publikasi.</td>
+                                    <td colspan="6" class="text-center">Tidak ada data publikasi.</td>
                                 </tr>
                             @endforelse
                             </tbody>

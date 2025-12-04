@@ -15,6 +15,7 @@ class Konten extends Model
         'slug',
         'gambar',
         'deskripsi',
+        'status',
         'users_id',
     ];
 
