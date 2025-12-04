@@ -150,7 +150,7 @@
 
                     <!-- Pagination -->
                     <div class="mt-4">
-                        {{ $notulen->appends(request()->query())->links() }}
+                        {{ $notulen->appends(request()->query())->links('pagination::bootstrap-5') }}
                     </div>
                 @else
                     <div class="text-center py-5">

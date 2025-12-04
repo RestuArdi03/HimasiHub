@@ -86,7 +86,7 @@
                     </tbody>
                 </table>
                 <div class="mt-3">
-                    {{ $kegiatan->links() }}
+                    {{ $kegiatan->withQueryString()->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

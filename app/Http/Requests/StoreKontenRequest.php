@@ -27,7 +27,7 @@ class StoreKontenRequest extends FormRequest
             'judul' => 'required|string|max:255|unique:konten,judul',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi' => 'required|string',
-            'status' => 'required|string|in:draft,published',
+            'status' => 'required|string|in:draft,published,review',
         ];
     }
 }

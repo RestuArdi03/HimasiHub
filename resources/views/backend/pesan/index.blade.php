@@ -95,7 +95,7 @@
                     </div>
                     {{-- Pagination --}}
                     <div class="mt-4">
-                        {{ $pesan->links() }}
+                        {{ $pesan->withQueryString()->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
