@@ -65,6 +65,8 @@ class FrontendKontenController extends Controller
         }
 
         $konten->load(['user', 'komenTerbaru']);
+        $konten->increment('views');
+
         return view('frontend.konten.show', [
             'konten' => $konten
         ]);

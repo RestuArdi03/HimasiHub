@@ -65,7 +65,7 @@
                                     <table class="table table-striped table-hover">
                                         <tr>
                                             <td>Nama</td>
-                                            <td>{{ $user->nama ?? $anggota->nama ?? '-' }}</td>
+                                            <td>{{ $anggota->users->nama ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <td>NIM</td>
