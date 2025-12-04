@@ -40,6 +40,40 @@
                 </div>
             </div>
         </section>
+
+        <!-- Modal Peringatan Ukuran File -->
+        <div class="modal fade" id="size-warning-modal" tabindex="-1" role="dialog" aria-labelledby="sizeWarningModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="sizeWarningModalLabel">Peringatan Ukuran File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Ukuran file lebih dari 2MB. Proses konversi mungkin memakan waktu lama atau gagal. Apakah Anda ingin melanjutkan?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-upload-btn">Batal</button>
+                        <button type="button" class="btn btn-primary" id="confirm-upload-btn">Lanjutkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Error Konversi -->
+        <div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="errorModalLabel">Gagal Membaca File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Gagal membaca file docx. Pastikan file tidak rusak dan dalam format yang benar.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -56,12 +90,11 @@
                 height: 300
             });
 
-            function handleFileSelect(event) {
-                const file = event.target.files[0];
-                if (!file) {
-                    return;
-                }
+            let selectedFile = null;
+            const sizeWarningModal = new bootstrap.Modal(document.getElementById('size-warning-modal'));
+            const errorModal = new bootstrap.Modal(document.getElementById('error-modal'));
 
+            function processFile(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     mammoth.convertToHtml({ arrayBuffer: e.target.result })
@@ -70,13 +103,41 @@
                         })
                         .catch(function(err) {
                             console.log("Error reading docx file:", err);
-                            alert("Gagal membaca file docx. Pastikan file tidak rusak.");
+                            errorModal.show();
                         });
                 };
                 reader.readAsArrayBuffer(file);
             }
 
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                const maxSize = 2 * 1024 * 1024; // 2MB
+
+                if (!file) {
+                    selectedFile = null;
+                    return;
+                }
+
+                selectedFile = file;
+
+                if (file.size > maxSize) {
+                    sizeWarningModal.show();
+                } else {
+                    processFile(selectedFile);
+                }
+            }
+
             $('#file_konten').on('change', handleFileSelect);
+            $('#confirm-upload-btn').on('click', function() {
+                if (selectedFile) {
+                    processFile(selectedFile);
+                }
+                sizeWarningModal.hide();
+            });
+            $('#cancel-upload-btn').on('click', function() {
+                $('#file_konten').val('');
+                selectedFile = null;
+            });
 
             // Toggle antara editor dan upload file
             $('input[name="content_source"]').on('change', function() {
