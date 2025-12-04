@@ -42,7 +42,7 @@ class KontenController extends Controller
 
         $slug = Str::slug($validated['judul'], '-');
 
-        $path = $request->file('gambar')->store('public/konten');
+        $path = $request->file('gambar')->store('konten', 'public');
 
         Konten::create([
             'judul' => $validated['judul'],
@@ -51,6 +51,7 @@ class KontenController extends Controller
             'deskripsi' => $validated['deskripsi'],
             'status' => $validated['status'],
             'users_id' => auth()->id(),
+            'views' => 0
         ]);
 
         return redirect()->route('backend.konten.index')->with('success', 'Konten berhasil ditambahkan.');
@@ -91,7 +92,9 @@ class KontenController extends Controller
         $validated['gambar'] = $path; // Tetapkan gambar lama sebagai default
         if ($request->hasFile('gambar')) {
             Storage::delete($konten->gambar);
-            $path = $request->file('gambar')->store('public/konten');
+            // Hapus gambar lama dari storage public
+            Storage::disk('public')->delete($konten->gambar);
+            $path = $request->file('gambar')->store('konten', 'public');
             $validated['gambar'] = $path;
         }
 
@@ -106,7 +109,7 @@ class KontenController extends Controller
     public function destroy(Konten $konten)
     {
         $this->authorize('delete', $konten);
-        Storage::delete($konten->gambar);
+        Storage::disk('public')->delete($konten->gambar);
         $konten->delete();
         return redirect()->route('backend.konten.index')->with('success', 'Konten berhasil dihapus.');
     }
