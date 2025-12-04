@@ -11,6 +11,7 @@ use Database\Seeders\AnggotaSeeder;
 use Database\Seeders\KegiatanSeeder;
 use Database\Seeders\NotulenSeeder;
 use Database\Seeders\KontenSeeder;
+use Database\Seeders\KalenderKegiatanSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -42,5 +43,7 @@ class DatabaseSeeder extends Seeder
 
         // Seed konten
         $this->call(KontenSeeder::class);
+
+        $this->call(KalenderKegiatanSeeder::class);
     }
 }

@@ -62,19 +62,18 @@
                         right: 'dayGridMonth,timeGridWeek,listWeek'
                     },
                     locale: 'id',
-                    events: '{{ route("kegiatan.events") }}',
+                    events: '{{ route("kalender-kegiatan.events", ["context" => "frontend"]) }}',
                     
                     // --- Logika Tooltip ---
                     eventMouseEnter: function(info) {
                         const props = info.event.extendedProps;
                         const tooltipEl = document.getElementById('eventTooltip');
 
-                        // 1. Isi konten tooltip dan buat visibel (tapi di luar layar) untuk mengukur lebarnya
-                        tooltipEl.innerHTML = `<strong>${info.event.title}</strong><br>Tipe: ${props.tipe || '-'}<br>Tempat: ${props.tempat || '-'}`;
+                        // 1. Isi konten tooltip dengan judul dan deskripsi (isi)
+                        tooltipEl.innerHTML = `<strong>${info.event.title}</strong><br>${props.isi || ''}`;
                         tooltipEl.style.display = 'block';
                         tooltipEl.style.left = '-9999px'; // Pindahkan sementara ke luar layar
 
-                        // 2. Dapatkan posisi acara dan lebar tooltip/viewport
                         const eventRect = info.el.getBoundingClientRect();
                         const tooltipWidth = tooltipEl.offsetWidth;
                         const viewportWidth = window.innerWidth;

@@ -74,6 +74,13 @@
                         <span>Pencatatan</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item {{ request()->routeIs('backend.kalender-kegiatan.*') ? 'active' : '' }} ">
+                    <a href="{{ route('backend.kalender-kegiatan.index') }}" class='sidebar-link'>
+                        <i class="bi bi-calendar-event-fill"></i>
+                        <span>Kalender</span>
+                    </a>
+                </li>
                 
                 {{-- PUBLIKASI --}}
                 <li class="sidebar-item {{ request()->routeIs('backend.konten.*') ? 'active' : '' }} ">
