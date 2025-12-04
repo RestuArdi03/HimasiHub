@@ -284,7 +284,7 @@
 
 @push('scripts')
 <!-- TinyMCE (local vendor to avoid cloud API warning) -->
-<script src="{{ asset('vendors/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('backend-assets/vendors/tinymce/tinymce.min.js') }}"></script>
 <script>
     tinymce.init({
         selector: '.tiny-editor',
