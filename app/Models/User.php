@@ -60,6 +60,18 @@ class User extends Authenticatable
         return $this->role->nama_role === $role;
     }
 
+    /**
+     * Check if the user has any of the given roles.
+     *
+     * @param array $roles
+     * @return boolean
+     */
+    public function hasAnyRole(array $roles): bool
+    {
+        // Memeriksa apakah properti 'role' ada dan apakah 'nama_role' ada di dalam array $roles.
+        return $this->role && in_array($this->role->nama_role, $roles);
+    }
+
     public function komen()
     {
         return $this->hasMany(Komen::class);

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\BackupController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\KalenderKegiatanController;
 use App\Http\Controllers\DiskusiController;
 use App\Http\Controllers\FrontendDashboardController;
 use App\Http\Controllers\AnggotaController;
@@ -126,12 +127,13 @@ Route::middleware(['auth'])->group(function () {
         // ROUTE BACKUP
         Route::post('/backup/create', [BackupController::class, 'create'])->name('backup.create');
         Route::post('/backup/restore', [BackupController::class, 'restore'])->name('backup.restore');
+
+        // ROUTE KALENDER
+        Route::resource('kalender-kegiatan', KalenderKegiatanController::class);
     });
 });
 
-// Route untuk menampilkan halaman kalender
-Route::get('/kegiatan/kalender', [KegiatanController::class, 'kalender'])->name('kegiatan.kalender');
-
+Route::get('/kalender-kegiatan/events', [KalenderKegiatanController::class, 'getEvents'])->name('kalender-kegiatan.events');
 // Route API untuk mendapatkan data event
 Route::get('/api/kegiatan/events', [KegiatanController::class, 'getEvents'])->name('kegiatan.events');
 
