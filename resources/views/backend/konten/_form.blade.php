@@ -76,6 +76,7 @@
             <label for="status">Status Publikasi</label>
             <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
                 <option value="draft" {{ old('status', $konten->status ?? 'draft') == 'draft' ? 'selected' : '' }}>Draft (Disimpan, tidak tayang)</option>
+                <option value="review" {{ old('status', $konten->status ?? '') == 'review' ? 'selected' : '' }}>Review (Menunggu persetujuan)</option>
                 <option value="published" {{ old('status', $konten->status ?? '') == 'published' ? 'selected' : '' }}>Published (Tayang)</option>
             </select>
             @error('status')

@@ -77,6 +77,8 @@
                                     <td>
                                         @if ($item->status == 'published')
                                             <span class="badge bg-light-success">Published</span>
+                                        @elseif ($item->status == 'review')
+                                            <span class="badge bg-light-warning">Review</span>
                                         @else
                                             <span class="badge bg-light-secondary">Draft</span>
                                         @endif
@@ -132,7 +134,7 @@
                     </div>
                     {{-- Pagination --}}
                     <div class="mt-4">
-                        {{ $konten->links() }}
+                        {{ $konten->withQueryString()->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

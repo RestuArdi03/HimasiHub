@@ -119,7 +119,7 @@
                             </div>
                             {{-- Pagination --}}
                             <div class="mt-4">
-                                {{ $saldos->links() }}
+                                {{ $saldos->withQueryString()->links('pagination::bootstrap-5') }}
                             </div>
                         </div>
                     </div>

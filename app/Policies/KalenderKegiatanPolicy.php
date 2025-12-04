@@ -44,7 +44,7 @@ class KalenderKegiatanPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['admin', 'sekretaris']);
+        return $user->hasAnyRole(['admin', 'humas']);
     }
 
     /**
@@ -52,7 +52,7 @@ class KalenderKegiatanPolicy
      */
     public function update(User $user, KalenderKegiatan $kalenderKegiatan): bool
     {
-        return $user->hasAnyRole(['admin', 'sekretaris']);
+        return $user->hasAnyRole(['admin', 'humas']);
     }
 
     /**
@@ -60,7 +60,7 @@ class KalenderKegiatanPolicy
      */
     public function delete(User $user, KalenderKegiatan $kalenderKegiatan): bool
     {
-        return $user->hasAnyRole(['admin', 'sekretaris']);
+        return $user->hasAnyRole(['admin', 'humas']);
     }
 
     /**
@@ -68,7 +68,7 @@ class KalenderKegiatanPolicy
      */
     public function restore(User $user, KalenderKegiatan $kalenderKegiatan): bool
     {
-        return $user->hasAnyRole(['admin', 'sekretaris']);
+        return $user->hasAnyRole(['admin', 'humas']);
     }
 
     /**
@@ -76,6 +76,6 @@ class KalenderKegiatanPolicy
      */
     public function forceDelete(User $user, KalenderKegiatan $kalenderKegiatan): bool
     {
-        return $user->hasAnyRole(['admin', 'sekretaris']);
+        return $user->hasAnyRole(['admin', 'humas']);
     }
 }

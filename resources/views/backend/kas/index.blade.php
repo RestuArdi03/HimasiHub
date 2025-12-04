@@ -201,6 +201,10 @@
                             @endforelse
                             </tbody>
                         </table>
+                        {{-- Pagination --}} 
+                        <div class="mt-4">
+                            {{ $members->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>

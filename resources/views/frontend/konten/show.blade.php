@@ -3,6 +3,13 @@
 @section('title', $konten->judul . ' - HimasiHub')
 
 @section('content')
+
+{{-- Cek jika konten tidak published, maka tampilkan 404 --}}
+@if($konten->status !== 'published')
+    @php
+        abort(404);
+    @endphp
+@endif
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
