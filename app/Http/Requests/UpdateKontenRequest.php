@@ -31,6 +31,7 @@ class UpdateKontenRequest extends FormRequest
             ],
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi' => 'required|string',
+            'status' => 'required|string|in:draft,published',
         ];
     }
 }

@@ -32,6 +32,7 @@ class KontenFactory extends Factory
             'users_id' => function () {
                 return User::inRandomOrder()->first()->id ?? User::factory()->create()->id;
             },
+            'status' => $this->faker->randomElement(['draft', 'published']),
         ];
     }
 }

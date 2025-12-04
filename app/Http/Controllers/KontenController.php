@@ -49,6 +49,7 @@ class KontenController extends Controller
             'slug' => $slug,
             'gambar' => $path,
             'deskripsi' => $validated['deskripsi'],
+            'status' => $validated['status'],
             'users_id' => auth()->id(),
         ]);
 
@@ -86,11 +87,11 @@ class KontenController extends Controller
         $validated['slug'] = Str::slug($validated['judul'], '-');
 
         $path = $konten->gambar;
+        // Pastikan status juga masuk dalam data yang divalidasi dan diupdate
+        $validated['gambar'] = $path; // Tetapkan gambar lama sebagai default
         if ($request->hasFile('gambar')) {
             Storage::delete($konten->gambar);
             $path = $request->file('gambar')->store('public/konten');
-            $validated['gambar'] = $path;
-        } else {
             $validated['gambar'] = $path;
         }
 

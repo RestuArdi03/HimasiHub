@@ -70,5 +70,17 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
+        {{-- Status --}}
+        <div class="form-group">
+            <label for="status">Status Publikasi</label>
+            <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
+                <option value="draft" {{ old('status', $konten->status ?? 'draft') == 'draft' ? 'selected' : '' }}>Draft (Disimpan, tidak tayang)</option>
+                <option value="published" {{ old('status', $konten->status ?? '') == 'published' ? 'selected' : '' }}>Published (Tayang)</option>
+            </select>
+            @error('status')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
     </div>
 </div>
