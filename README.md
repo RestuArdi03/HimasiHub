@@ -36,32 +36,30 @@ npm install
 npm run build
 ```
 
-5. Menginstall Library Prasyarat (package doctrine/dbal)
-```bash
-composer require doctrine/dbal
-```
-
-6. Salin env, pastikan juga informasi didalamnya sesuai
+5. Salin env, pastikan juga informasi didalamnya sesuai
 ```bash
 cp .env.example .env
 ```
 
-7. Membuat key laravel
+6. Membuat key laravel
 ```bash
 php artisan key:generate
 ```
 
-8. Membuat dan mengisi database
+7. Membuat dan mengisi database
 ```bash
 php artisan migrate --seed
 ```
 
-9. Menghubungkan public ke storage
+8. Menghubungkan public ke storage
 ```bash
 php artisan storage:link
 ```
 
-10. Menjalankan project
+9. Menjalankan project
 ```bash
 php artisan serve
 ```
+
+#
+Catatan: aktifkan extensi php-zip pada modul php yang digunakan apabila ingin mengaktifkan fungsi backup
