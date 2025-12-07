@@ -43,6 +43,7 @@ class AnggotaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'nama'          => 'required|string|max:255',
             'nim'           => 'required|string|max:50|unique:anggota,nim', 
             'kelas'         => 'required|string|max:50',
             'jurusan'       => 'required|string|max:100',
@@ -81,7 +82,7 @@ class AnggotaController extends Controller
             $user = User::findOrFail($validated['users_id']);
             $user->update([
                 'nama' => $validated['nama'], // Update nama user
-                'role_id' => $newRoleId,
+                'role_id'    => $newRoleId,
                 'anggota_id' => $anggota->id, // Set anggota_id pada user
             ]);
         }, 3); // Retry 3 times on deadlock
@@ -124,7 +125,7 @@ class AnggotaController extends Controller
             'jabatan_id' => 'required|integer|exists:jabatan,id',
             'alamat'    => 'nullable|string|max:255',
             'moto_hidup' => 'nullable|string|max:255',
-            
+            'nama'          => 'required|string|max:255',
             'users_id'  => ['required', 'integer', 'exists:users,id', Rule::unique('anggota', 'users_id')->ignore($anggota->id)],
             'tiktok'    => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',
@@ -172,7 +173,8 @@ class AnggotaController extends Controller
                 $newUser->update([
                     'anggota_id' => $anggota->id, 
                     'role_id' => $newRoleId
-                ]);
+                 ]);
+
             }
         });
 
