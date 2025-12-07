@@ -172,7 +172,8 @@ class AnggotaController extends Controller
             if ($newUser) {
                 $newUser->update([
                     'anggota_id' => $anggota->id, 
-                    'role_id' => $newRoleId
+                    'role_id' => $newRoleId,
+                    'nama' => $validated['nama'] // Update nama user juga
                  ]);
 
             }
