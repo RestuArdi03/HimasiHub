@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('konten', function (Blueprint $table) {
-            // Mengubah tipe kolom 'deskripsi' menjadi TEXT
-            $table->text('deskripsi')->change();
+            // Mengubah tipe kolom 'deskripsi' menjadi LONGTEXT
+            $table->longText('deskripsi')->change();
         });
     }
 
