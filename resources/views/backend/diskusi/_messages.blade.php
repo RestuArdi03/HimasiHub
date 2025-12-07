@@ -5,7 +5,7 @@
         <button class="btn btn-sm btn-outline-primary reply-hover-btn" title="Balas">&#x21A9;</button>
         <div class="w-100">
             <div class="sender-name">{{ optional($pesan->user)->nama ?? 'Pengguna Dihapus' }}</div>
-            <div class="sender-role">{{ optional(optional($pesan->user)->role)->nama_role ?? 'Mantan Anggota' }}</div>
+            <div class="sender-role">{{ $pesan->user->anggota->jabatan->nama_jabatan ?? 'Mantan Anggota' }}</div>
 
             @if ($pesan->parentMessage)
                 <div class="reply-to" data-reply-to-id="{{ $pesan->parent_id }}">
