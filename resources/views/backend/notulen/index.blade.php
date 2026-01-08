@@ -25,12 +25,14 @@
     <section class="section">
         {{-- Tombol Aksi & Search --}}
         <div class="mb-3 d-flex gap-2 align-items-center">
-            <a href="{{ route('backend.notulen.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Tambah Notulen
-            </a>
-            <a href="{{ route('backend.notulen.archive') }}" class="btn btn-danger">
-                <i class="bi bi-archive-fill"></i> Arsip
-            </a>
+            @can('create', App\Models\Notulen::class)
+                <a href="{{ route('backend.notulen.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Tambah Notulen
+                </a>
+                <a href="{{ route('backend.notulen.archive') }}" class="btn btn-danger">
+                    <i class="bi bi-archive-fill"></i> Arsip
+                </a>
+            @endcan
             <form method="GET" class="d-flex gap-2 flex-grow-1">
                 <input type="text" name="q" class="form-control form-control-sm" placeholder="Cari judul atau catatan..." value="{{ request('q') }}">
                 {{-- Preserve filter and sort params --}}
@@ -129,12 +131,16 @@
                                     </a>
                                     <div class="text-end ms-3">
                                         <div class="d-flex gap-2 justify-content-end">
-                                            <a href="{{ route('backend.notulen.edit', $item->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit Notulen">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
-                                            <button class="btn btn-sm btn-danger" onclick="deleteNotulen({{ $item->id }}, {!! json_encode($item->judul_rapat ?? $item->judul) !!})" title="Hapus Notulen">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                            @can('update', $item)
+                                                <a href="{{ route('backend.notulen.edit', $item->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit Notulen">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                            @endcan
+                                            @can('delete', $item)
+                                                <button class="btn btn-sm btn-danger" onclick="deleteNotulen({{ $item->id }}, {!! json_encode($item->judul_rapat ?? $item->judul) !!})" title="Hapus Notulen">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            @endcan
                                         </div>
                                         <div class="mb-2">
                                             <small class="text-muted d-block">

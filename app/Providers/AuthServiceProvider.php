@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Anggota;
 use App\Policies\KontenPolicy;
 use App\Policies\SaldoPolicy;
+use App\Models\Notulen;
+use App\Policies\NotulenPolicy;
 use App\Policies\TransaksiPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\AnggotaPolicy;
@@ -31,6 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         Diskusi::class => DiskusiPolicy::class,
         User::class => UserPolicy::class,
         Anggota::class => AnggotaPolicy::class,
+        Notulen::class => NotulenPolicy::class,
     ];
 
     /**

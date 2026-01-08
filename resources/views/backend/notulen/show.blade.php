@@ -189,15 +189,19 @@
                 <a href="{{ route('backend.notulen.index') }}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Kembali
                 </a>
-                <a href="{{ route('backend.notulen.edit', $notulen->id) }}" class="btn btn-primary">
-                    <i class="bi bi-pencil"></i> Edit
-                </a>
+                @can('update', $notulen)
+                    <a href="{{ route('backend.notulen.edit', $notulen->id) }}" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                @endcan
                 <a href="{{ route('backend.notulen.download', $notulen->id) }}" class="btn btn-success">
                     <i class="bi bi-file-earmark-pdf"></i> Download PDF
                 </a>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                    <i class="bi bi-trash"></i> Hapus
-                </button>
+                @can('delete', $notulen)
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash"></i> Hapus
+                    </button>
+                @endcan
             </div>
         </div>
     </section>

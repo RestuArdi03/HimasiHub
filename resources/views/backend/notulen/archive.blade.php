@@ -89,12 +89,16 @@
                                     </div>
                                     <div class="text-end ms-3">
                                         <div class="d-flex gap-2 justify-content-end">
-                                            <button class="btn btn-sm btn-success" onclick="restoreNotulen({{ $item->id }}, '{{ addslashes($item->judul) }}')" title="Pulihkan">
-                                                <i class="bi bi-arrow-counterclockwise"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger" onclick="forceDeleteNotulen({{ $item->id }}, '{{ addslashes($item->judul) }}')" title="Hapus Permanen">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                            @can('restore', $item)
+                                                <button class="btn btn-sm btn-success" onclick="restoreNotulen({{ $item->id }}, '{{ addslashes($item->judul) }}')" title="Pulihkan">
+                                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                                </button>
+                                            @endcan
+                                            @can('forceDelete', $item)
+                                                <button class="btn btn-sm btn-danger" onclick="forceDeleteNotulen({{ $item->id }}, '{{ addslashes($item->judul) }}')" title="Hapus Permanen">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            @endcan
                                         </div>
                                     </div>
                                 </div>

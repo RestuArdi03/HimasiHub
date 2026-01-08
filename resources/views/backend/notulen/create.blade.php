@@ -25,9 +25,6 @@
 
     <section class="section">
         <form action="{{ route('backend.notulen.store') }}" method="POST" enctype="multipart/form-data" id="notulenForm">
-
-    <section class="section">
-        <form action="{{ route('backend.notulen.store') }}" method="POST" enctype="multipart/form-data" id="notulenForm">
             @csrf
 
             <!-- Informasi Rapat -->

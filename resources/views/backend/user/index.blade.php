@@ -44,9 +44,9 @@
                                 <th>Nama</th>
                                 <th>Email</th>
                                 <th>Role</th> 
-                                {{-- @if (Auth::check() && Auth::user()->role->nama_role === 'admin')
+                                @if (Auth::user()->hasRole('admin'))
                                     <th>Aksi</th>
-                                @endif --}}
+                                @endif
                             </tr>
                             </thead>
                             <tbody>
@@ -55,17 +55,11 @@
                                     <td>{{ $item->nama }}</td>
                                     <td>{{ $item->email }}</td>
                                     <td>{{ ($item->role)->nama_role ?? 'tamu' }}</td>
+                                    @if (Auth::user()->hasRole('admin'))
                                     <td>
-                                        {{-- @can('update', $item)
-                                            <a href="#" class="btn btn-sm btn-warning" title="Edit">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                        @endcan --}}
-                                        {{-- @can('delete', $item)
-                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        @endcan --}}
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
 
                                         {{-- Modal Konfirmasi Hapus --}}
                                         <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
@@ -90,6 +84,7 @@
                                             </div>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
