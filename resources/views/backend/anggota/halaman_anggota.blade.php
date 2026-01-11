@@ -47,7 +47,7 @@
                 {{-- Data Anggota --}}
                 <div class="row justify-content-center g-4"> 
                     @forelse ($anggota as $agt)
-                        <div class="col-4 col-sm-4 col-md-3 col-xl-2"> 
+                        <div class="col-12 col-sm-6 col-md-3 col-xl-2"> 
                             <div class="card h-100 shadow-sm text-center"> 
                                 
                                 {{-- Foto--}}

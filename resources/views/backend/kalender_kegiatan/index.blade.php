@@ -22,69 +22,70 @@
     </div>
 
     <section class="section">
+        <div class="row">
+            <div class="col-12 mb-3">
+                @can('create', $kalenderClass)
+                    <a href="{{ route('backend.kalender-kegiatan.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i> Tambah Acara
+                    </a>
+                @endcan
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5 class="card-title">Daftar Acara Kalender</h5>
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        @can('create', $kalenderClass)
-                            <a href="{{ route('backend.kalender-kegiatan.create') }}" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i> Tambah Acara
-                            </a>
-                        @endcan
-                    </div>
-                </div>
+                <h5 class="card-title">Daftar Acara Kalender</h5>
             </div>
             <div class="card-body">
                 @include('backend.layouts.partials.alerts')
 
-                <table class="table table-striped" id="table1">
-                    <thead>
-                        <tr>
-                            <th>Judul</th>
-                            <th>Waktu Mulai</th>
-                            <th>Status Tampil</th>
-                            @can('create', $kalenderClass)
-                                <th>Aksi</th>
-                            @endcan
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($kegiatan as $item)
-                        <tr>
-                            <td>{{ $item->judul }}</td>
-                            <td>{{ $item->waktu_mulai->format('d M Y, H:i') }}</td>
-                            <td>
-                                @if($item->status == 'frontend')
-                                    <span class="badge bg-info">Frontend</span>
-                                @elseif($item->status == 'backend')
-                                    <span class="badge bg-warning">Backend</span>
-                                @else
-                                    <span class="badge bg-success">Keduanya</span>
-                                @endif
-                            </td>
-                            @can('create', $kalenderClass)
+                <div class="table-responsive">
+                    <table class="table table-striped" id="table1">
+                        <thead>
+                            <tr>
+                                <th>Judul</th>
+                                <th>Waktu Mulai</th>
+                                <th>Status Tampil</th>
+                                @can('create', $kalenderClass)
+                                    <th>Aksi</th>
+                                @endcan
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($kegiatan as $item)
+                            <tr>
+                                <td>{{ $item->judul }}</td>
+                                <td>{{ $item->waktu_mulai->format('d M Y, H:i') }}</td>
                                 <td>
-                                    @can('update', $item)
-                                        <a href="{{ route('backend.kalender-kegiatan.edit', $item->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                    @endcan
-                                    @can('delete', $item)
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ route('backend.kalender-kegiatan.destroy', $item->id) }}" title="Hapus">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    @endcan
+                                    @if($item->status == 'frontend')
+                                        <span class="badge bg-info">Frontend</span>
+                                    @elseif($item->status == 'backend')
+                                        <span class="badge bg-warning">Backend</span>
+                                    @else
+                                        <span class="badge bg-success">Keduanya</span>
+                                    @endif
                                 </td>
-                            @endcan
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="@can('create', $kalenderClass) 4 @else 3 @endcan" class="text-center">Tidak ada data acara.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                @can('create', $kalenderClass)
+                                    <td>
+                                        @can('update', $item)
+                                            <a href="{{ route('backend.kalender-kegiatan.edit', $item->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                                        @endcan
+                                        @can('delete', $item)
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{{ route('backend.kalender-kegiatan.destroy', $item->id) }}" title="Hapus">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        @endcan
+                                    </td>
+                                @endcan
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="@can('create', $kalenderClass) 4 @else 3 @endcan" class="text-center">Tidak ada data acara.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
                 <div class="mt-3">
                     {{ $kegiatan->withQueryString()->links('pagination::bootstrap-5') }}
                 </div>
