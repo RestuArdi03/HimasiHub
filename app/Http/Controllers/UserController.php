@@ -87,6 +87,27 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if (!Auth::user()->hasRole('admin')) {
+            abort(403, 'Anda tidak memiliki akses untuk menghapus user ini.');
+        }
+
+        DB::transaction(function () use ($user) {
+            // Putuskan relasi dengan anggota jika ada
+            if ($user->anggota) {
+                $user->anggota->update(['users_id' => null]);
+            }
+
+            // Hapus data diskusi yang terkait dengan user sebelum menghapus user
+            DB::table('diskusi')->where('users_id', $user->id)->delete();
+
+            // Hapus foto jika ada
+            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+                Storage::disk('public')->delete($user->foto);
+            }
+
+            $user->delete();
+        });
+
+        return redirect()->route('backend.user.index')->with('success', 'User berhasil dihapus.');
     }
 }

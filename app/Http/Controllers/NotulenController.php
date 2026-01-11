@@ -19,6 +19,8 @@ class NotulenController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Notulen::class);
+
         $query = Notulen::with('kegiatan', 'users', 'agenda', 'pimpinan', 'notulis')
             ->whereNull('deleted_at');
 
@@ -59,7 +61,7 @@ class NotulenController extends Controller
         $notulen = $query->orderBy($sortBy, $order)->paginate(15);
 
         // Pass anggota list for filter selects
-        $anggota = Anggota::all();
+        $anggota = Anggota::with('users')->get();
 
         return view('backend.notulen.index', compact('notulen', 'anggota'));
     }
@@ -69,6 +71,8 @@ class NotulenController extends Controller
      */
     public function archive()
     {
+        $this->authorize('create', Notulen::class);
+
         $notulen = Notulen::onlyTrashed()
             ->with('kegiatan', 'users', 'agenda', 'pimpinan', 'notulis')
             ->orderBy('deleted_at', 'DESC')
@@ -82,9 +86,11 @@ class NotulenController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Notulen::class);
+
         $kegiatan = Kegiatan::all();
         $users = User::all();
-        $anggota = Anggota::all();
+        $anggota = Anggota::with(['users', 'jabatan'])->get();
         
         return view('backend.notulen.create', compact('kegiatan', 'users', 'anggota'));
     }
@@ -94,6 +100,8 @@ class NotulenController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Notulen::class);
+
         $validated = $request->validate([
             'judul_rapat' => 'required|string|max:255',
             'catatan_tambahan' => 'required|string',
@@ -113,6 +121,9 @@ class NotulenController extends Controller
             'dokumentasi.*' => 'file|mimes:jpeg,png,jpg,pdf,doc,docx|max:5120',
         ]);
 
+        $pimpinan = Anggota::with('users')->find($validated['pimpinan_rapat']);
+        $notulis = Anggota::with('users')->find($validated['notulis_id']);
+
         // Simpan notulen
         $notulen = Notulen::create([
             'judul_rapat' => $validated['judul_rapat'],
@@ -124,8 +135,8 @@ class NotulenController extends Controller
             'tipe_rapat' => $validated['tipe_rapat'],
             'pimpinan_rapat_id' => $validated['pimpinan_rapat'],
             'notulis_id' => $validated['notulis_id'],
-            'pimpinan_rapat_nama' => optional(Anggota::find($validated['pimpinan_rapat']))->nama ?? null,
-            'notulis_nama' => optional(Anggota::find($validated['notulis_id']))->nama ?? null,
+            'pimpinan_rapat_nama' => $pimpinan?->users?->nama,
+            'notulis_nama' => $notulis?->users?->nama,
         ]);
 
         // Simpan agenda
@@ -146,11 +157,11 @@ class NotulenController extends Controller
             $presensiableId = $notulen->id;
             $presensiableType = Notulen::class;
 
-            foreach ($request->get('attendees') as $anggotaId) {
-                $anggota = Anggota::find($anggotaId);
-                if ($anggota) {
+            $attendees = Anggota::with('users')->whereIn('id', $request->get('attendees'))->get();
+            foreach ($attendees as $anggota) {
+                if ($anggota && $anggota->users) {
                     $data = [
-                        'peserta_nama' => $anggota->nama,
+                        'peserta_nama' => $anggota->users->nama,
                         'user_id' => $anggota->users_id ?? null,
                         'presensiable_id' => $presensiableId,
                         'presensiable_type' => $presensiableType,
@@ -189,6 +200,7 @@ class NotulenController extends Controller
      */
     public function show(Notulen $notulen)
     {
+        $this->authorize('view', $notulen);
         $notulen->load('kegiatan', 'users', 'agenda', 'dokumentasi', 'pimpinan', 'notulis');
         return view('backend.notulen.show', compact('notulen'));
     }
@@ -198,9 +210,11 @@ class NotulenController extends Controller
      */
     public function edit(Notulen $notulen)
     {
+        $this->authorize('update', $notulen);
+
         $kegiatan = Kegiatan::all();
         $users = User::all();
-        $anggota = Anggota::all();
+        $anggota = Anggota::with(['users', 'jabatan'])->get();
 
         // Existing attendees (peserta_nama) for checking checkboxes
         $existingAttendees = PresensiKehadiran::where('presensiable_id', $notulen->id)
@@ -227,6 +241,8 @@ class NotulenController extends Controller
      */
     public function update(Request $request, Notulen $notulen)
     {
+        $this->authorize('update', $notulen);
+
         $validated = $request->validate([
             'judul_rapat' => 'required|string|max:255',
             'catatan_tambahan' => 'required|string',
@@ -247,6 +263,9 @@ class NotulenController extends Controller
             'dokumentasi.*' => 'file|mimes:jpeg,png,jpg,pdf,doc,docx|max:5120',
         ]);
 
+        $pimpinan = Anggota::with('users')->find($validated['pimpinan_rapat']);
+        $notulis = Anggota::with('users')->find($validated['notulis_id']);
+
         // Update notulen fields
         $notulen->update([
             'judul_rapat' => $validated['judul_rapat'],
@@ -258,8 +277,8 @@ class NotulenController extends Controller
             'tipe_rapat' => $validated['tipe_rapat'],
             'pimpinan_rapat_id' => $validated['pimpinan_rapat'],
             'notulis_id' => $validated['notulis_id'],
-            'pimpinan_rapat_nama' => optional(Anggota::find($validated['pimpinan_rapat']))->nama ?? null,
-            'notulis_nama' => optional(Anggota::find($validated['notulis_id']))->nama ?? null,
+            'pimpinan_rapat_nama' => $pimpinan?->users?->nama,
+            'notulis_nama' => $notulis?->users?->nama,
         ]);
 
         // Handle agenda: update existing or create new
@@ -291,11 +310,11 @@ class NotulenController extends Controller
             ->delete();
 
         if ($request->has('attendees') && is_array($request->get('attendees'))) {
-            foreach ($request->get('attendees') as $anggotaId) {
-                $anggota = Anggota::find($anggotaId);
-                if ($anggota) {
+            $attendees = Anggota::with('users')->whereIn('id', $request->get('attendees'))->get();
+            foreach ($attendees as $anggota) {
+                if ($anggota && $anggota->users) {
                     PresensiKehadiran::create([
-                        'peserta_nama' => $anggota->nama,
+                        'peserta_nama' => $anggota->users->nama,
                         'user_id' => $anggota->users_id ?? null,
                         'presensiable_id' => $notulen->id,
                         'presensiable_type' => Notulen::class,
@@ -327,6 +346,8 @@ class NotulenController extends Controller
      */
     public function destroy(Notulen $notulen)
     {
+        $this->authorize('delete', $notulen);
+
         // Soft delete (archive) the notulen
         $notulen->delete();
 
@@ -341,6 +362,7 @@ class NotulenController extends Controller
     {
         try {
             $notulen = Notulen::withTrashed()->findOrFail($id);
+            $this->authorize('restore', $notulen);
             $notulen->restore();
 
             return redirect()->route('backend.notulen.archive')
@@ -358,6 +380,7 @@ class NotulenController extends Controller
     {
         try {
             $notulen = Notulen::withTrashed()->findOrFail($id);
+            $this->authorize('forceDelete', $notulen);
 
             // Delete related files
             if ($notulen->dokumentasi()->exists()) {
@@ -393,6 +416,8 @@ class NotulenController extends Controller
      */
     public function downloadPdf(Notulen $notulen)
     {
+        $this->authorize('view', $notulen);
+
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('backend.notulen.pdf', compact('notulen'));
 
@@ -400,4 +425,3 @@ class NotulenController extends Controller
         return $pdf->download($fileName);
     }
 }
-
