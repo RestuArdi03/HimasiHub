@@ -4,6 +4,24 @@
 
 @section('content')
 
+<style>
+    .article-body {
+        text-align: justify;
+        overflow-wrap: break-word;
+    }
+    .article-body img, 
+    .article-body iframe, 
+    .article-body video {
+        max-width: 100%;
+        height: auto;
+    }
+    .article-body table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+</style>
+
 {{-- Cek jika konten tidak published, maka tampilkan 404 --}}
 @if($konten->status !== 'published')
     @php
@@ -20,7 +38,7 @@
             {{-- Gambar Sampul --}}
             @if($konten->gambar)
                 <figure class="mb-4">
-                    <img src="{{ Str::startsWith($konten->gambar, 'http') ? $konten->gambar : Storage::url($konten->gambar) }}" class="img-fluid rounded-3" alt="Sampul {{ $konten->judul }}" style="width: 100%; height: 450px; object-fit: cover;">
+                    <img src="{{ Str::startsWith($konten->gambar, 'http') ? $konten->gambar : Storage::url($konten->gambar) }}" class="img-fluid rounded-3" alt="Sampul {{ $konten->judul }}" style="width: 100%; height: auto; max-height: 450px; object-fit: cover;">
                 </figure>
             @endif
 

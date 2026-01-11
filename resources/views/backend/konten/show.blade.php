@@ -35,7 +35,7 @@
                 <div class="card-body">
                     @if($konten->gambar)
                         <div class="mb-4 text-center">
-                            <img src="{{ Str::startsWith($konten->gambar, 'http') ? $konten->gambar : Storage::url($konten->gambar) }}" class="img-fluid rounded" alt="{{ $konten->judul }}" style="max-height: 400px;">
+                            <img src="{{ Str::startsWith($konten->gambar, 'http') ? $konten->gambar : Storage::url($konten->gambar) }}" class="img-fluid rounded" alt="{{ $konten->judul }}" style="max-height: 400px; max-width: 100%; height: auto;">
                         </div>
                     @endif
 
@@ -63,7 +63,23 @@
                         </div>
                     </div>
 
-                    <div class="fs-5">
+                    <style>
+                        .konten-body {
+                            overflow-wrap: break-word;
+                        }
+                        .konten-body img,
+                        .konten-body iframe,
+                        .konten-body video {
+                            max-width: 100%;
+                            height: auto;
+                        }
+                        .konten-body table {
+                            display: block;
+                            width: 100%;
+                            overflow-x: auto;
+                        }
+                    </style>
+                    <div class="fs-5 konten-body" style="text-align: justify;">
                         {!! $konten->deskripsi !!}
                     </div>
                 </div>

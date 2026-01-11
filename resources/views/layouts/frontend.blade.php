@@ -54,11 +54,11 @@
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0 h-100">
-        <a href="{{ route('frontend.index') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="navbar-logo me-2"> 
-            <h2 class="text-himasi">HimasiHub</h2>
+        <a href="{{ route('frontend.index') }}" class="navbar-brand d-flex align-items-center px-3 px-lg-5">
+            <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="navbar-logo me-2" style="max-height: 40px;"> 
+            <h2 class="text-himasi m-0" style="font-size: 1.5rem;">HimasiHub</h2>
         </a>
-        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <button type="button" class="navbar-toggler me-3" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
@@ -67,7 +67,7 @@
                 {{-- Contoh rute lain, Anda bisa membuat rute ini di web.php --}}
                 <a href="{{ route('frontend.about.index') }}" class="nav-item d-flex nav-link {{ request()->routeIs('frontend.about.*') ? 'active' : '' }}">Tentang Kami</a>
                 <a href="{{ route('frontend.konten.index') }}" class="nav-item d-flex nav-link {{ request()->routeIs('frontend.konten.*') ? 'active' : '' }}">Publikasi</a>
-                <div class="nav-item d-flex dropdown">
+                <div class="nav-item dropdown mt-2">
                     <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('frontend.anggota.*', 'frontend.contact.*', 'frontend.bantuan.*') ? 'active' : '' }}" data-bs-toggle="dropdown">Lain-lain</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="{{ route('frontend.anggota.index') }}" class="dropdown-item">Anggota</a>
@@ -87,9 +87,9 @@
                                 <div class="me-2">
                                     <img src="{{ Auth::user()->avatar ?? 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(Auth::user()->email))) . '?d=mp' }}"
                                         alt="avatar"
-                                        class="rounded-circle avatar-img">
+                                        class="rounded-circle avatar-img" width="35" height="35" style="object-fit: cover;">
                                 </div>
-                                <div class="d-none d-lg-block">
+                                <div>
                                     <div class="user-name">{{ Auth::user()->nama }}</div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <a href="{{ route('frontend.index') }}">
-                        <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="footer-logo">
+                        <img src="{{ asset('asset/logo.png') }}" alt="HimasiHub" class="footer-logo img-fluid" style="max-height: 60px;">
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -158,7 +158,7 @@
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top position-fixed bottom-0 end-0 m-4 rounded shadow p-0" style="width: 60px; height: 60px; line-height: 60px; z-index: 1040;"><i class="bi bi-arrow-up"></i></a>
 
 
     <!-- JavaScript Libraries -->

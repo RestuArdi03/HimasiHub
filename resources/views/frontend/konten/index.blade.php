@@ -39,7 +39,7 @@
                                     <div class="row g-0">
                                         <div class="col-md-4">
                                             <a href="{{ route('frontend.konten.show', $item->slug) }}">
-                                                <img src="{{ Str::startsWith($item->gambar, 'http') ? $item->gambar : Storage::url($item->gambar) }}" class="img-fluid rounded-start" alt="{{ $item->judul }}" style="height: 100%; object-fit: cover; min-height: 220px;">
+                                                <img src="{{ Str::startsWith($item->gambar, 'http') ? $item->gambar : Storage::url($item->gambar) }}" class="img-fluid rounded" alt="{{ $item->judul }}" style="height: 100%; object-fit: cover; min-height: 220px; width: 100%;">
                                             </a>
                                         </div>
                                         <div class="col-md-8 d-flex flex-column">
@@ -47,7 +47,7 @@
                                                 <h5 class="card-title fw-bold">
                                                     <a href="{{ route('frontend.konten.show', $item->slug) }}" class="text-decoration-none text-dark">{{ $item->judul }}</a>
                                                 </h5>
-                                                <p class="card-text text-muted">{{ Str::limit(strip_tags($item->deskripsi), 150) }}</p>
+                                                <p class="card-text text-muted" style="text-align: justify;">{{ Str::limit(strip_tags($item->deskripsi), 150) }}</p>
                                             </div>
                                             <div class="card-footer bg-transparent border-0 pt-0 pb-3">
                                                 <div class="d-flex justify-content-between align-items-center text-muted small">
@@ -88,7 +88,8 @@
 
                 {{-- Sidebar untuk Filter dan Pencarian --}}
                 <div class="col-lg-4">
-                    <div class="p-4 bg-light rounded-3 shadow-sm wow fadeInUp" data-wow-delay="0.2s">
+                    {{-- Tampilan Desktop --}}
+                    <div class="d-none d-lg-block p-4 bg-light rounded-3 shadow-sm wow fadeInUp" data-wow-delay="0.2s">
                         <form action="{{ route('frontend.konten.index') }}" method="GET">
                             <div class="mb-4">
                                 <label for="search" class="form-label fw-bold">Cari Artikel</label>
@@ -104,6 +105,39 @@
                                 <a href="{{ route('frontend.konten.index') }}" class="btn btn-outline-secondary">Reset Filter</a>
                             </div>
                         </form>
+                    </div>
+
+                    {{-- Tampilan Mobile (Floating Button & Offcanvas) --}}
+                    <div class="d-lg-none">
+                        {{-- Tombol Floating --}}
+                        <button class="btn btn-primary position-fixed bottom-0 start-0 m-4 rounded shadow d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch" style="width: 60px; height: 60px; z-index: 1050;">
+                            <i class="bi bi-search fs-4"></i>
+                        </button>
+
+                        {{-- Offcanvas --}}
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasSearch" aria-labelledby="offcanvasSearchLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasSearchLabel">Cari & Filter</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <form action="{{ route('frontend.konten.index') }}" method="GET">
+                                    <div class="mb-4">
+                                        <label for="search_mobile" class="form-label fw-bold">Cari Artikel</label>
+                                        <input type="search" class="form-control" id="search_mobile" name="search" placeholder="Masukkan kata kunci..." value="{{ $request->search ?? '' }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="start_date_mobile" class="form-label fw-bold">Filter Tanggal</label>
+                                        <input type="date" class="form-control mb-2" id="start_date_mobile" name="start_date" value="{{ $request->start_date ?? '' }}" title="Dari Tanggal">
+                                        <input type="date" class="form-control" id="end_date_mobile" name="end_date" value="{{ $request->end_date ?? '' }}" title="Sampai Tanggal">
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary"><i class="bi bi-search me-2"></i>Cari</button>
+                                        <a href="{{ route('frontend.konten.index') }}" class="btn btn-outline-secondary">Reset Filter</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
