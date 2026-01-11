@@ -137,7 +137,10 @@
                                                 </a>
                                             @endcan
                                             @can('delete', $item)
-                                                <button class="btn btn-sm btn-danger" onclick="deleteNotulen({{ $item->id }}, {!! json_encode($item->judul_rapat ?? $item->judul) !!})" title="Hapus Notulen">
+                                                <button class="btn btn-sm btn-danger btn-delete-notulen" 
+                                                        data-id="{{ $item->id }}" 
+                                                        data-judul="{{ $item->judul_rapat ?? $item->judul }}" 
+                                                        title="Hapus Notulen">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             @endcan
@@ -167,9 +170,6 @@
         </div>
     </section>
 </div>
-@endsection
-
-@push('scripts')
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -189,6 +189,9 @@
         </div>
     </div>
 </div>
+@endsection
+
+@push('scripts')
 
             <!-- Filter Modal -->
             <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -245,34 +248,40 @@
             </div>
 
 <script>
-    let deleteId = null;
+    document.addEventListener('DOMContentLoaded', function () {
+        let deleteId = null;
+        const modalEl = document.getElementById('deleteModal');
+        const myModal = new bootstrap.Modal(modalEl);
+        const titleSpan = document.getElementById('deleteItemTitle');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
 
-    function deleteNotulen(id, title) {
-        deleteId = id;
-        document.getElementById('deleteItemTitle').textContent = title;
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        deleteModal.show();
-    }
+        // Menangani klik pada semua tombol hapus
+        document.querySelectorAll('.btn-delete-notulen').forEach(button => {
+            button.addEventListener('click', function () {
+                deleteId = this.getAttribute('data-id');
+                const judul = this.getAttribute('data-judul');
+                
+                titleSpan.textContent = judul;
+                myModal.show();
+            });
+        });
 
-    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-        if (deleteId) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/backend/notulen/' + deleteId;
-            form.innerHTML = '@csrf @method("DELETE")';
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-
-    document.getElementById('btnSort')?.addEventListener('click', function() {
-        // Implementasi sorting logic
-        alert('Sorting feature');
-    });
-
-    document.getElementById('btnFilter')?.addEventListener('click', function() {
-        // Implementasi filter logic
-        alert('Filter feature');
+        // Menangani klik tombol konfirmasi di dalam modal
+        confirmBtn.addEventListener('click', function () {
+            if (deleteId) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ url("backend/notulen") }}/' + deleteId;
+                
+                form.innerHTML = `
+                    @csrf
+                    @method("DELETE")
+                `;
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
     });
 </script>
 @endpush
